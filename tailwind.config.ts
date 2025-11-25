@@ -14,6 +14,11 @@ export default {
     },
     extend: {
       colors: {
+        "stallion-navy": "hsl(var(--stallion-navy))",
+        "stallion-gold": "hsl(var(--stallion-gold))",
+        "stallion-black": "hsl(var(--stallion-black))",
+        "stallion-grey": "hsl(var(--stallion-grey))",
+        "stallion-bg": "hsl(var(--stallion-bg))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -57,6 +62,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      fontFamily: {
+        poppins: ['Poppins', 'Roboto', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
+      },
+      boxShadow: {
+        'subtle': '0 3px 8px rgba(0, 0, 0, 0.08)',
+        'medium': '0 8px 20px rgba(0, 0, 0, 0.12)',
+        'gold': '0 4px 16px rgba(205, 170, 125, 0.25)',
       },
       borderRadius: {
         lg: "var(--radius)",
