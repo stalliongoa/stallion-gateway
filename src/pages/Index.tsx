@@ -1,12 +1,266 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Link } from "react-router-dom";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import stallionLogo from "@/assets/stallion-logo.png";
+import { 
+  Network, 
+  Camera, 
+  Wifi, 
+  Shield, 
+  CheckCircle2, 
+  Clock, 
+  Users,
+  TrendingUp,
+  ArrowRight
+} from "lucide-react";
 
 const Index = () => {
+  const services = [
+    {
+      icon: <Network className="h-10 w-10 text-secondary" />,
+      title: "IT Network Design",
+      description: "Robust and scalable network infrastructure tailored to your business"
+    },
+    {
+      icon: <Camera className="h-10 w-10 text-secondary" />,
+      title: "CCTV Surveillance",
+      description: "Cutting-edge security solutions with 24/7 monitoring capabilities"
+    },
+    {
+      icon: <Wifi className="h-10 w-10 text-secondary" />,
+      title: "WiFi Solutions",
+      description: "High-performance wireless networks with heatmap planning"
+    },
+    {
+      icon: <Shield className="h-10 w-10 text-secondary" />,
+      title: "IT AMC Services",
+      description: "Comprehensive maintenance contracts with priority support"
+    }
+  ];
+
+  const stats = [
+    {
+      icon: <Clock className="h-8 w-8 text-secondary" />,
+      value: "10+",
+      label: "Years Experience"
+    },
+    {
+      icon: <Users className="h-8 w-8 text-secondary" />,
+      value: "100+",
+      label: "AMC Clients"
+    },
+    {
+      icon: <Camera className="h-8 w-8 text-secondary" />,
+      value: "1000+",
+      label: "CCTV Setups"
+    },
+    {
+      icon: <TrendingUp className="h-8 w-8 text-secondary" />,
+      value: "24hr",
+      label: "Response Time"
+    }
+  ];
+
+  const features = [
+    "Specialized in hospitality industry IT solutions",
+    "Experienced team with 10+ years in the field",
+    "24/7 emergency support available",
+    "Proactive maintenance and monitoring",
+    "Free IT consultation and staff training",
+    "Competitive pricing with flexible plans"
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <Navigation />
+      
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="hero-gradient text-primary-foreground py-20 lg:py-32">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <Badge className="mb-6 bg-secondary text-secondary-foreground">
+                  Trusted Since 2012
+                </Badge>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                  Your Trusted IT Partner for Hotels & Businesses
+                </h1>
+                <p className="text-lg md:text-xl text-primary-foreground/90 mb-8">
+                  Stallion is an all-in-one IT solution provider with skilled staff and years of hospitality industry experience. We deliver complete IT solutions focused on business continuity, guest experience and long-term value.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button size="lg" variant="secondary" asChild>
+                    <Link to="/contact">
+                      Book Free IT Audit
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                  <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10" asChild>
+                    <Link to="/amc-plans">View AMC Plans</Link>
+                  </Button>
+                </div>
+              </div>
+              <div className="flex justify-center lg:justify-end">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-secondary/20 rounded-full blur-3xl"></div>
+                  <img 
+                    src={stallionLogo} 
+                    alt="Stallion IT Solutions" 
+                    className="relative h-64 w-64 lg:h-80 lg:w-80 animate-fade-in"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {stats.map((stat, index) => (
+                <Card key={index} className="text-center shadow-subtle hover:shadow-gold transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex justify-center mb-3">{stat.icon}</div>
+                    <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
+                    <div className="text-sm text-foreground/70">{stat.label}</div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Services Preview */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Our Core Services</h2>
+              <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+                Comprehensive IT solutions designed specifically for the hospitality and business sectors
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {services.map((service, index) => (
+                <Card key={index} className="shadow-subtle hover:shadow-gold transition-all duration-300 hover:-translate-y-1">
+                  <CardHeader>
+                    <div className="mb-4">{service.icon}</div>
+                    <CardTitle className="text-xl text-primary">{service.title}</CardTitle>
+                    <CardDescription>{service.description}</CardDescription>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+            <div className="text-center mt-12">
+              <Button size="lg" variant="outline" asChild>
+                <Link to="/services">
+                  View All Services
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Choose Us */}
+        <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Why Choose Stallion?</h2>
+                <p className="text-lg text-foreground/70">
+                  We emphasize understanding client objectives and use technology to streamline operations
+                </p>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {features.map((feature, index) => (
+                  <Card key={index} className="shadow-subtle">
+                    <CardContent className="p-6 flex items-start">
+                      <CheckCircle2 className="h-6 w-6 text-secondary mr-3 flex-shrink-0 mt-0.5" />
+                      <p className="text-foreground/80">{feature}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Project */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Featured Project</h2>
+                <p className="text-lg text-foreground/70">Recent success story from 2023-24</p>
+              </div>
+              <Card className="shadow-medium">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-4">
+                    <CardTitle className="text-2xl text-primary">Elements by Rosetta - Varca Goa</CardTitle>
+                    <Badge variant="secondary">2023</Badge>
+                  </div>
+                  <CardDescription className="text-base">
+                    A beautiful 76-room property at Varca launched in November 2023, featuring our complete High Tech IT setup
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-4 mb-6">
+                    <div className="flex items-start">
+                      <CheckCircle2 className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm">Complete network design & implementation</span>
+                    </div>
+                    <div className="flex items-start">
+                      <CheckCircle2 className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm">IP-based CCTV integration</span>
+                    </div>
+                    <div className="flex items-start">
+                      <CheckCircle2 className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm">High-speed Giga WiFi systems</span>
+                    </div>
+                    <div className="flex items-start">
+                      <CheckCircle2 className="h-5 w-5 text-secondary mr-2 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm">Firewall security setup</span>
+                    </div>
+                  </div>
+                  <Button asChild>
+                    <Link to="/projects">
+                      View All Projects
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 hero-gradient text-primary-foreground">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your IT Infrastructure?</h2>
+              <p className="text-lg md:text-xl mb-8 text-primary-foreground/90">
+                Book your free IT audit today and discover how we can help your business thrive
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" variant="secondary" asChild>
+                  <Link to="/contact">Book Free Audit</Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10" asChild>
+                  <a href="tel:+917875811148">Call Us Now</a>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 };
