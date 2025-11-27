@@ -11,6 +11,7 @@ import TeamManager from "@/components/admin/TeamManager";
 import ClientsManager from "@/components/admin/ClientsManager";
 import BlogManager from "@/components/admin/BlogManager";
 import SettingsManager from "@/components/admin/SettingsManager";
+import PageContentManager from "@/components/admin/PageContentManager";
 
 export default function Admin() {
   const [user, setUser] = useState<User | null>(null);
@@ -114,12 +115,17 @@ export default function Admin() {
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="projects" className="space-y-4">
           <TabsList>
+            <TabsTrigger value="pages">Page Content</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="team">Team Members</TabsTrigger>
             <TabsTrigger value="clients">Clients</TabsTrigger>
             <TabsTrigger value="blog">Blog Posts</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="pages">
+            <PageContentManager />
+          </TabsContent>
 
           <TabsContent value="projects">
             <ProjectsManager />
