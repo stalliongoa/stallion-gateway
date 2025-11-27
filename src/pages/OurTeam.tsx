@@ -1,33 +1,38 @@
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Phone, Linkedin } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface TeamMember {
+  id: string;
+  name: string;
+  position: string | null;
+  bio: string | null;
+  image_url: string | null;
+  email: string | null;
+  phone: string | null;
+}
 
 const OurTeam = () => {
-  const teamMembers = [
-    {
-      name: "Mr. Tukaram Kunkalikar",
-      role: "Lead Technical Consultant",
-      specialization: "Servers, Networking & CCTV",
-      description: "With exceptional experience and expertise in servers, networking, and CCTV setups, Tukaram has been instrumental in keeping operations running smoothly for over 10 years.",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop"
-    },
-    {
-      name: "Mr. Hafeel Mohammad",
-      role: "Senior Support Engineer",
-      specialization: "Client Support & Problem Solving",
-      description: "Known for prompt client support, honesty, and hands-on problem-solving, Hafeel is the go-to engineer for our team with his friendly and dependable service.",
-      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop"
-    },
-    {
-      name: "Technical Team",
-      role: "Field Engineers",
-      specialization: "Installation & Maintenance",
-      description: "Our skilled field engineers handle on-site installations, maintenance, and support across all our client locations with professionalism and efficiency.",
-      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=400&fit=crop"
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+
+  useEffect(() => {
+    fetchTeamMembers();
+  }, []);
+
+  const fetchTeamMembers = async () => {
+    const { data, error } = await supabase
+      .from("team_members")
+      .select("*")
+      .order("display_order", { ascending: true });
+
+    if (!error && data) {
+      setTeamMembers(data);
     }
-  ];
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -61,30 +66,41 @@ const OurTeam = () => {
                     <div className="mb-4 flex justify-center">
                       <div className="relative">
                         <div className="absolute inset-0 bg-secondary/20 rounded-full blur-xl"></div>
-                        <img
-                          src={member.image}
-                          alt={member.name}
-                          className="relative w-32 h-32 rounded-full object-cover border-4 border-secondary"
-                        />
+                        {member.image_url ? (
+                          <img
+                            src={member.image_url}
+                            alt={member.name}
+                            className="relative w-32 h-32 rounded-full object-cover border-4 border-secondary"
+                          />
+                        ) : (
+                          <div className="relative w-32 h-32 rounded-full bg-secondary/20 flex items-center justify-center border-4 border-secondary">
+                            <span className="text-4xl font-bold text-secondary">
+                              {member.name.charAt(0)}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <CardTitle className="text-xl text-primary mb-2">{member.name}</CardTitle>
-                    <Badge variant="secondary" className="mb-2">{member.role}</Badge>
-                    <CardDescription className="text-sm font-medium text-secondary">
-                      {member.specialization}
-                    </CardDescription>
+                    {member.position && <Badge variant="secondary" className="mb-2">{member.position}</Badge>}
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-foreground/70 text-center mb-4">
-                      {member.description}
-                    </p>
+                    {member.bio && (
+                      <p className="text-sm text-foreground/70 text-center mb-4">
+                        {member.bio}
+                      </p>
+                    )}
                     <div className="flex justify-center space-x-4">
-                      <a href="#" className="text-secondary hover:text-secondary/80 transition-colors">
-                        <Phone className="h-5 w-5" />
-                      </a>
-                      <a href="#" className="text-secondary hover:text-secondary/80 transition-colors">
-                        <Mail className="h-5 w-5" />
-                      </a>
+                      {member.phone && (
+                        <a href={`tel:${member.phone}`} className="text-secondary hover:text-secondary/80 transition-colors">
+                          <Phone className="h-5 w-5" />
+                        </a>
+                      )}
+                      {member.email && (
+                        <a href={`mailto:${member.email}`} className="text-secondary hover:text-secondary/80 transition-colors">
+                          <Mail className="h-5 w-5" />
+                        </a>
+                      )}
                       <a href="#" className="text-secondary hover:text-secondary/80 transition-colors">
                         <Linkedin className="h-5 w-5" />
                       </a>
