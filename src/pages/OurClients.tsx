@@ -32,6 +32,7 @@ const OurClients = () => {
       setClients(data);
     }
   };
+
   const clientCategories = [
     {
       icon: <Hotel className="h-12 w-12 text-secondary" />,
@@ -60,23 +61,6 @@ const OurClients = () => {
       count: "80+",
       description: "Small and medium businesses across various industries",
       clients: ["Retail stores", "Restaurants", "Clinics", "Service businesses"]
-    }
-  ];
-
-  const testimonials = [
-    {
-      text: "For over 10 years, Stallion IT Solutions and Services has been our trusted technology partner, managing the complete IT infrastructure of our office, including a network of 50+ computers, servers, and CCTV systems. Their professionalism, reliability, and fast response have always stood out. A special mention to Mr. Tukaram Kunkalikar, whose experience and expertise in servers, networking, and CCTV setups have kept our operations running smoothly. His commitment and technical knowledge are truly exceptional. I would also like to appreciate Mr. Hafeel Mohammad for his prompt client support, honesty, and hands-on problem-solving. He has been the go-to engineer for our team and is known for his friendly and dependable service.",
-      author: "Mr Sachin Patil",
-      company: "Rubiq Solutions Pvt. Ltd",
-      project: "IT Consultation for Office setup",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop"
-    },
-    {
-      text: "Stallion IT Solutions and Services has been an invaluable IT partner for Insignia Group, supporting our real estate office and multiple client projects with complete reliability and professionalism. Their expertise in network design, CCTV setups, automation systems, and IT infrastructure for new apartment projects has helped us execute our work seamlessly and efficiently. They understand the unique needs of the real estate sector and consistently deliver high-quality, on-time solutions. Whether it is setting up secure networks, configuring surveillance systems, or managing automation requirements, the Stallion team has always exceeded our expectations. Their dedication, technical depth, and problem-solving mindset make them a trusted partner for any business looking for dependable IT services. I strongly recommend Stallion IT Solutions and Services for professional, long-term technology support.",
-      author: "Mr. Ravish Tople",
-      company: "Insignia Group",
-      project: "Network Design",
-      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop"
     }
   ];
 
@@ -211,32 +195,6 @@ const OurClients = () => {
                             </svg>
                           ))}
                         </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-              {testimonials.map((testimonial, index) => (
-                <Card key={index} className="shadow-medium">
-                  <CardContent className="p-8">
-                    <div className="mb-6">
-                      <svg className="h-8 w-8 text-secondary/40 mb-4" fill="currentColor" viewBox="0 0 32 32">
-                        <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
-                      </svg>
-                      <p className="text-foreground/80 italic text-sm leading-relaxed">
-                        {testimonial.text}
-                      </p>
-                    </div>
-                    <div className="flex items-center">
-                      <img
-                        src={testimonial.image}
-                        alt={testimonial.author}
-                        className="w-12 h-12 rounded-full mr-4 border-2 border-secondary"
-                      />
-                      <div>
-                        <p className="font-bold text-primary">{testimonial.author}</p>
-                        <p className="text-sm text-foreground/70">{testimonial.company}</p>
-                        <Badge variant="secondary" className="mt-1 text-xs">{testimonial.project}</Badge>
                       </div>
                     </div>
                   </CardContent>
