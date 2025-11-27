@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Loader2, X } from "lucide-react";
 
 interface TeamMember {
   id: string;
@@ -22,6 +22,7 @@ interface TeamMember {
 export default function TeamManager() {
   const [members, setMembers] = useState<TeamMember[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     position: "",
@@ -108,6 +109,38 @@ export default function TeamManager() {
     fetchMembers();
   };
 
+  const handleFileUpload = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Invalid file", description: "Please upload an image file", variant: "destructive" });
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Please upload an image smaller than 2MB", variant: "destructive" });
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `team-${Date.now()}.${fileExt}`;
+      const filePath = `team/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage.from("content-images").upload(filePath, file);
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage.from("content-images").getPublicUrl(filePath);
+      setFormData({ ...formData, image_url: urlData.publicUrl });
+
+      toast({ title: "Success", description: "Image uploaded successfully" });
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast({ title: "Error", description: "Failed to upload image", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const resetForm = () => {
     setEditingId(null);
     setFormData({
@@ -160,12 +193,36 @@ export default function TeamManager() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image_url">Image URL</Label>
-              <Input
-                id="image_url"
-                value={formData.image_url}
-                onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-              />
+              <Label htmlFor="image">Member Photo</Label>
+              <div className="flex items-center gap-4">
+                {formData.image_url && (
+                  <div className="relative">
+                    <img src={formData.image_url} alt="Preview" className="h-16 w-16 object-cover rounded-full border" />
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      className="absolute -top-2 -right-2 h-6 w-6"
+                      onClick={() => setFormData({ ...formData, image_url: "" })}
+                      type="button"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+                <div className="flex-1">
+                  <Input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload(file);
+                    }}
+                    disabled={uploading}
+                  />
+                </div>
+                {uploading && <Loader2 className="h-5 w-5 animate-spin" />}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
