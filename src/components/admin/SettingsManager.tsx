@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Upload, X } from "lucide-react";
+import { Loader2, Save, X } from "lucide-react";
 
 interface Setting {
   key: string;
@@ -16,8 +16,16 @@ export default function SettingsManager() {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoDarkUrl, setLogoDarkUrl] = useState<string | null>(null);
   const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
+  const [companyName, setCompanyName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [facebookUrl, setFacebookUrl] = useState("");
+  const [instagramUrl, setInstagramUrl] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -29,7 +37,18 @@ export default function SettingsManager() {
       const { data, error } = await supabase
         .from("site_settings")
         .select("*")
-        .in("key", ["logo_url", "logo_dark_url", "favicon_url"]);
+        .in("key", [
+          "logo_url",
+          "logo_dark_url",
+          "favicon_url",
+          "company_name",
+          "phone",
+          "email",
+          "address",
+          "facebook_url",
+          "instagram_url",
+          "linkedin_url"
+        ]);
 
       if (error) throw error;
 
@@ -41,6 +60,13 @@ export default function SettingsManager() {
       setLogoUrl(settingsMap.logo_url || null);
       setLogoDarkUrl(settingsMap.logo_dark_url || null);
       setFaviconUrl(settingsMap.favicon_url || null);
+      setCompanyName(settingsMap.company_name || "");
+      setPhone(settingsMap.phone || "");
+      setEmail(settingsMap.email || "");
+      setAddress(settingsMap.address || "");
+      setFacebookUrl(settingsMap.facebook_url || "");
+      setInstagramUrl(settingsMap.instagram_url || "");
+      setLinkedinUrl(settingsMap.linkedin_url || "");
     } catch (error) {
       console.error("Error fetching settings:", error);
       toast({
@@ -153,6 +179,54 @@ export default function SettingsManager() {
         description: "Failed to remove logo",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleSaveTextSettings = async () => {
+    setSaving(true);
+    try {
+      // Validate email if provided
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        toast({
+          title: "Validation Error",
+          description: "Please enter a valid email address",
+          variant: "destructive",
+        });
+        setSaving(false);
+        return;
+      }
+
+      const settings = [
+        { key: "company_name", value: companyName },
+        { key: "phone", value: phone },
+        { key: "email", value: email },
+        { key: "address", value: address },
+        { key: "facebook_url", value: facebookUrl },
+        { key: "instagram_url", value: instagramUrl },
+        { key: "linkedin_url", value: linkedinUrl },
+      ];
+
+      for (const setting of settings) {
+        const { error } = await supabase
+          .from("site_settings")
+          .upsert({ key: setting.key, value: setting.value }, { onConflict: "key" });
+
+        if (error) throw error;
+      }
+
+      toast({
+        title: "Success",
+        description: "Settings saved successfully",
+      });
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save settings",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -284,6 +358,117 @@ export default function SettingsManager() {
               Recommended: 32x32px or 16x16px PNG
             </p>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Company Information</CardTitle>
+          <CardDescription>
+            Update your company's contact information
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="company_name">Company Name</Label>
+            <Input
+              id="company_name"
+              type="text"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              placeholder="Enter company name"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phone">Phone Number</Label>
+            <Input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Enter phone number"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">Email Address</Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter email address"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="address">Address</Label>
+            <Input
+              id="address"
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Enter company address"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Social Media Links</CardTitle>
+          <CardDescription>
+            Add your social media profile URLs
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="facebook">Facebook URL</Label>
+            <Input
+              id="facebook"
+              type="url"
+              value={facebookUrl}
+              onChange={(e) => setFacebookUrl(e.target.value)}
+              placeholder="https://facebook.com/yourpage"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="instagram">Instagram URL</Label>
+            <Input
+              id="instagram"
+              type="url"
+              value={instagramUrl}
+              onChange={(e) => setInstagramUrl(e.target.value)}
+              placeholder="https://instagram.com/yourprofile"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="linkedin">LinkedIn URL</Label>
+            <Input
+              id="linkedin"
+              type="url"
+              value={linkedinUrl}
+              onChange={(e) => setLinkedinUrl(e.target.value)}
+              placeholder="https://linkedin.com/company/yourcompany"
+            />
+          </div>
+
+          <Button onClick={handleSaveTextSettings} disabled={saving} className="w-full">
+            {saving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Save Settings
+              </>
+            )}
+          </Button>
         </CardContent>
       </Card>
     </div>
