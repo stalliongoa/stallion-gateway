@@ -120,7 +120,7 @@ const OurClients = () => {
                         <img
                           src={client.image_url}
                           alt={client.name}
-                          className="h-16 w-auto object-contain mb-4 grayscale group-hover:grayscale-0 transition-all duration-300"
+                          className="h-16 w-auto object-contain mb-4 transition-all duration-300"
                         />
                       ) : (
                         <div className="h-16 w-16 rounded-full bg-secondary/20 flex items-center justify-center mb-4">
