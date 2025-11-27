@@ -12,7 +12,10 @@ const Navigation = () => {
     { name: "About", path: "/about" },
     { name: "Services", path: "/services" },
     { name: "AMC Plans", path: "/amc-plans" },
+    { name: "Our Team", path: "/our-team" },
+    { name: "Our Clients", path: "/our-clients" },
     { name: "Projects", path: "/projects" },
+    { name: "Blog", path: "/blog" },
     { name: "Contact", path: "/contact" },
   ];
 

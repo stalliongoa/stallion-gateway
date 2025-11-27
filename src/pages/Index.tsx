@@ -239,6 +239,64 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Testimonials Section */}
+        <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Client Testimonials</h2>
+              <p className="text-lg text-foreground/70">
+                Hear from our satisfied clients about their experience with Stallion IT Solutions
+              </p>
+            </div>
+            <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+              <Card className="shadow-medium">
+                <CardContent className="p-8">
+                  <div className="mb-6">
+                    <svg className="h-8 w-8 text-secondary/40 mb-4" fill="currentColor" viewBox="0 0 32 32">
+                      <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
+                    </svg>
+                    <p className="text-foreground/80 italic text-sm leading-relaxed">
+                      "For over 10 years, Stallion IT Solutions and Services has been our trusted technology partner, managing the complete IT infrastructure of our office, including a network of 50+ computers, servers, and CCTV systems. Their professionalism, reliability, and fast response have always stood out. A special mention to Mr. Tukaram Kunkalikar, whose experience and expertise in servers, networking, and CCTV setups have kept our operations running smoothly."
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center mr-4 text-secondary font-bold">
+                      SP
+                    </div>
+                    <div>
+                      <p className="font-bold text-primary">Mr Sachin Patil</p>
+                      <p className="text-sm text-foreground/70">Rubiq Solutions Pvt. Ltd</p>
+                      <Badge variant="secondary" className="mt-1 text-xs">IT Consultation for Office setup</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="shadow-medium">
+                <CardContent className="p-8">
+                  <div className="mb-6">
+                    <svg className="h-8 w-8 text-secondary/40 mb-4" fill="currentColor" viewBox="0 0 32 32">
+                      <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
+                    </svg>
+                    <p className="text-foreground/80 italic text-sm leading-relaxed">
+                      "Stallion IT Solutions and Services has been an invaluable IT partner for Insignia Group, supporting our real estate office and multiple client projects with complete reliability and professionalism. Their expertise in network design, CCTV setups, automation systems, and IT infrastructure for new apartment projects has helped us execute our work seamlessly and efficiently."
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center mr-4 text-secondary font-bold">
+                      RT
+                    </div>
+                    <div>
+                      <p className="font-bold text-primary">Mr. Ravish Tople</p>
+                      <p className="text-sm text-foreground/70">Insignia Group</p>
+                      <Badge variant="secondary" className="mt-1 text-xs">Network Design</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="py-20 hero-gradient text-primary-foreground">
           <div className="container mx-auto px-4">
