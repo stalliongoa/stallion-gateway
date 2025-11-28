@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import stallionLogo from "@/assets/stallion-logo.png";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Network, 
   Camera, 
@@ -18,6 +20,34 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const [sachinImage, setSachinImage] = useState<string | null>(null);
+  const [ravishImage, setRavishImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTestimonialImages = async () => {
+      const { data, error } = await supabase
+        .from("clients")
+        .select("name, image_url")
+        .in("name", ["Mr Sachin Patil", "Mr. Ravish Tople"]);
+
+      if (error) {
+        console.error("Error fetching testimonial images:", error);
+        return;
+      }
+
+      data?.forEach((client) => {
+        if (client.name === "Mr Sachin Patil") {
+          setSachinImage(client.image_url);
+        }
+        if (client.name === "Mr. Ravish Tople") {
+          setRavishImage(client.image_url);
+        }
+      });
+    };
+
+    fetchTestimonialImages();
+  }, []);
+
   const services = [
     {
       icon: <Network className="h-10 w-10 text-secondary" />,
@@ -260,9 +290,17 @@ const Index = () => {
                     </p>
                   </div>
                   <div className="flex items-center">
-                    <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center mr-4 text-secondary font-bold">
-                      SP
-                    </div>
+                    {sachinImage ? (
+                      <img
+                        src={sachinImage}
+                        alt="Mr Sachin Patil"
+                        className="w-12 h-12 rounded-full mr-4 border-2 border-secondary object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center mr-4 text-secondary font-bold">
+                        SP
+                      </div>
+                    )}
                     <div>
                       <p className="font-bold text-primary">Mr Sachin Patil</p>
                       <p className="text-sm text-foreground/70">Rubiq Solutions Pvt. Ltd</p>
@@ -282,9 +320,17 @@ const Index = () => {
                     </p>
                   </div>
                   <div className="flex items-center">
-                    <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center mr-4 text-secondary font-bold">
-                      RT
-                    </div>
+                    {ravishImage ? (
+                      <img
+                        src={ravishImage}
+                        alt="Mr. Ravish Tople"
+                        className="w-12 h-12 rounded-full mr-4 border-2 border-secondary object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center mr-4 text-secondary font-bold">
+                        RT
+                      </div>
+                    )}
                     <div>
                       <p className="font-bold text-primary">Mr. Ravish Tople</p>
                       <p className="text-sm text-foreground/70">Insignia Group</p>
