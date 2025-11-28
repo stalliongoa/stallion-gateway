@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Target, Users, Award } from "lucide-react";
+import founderImage from "@/assets/founder-image.jpg";
 
 const About = () => {
   const values = [
@@ -114,19 +115,28 @@ const About = () => {
               <Card className="shadow-medium">
                 <CardContent className="p-8">
                   <h2 className="text-3xl font-bold mb-6 text-primary">Founder's Message</h2>
-                  <div className="space-y-4 text-foreground/80">
-                    <p className="italic">
-                      "As the proud founder of Stallion, I am thrilled to reflect on a remarkable journey that began in 2012, a journey marked by a decade of unwavering commitment to excellence in the realm of IT consultation."
-                    </p>
-                    <p>
-                      Over the past ten years, we have evolved into a beacon of technological innovation, providing invaluable services to major hotels and industries across the vibrant landscape of Goa. Our mission has always been clear – to empower businesses with cutting-edge IT solutions that not only meet but exceed expectations.
-                    </p>
-                    <p>
-                      We take pride in the expertise we bring to the table, derived from years of hands-on experience and a commitment to staying at the forefront of technological advancements. Looking ahead, we are excited about the future possibilities as we continue to evolve, adapt, and lead the way in shaping the digital landscape.
-                    </p>
-                    <div className="mt-6 pt-6 border-t border-border">
-                      <p className="font-semibold text-primary">Rajvaibhav Parulekar</p>
-                      <p className="text-sm text-foreground/70">Founder, Stallion IT Solutions & Services</p>
+                  <div className="flex flex-col md:flex-row gap-8">
+                    <div className="md:w-1/3 flex-shrink-0">
+                      <img 
+                        src={founderImage} 
+                        alt="Rajvaibhav Parulekar - Founder" 
+                        className="w-full rounded-lg shadow-medium object-cover aspect-square"
+                      />
+                    </div>
+                    <div className="md:w-2/3 space-y-4 text-foreground/80">
+                      <p className="italic">
+                        "As the proud founder of Stallion, I am thrilled to reflect on a remarkable journey that began in 2012, a journey marked by a decade of unwavering commitment to excellence in the realm of IT consultation."
+                      </p>
+                      <p>
+                        Over the past ten years, we have evolved into a beacon of technological innovation, providing invaluable services to major hotels and industries across the vibrant landscape of Goa. Our mission has always been clear – to empower businesses with cutting-edge IT solutions that not only meet but exceed expectations.
+                      </p>
+                      <p>
+                        We take pride in the expertise we bring to the table, derived from years of hands-on experience and a commitment to staying at the forefront of technological advancements. Looking ahead, we are excited about the future possibilities as we continue to evolve, adapt, and lead the way in shaping the digital landscape.
+                      </p>
+                      <div className="mt-6 pt-6 border-t border-border">
+                        <p className="font-semibold text-primary">Rajvaibhav Parulekar</p>
+                        <p className="text-sm text-foreground/70">Founder, Stallion IT Solutions & Services</p>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
