@@ -20,8 +20,8 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-md">
-      <div className="container mx-auto px-4">
+    <nav className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-md overflow-x-hidden">
+      <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between gap-4 h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
