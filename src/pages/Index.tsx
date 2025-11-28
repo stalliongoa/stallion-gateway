@@ -104,37 +104,59 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
       <Navigation />
       
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-hidden">
         {/* Hero Section */}
-        <section className="hero-gradient text-primary-foreground py-20 lg:py-32">
-          <div className="container mx-auto px-4">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <Badge className="mb-6 bg-secondary text-secondary-foreground">
+        <section className="hero-gradient text-primary-foreground py-12 sm:py-16 lg:py-32">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div className="max-w-full">
+                <Badge className="mb-4 sm:mb-6 bg-secondary text-secondary-foreground">
                   Trusted Since 2012
                 </Badge>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                
+                {/* Mobile/Tablet: Text with logo inline on right */}
+                <div className="lg:hidden mb-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <h1 className="text-3xl sm:text-4xl font-bold leading-tight flex-1">
+                      Your Trusted IT Partner for Hotels & Businesses
+                    </h1>
+                    <div className="relative flex-shrink-0">
+                      <div className="absolute inset-0 bg-secondary/20 rounded-full blur-2xl"></div>
+                      <img 
+                        src={stallionLogo} 
+                        alt="Stallion IT Solutions" 
+                        className="relative h-16 w-16 sm:h-20 sm:w-20 animate-fade-in"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Desktop: Normal heading */}
+                <h1 className="hidden lg:block text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                   Your Trusted IT Partner for Hotels & Businesses
                 </h1>
-                <p className="text-lg md:text-xl text-primary-foreground/90 mb-8">
+                
+                <p className="text-base sm:text-lg md:text-xl text-primary-foreground/90 mb-6 sm:mb-8">
                   Stallion is an all-in-one IT solution provider with skilled staff and years of hospitality industry experience. We deliver complete IT solutions focused on business continuity, guest experience and long-term value.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" variant="secondary" asChild>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
                     <Link to="/contact">
                       Book Free IT Audit
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
-                  <Button size="lg" variant="secondary" asChild>
+                  <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
                     <Link to="/amc-plans">View AMC Plans</Link>
                   </Button>
                 </div>
               </div>
-              <div className="flex justify-center lg:justify-end">
+              
+              {/* Desktop: Large logo on right */}
+              <div className="hidden lg:flex justify-center lg:justify-end">
                 <div className="relative">
                   <div className="absolute inset-0 bg-secondary/20 rounded-full blur-3xl"></div>
                   <img 
@@ -149,9 +171,9 @@ const Index = () => {
         </section>
 
         {/* Stats Section */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <section className="py-12 sm:py-16 bg-muted/30">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               {stats.map((stat, index) => (
                 <Card key={index} className="text-center shadow-subtle hover:shadow-gold transition-shadow">
                   <CardContent className="p-6">
@@ -166,8 +188,8 @@ const Index = () => {
         </section>
 
         {/* Services Preview */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16">
+          <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Our Core Services</h2>
               <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
@@ -197,8 +219,8 @@ const Index = () => {
         </section>
 
         {/* Why Choose Us */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16 bg-muted/30">
+          <div className="container mx-auto px-4 max-w-7xl">
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Why Choose Stallion?</h2>
@@ -221,8 +243,8 @@ const Index = () => {
         </section>
 
         {/* Featured Project */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16">
+          <div className="container mx-auto px-4 max-w-7xl">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Featured Project</h2>
@@ -270,8 +292,8 @@ const Index = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16 bg-muted/30">
+          <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Client Testimonials</h2>
               <p className="text-lg text-foreground/70">
@@ -344,8 +366,8 @@ const Index = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 hero-gradient text-primary-foreground">
-          <div className="container mx-auto px-4">
+        <section className="py-12 sm:py-16 lg:py-20 hero-gradient text-primary-foreground">
+          <div className="container mx-auto px-4 max-w-7xl">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your IT Infrastructure?</h2>
               <p className="text-lg md:text-xl mb-8 text-primary-foreground/90">
