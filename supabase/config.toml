@@ -1,1 +1,4 @@
 project_id = "azatvrcoyfctudoagadj"
+
+[functions.send-audit-request]
+verify_jwt = false

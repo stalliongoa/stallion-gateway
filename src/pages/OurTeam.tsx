@@ -82,7 +82,11 @@ const OurTeam = () => {
                       </div>
                     </div>
                     <CardTitle className="text-xl text-primary mb-2">{member.name}</CardTitle>
-                    {member.position && <Badge variant="secondary" className="mb-2">{member.position}</Badge>}
+                    {member.position && (
+                      <div className="flex justify-center">
+                        <Badge variant="secondary" className="mb-2">{member.position}</Badge>
+                      </div>
+                    )}
                   </CardHeader>
                   <CardContent>
                     {member.bio && (

@@ -66,13 +66,13 @@ const Footer = () => {
             
             {/* Social Media */}
             <div className="flex items-center space-x-4 mt-6">
-              <a href="#" className="hover:text-secondary transition-colors">
+              <a href="https://www.facebook.com/stallionitsolutions" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-secondary transition-colors">
+              <a href="https://www.instagram.com/stallionitsolutions" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-secondary transition-colors">
+              <a href="https://www.linkedin.com/company/stallionitsolutions" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
