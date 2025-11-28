@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -21,6 +22,12 @@ const Contact = () => {
     service: "",
     message: ""
   });
+
+  // Animation hooks for different sections
+  const heroAnimation = useScrollAnimation({ threshold: 0.2 });
+  const contactInfoAnimation = useScrollAnimation({ threshold: 0.1 });
+  const formAnimation = useScrollAnimation({ threshold: 0.1 });
+  const mapAnimation = useScrollAnimation({ threshold: 0.1 });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,7 +133,12 @@ const Contact = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="hero-gradient text-primary-foreground py-12 sm:py-16 md:py-20">
+        <section 
+          ref={heroAnimation.ref}
+          className={`hero-gradient text-primary-foreground py-12 sm:py-16 md:py-20 transition-all duration-700 ${
+            heroAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+        >
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Get in Touch</h1>
@@ -138,11 +150,24 @@ const Contact = () => {
         </section>
 
         {/* Contact Info Cards */}
-        <section className="py-8 sm:py-12 md:py-16 bg-muted/30">
+        <section 
+          ref={contactInfoAnimation.ref}
+          className={`py-8 sm:py-12 md:py-16 bg-muted/30 transition-all duration-700 delay-200 ${
+            contactInfoAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+        >
           <div className="container mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto">
               {contactInfo.map((info, index) => (
-                <Card key={index} className="shadow-subtle hover:shadow-medium transition-shadow">
+                <Card 
+                  key={index} 
+                  className={`shadow-subtle hover:shadow-medium transition-all duration-500 ${
+                    contactInfoAnimation.isVisible 
+                      ? "opacity-100 translate-y-0" 
+                      : "opacity-0 translate-y-10"
+                  }`}
+                  style={{ transitionDelay: `${index * 100 + 300}ms` }}
+                >
                   <CardContent className="p-4 sm:p-6 text-center">
                     <div className="flex justify-center mb-3 sm:mb-4">{info.icon}</div>
                     <h3 className="font-semibold text-primary mb-2 text-sm sm:text-base">{info.title}</h3>
@@ -166,7 +191,12 @@ const Contact = () => {
         </section>
 
         {/* Contact Form */}
-        <section className="py-8 sm:py-12 md:py-16">
+        <section 
+          ref={formAnimation.ref}
+          className={`py-8 sm:py-12 md:py-16 transition-all duration-700 delay-300 ${
+            formAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+        >
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto">
               <Card className="shadow-medium">
@@ -295,7 +325,12 @@ const Contact = () => {
         </section>
 
         {/* Map Section */}
-        <section className="py-8 sm:py-12 md:py-16 bg-muted/30">
+        <section 
+          ref={mapAnimation.ref}
+          className={`py-8 sm:py-12 md:py-16 bg-muted/30 transition-all duration-700 delay-400 ${
+            mapAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+        >
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8 text-primary">Find Us</h2>
