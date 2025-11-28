@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import Map from "@/components/Map";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -22,7 +22,7 @@ const Contact = () => {
     message: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -35,24 +35,44 @@ const Contact = () => {
       return;
     }
 
-    // In a real application, this would send data to a backend
-    console.log("Form submitted:", formData);
-    
-    toast({
-      title: "Message sent successfully!",
-      description: "We'll get back to you within 24 hours.",
-    });
+    try {
+      console.log("Submitting audit request:", formData);
+      
+      // Send email notification via edge function
+      const { data, error } = await supabase.functions.invoke('send-audit-request', {
+        body: formData
+      });
 
-    // Reset form
-    setFormData({
-      name: "",
-      company: "",
-      email: "",
-      phone: "",
-      location: "",
-      service: "",
-      message: ""
-    });
+      if (error) {
+        console.error("Error sending audit request:", error);
+        throw error;
+      }
+
+      console.log("Audit request sent successfully:", data);
+      
+      toast({
+        title: "Message sent successfully!",
+        description: "We'll get back to you within 24 hours.",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        company: "",
+        email: "",
+        phone: "",
+        location: "",
+        service: "",
+        message: ""
+      });
+    } catch (error) {
+      console.error("Failed to submit audit request:", error);
+      toast({
+        title: "Failed to send message",
+        description: "Please try again or contact us directly at info@stallion.co.in",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -276,10 +296,15 @@ const Contact = () => {
               <Card className="shadow-medium overflow-hidden">
                 <CardContent className="p-0">
                   <div className="aspect-video">
-                    <Map 
-                      latitude={15.54062014112252} 
-                      longitude={73.83183874496716} 
-                      zoom={15}
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3844.3607829345937!2d73.82964!3d15.540620!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDMyJzI2LjIiTiA3M8KwNDknNDYuNyJF!5e0!3m2!1sen!2sin!4v1234567890"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Stallion IT Solutions Location"
                     />
                   </div>
                 </CardContent>
