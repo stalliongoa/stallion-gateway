@@ -97,7 +97,10 @@ const OurClients = () => {
                 </p>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-w-7xl mx-auto">
-                {clients.map((client) => (
+                {clients.filter(client => 
+                  !client.name.toLowerCase().includes('sachin patil') && 
+                  !client.name.toLowerCase().includes('ravish tople')
+                ).map((client) => (
                   <Card key={client.id} className="shadow-subtle hover:shadow-gold transition-all duration-300 group">
                     <CardContent className="p-6 flex flex-col items-center justify-center text-center min-h-[180px]">
                       {client.image_url ? (

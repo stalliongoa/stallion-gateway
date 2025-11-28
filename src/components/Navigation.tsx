@@ -22,9 +22,9 @@ const Navigation = () => {
   return (
     <nav className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-md">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between gap-4 h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
             <img src={stallionLogo} alt="Stallion IT Solutions & Services" className="h-14 w-14" />
             <div className="hidden md:block">
               <div className="text-lg font-bold">STALLION</div>
@@ -33,7 +33,7 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-6 flex-1 justify-center">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -46,7 +46,7 @@ const Navigation = () => {
           </div>
 
           {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4 flex-shrink-0">
             <Button variant="secondary" size="sm" asChild>
               <Link to="/contact">Book Free Audit</Link>
             </Button>
