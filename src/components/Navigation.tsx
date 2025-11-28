@@ -50,12 +50,6 @@ const Navigation = () => {
             <Button variant="secondary" size="sm" asChild>
               <Link to="/contact">Book Free Audit</Link>
             </Button>
-            <Button variant="outline" size="sm" asChild className="border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground">
-              <a href="tel:+917875811148">
-                <Phone className="h-4 w-4 mr-2" />
-                Call Now
-              </a>
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -83,12 +77,6 @@ const Navigation = () => {
             <div className="space-y-2 pt-4">
               <Button variant="secondary" size="sm" className="w-full" asChild>
                 <Link to="/contact" onClick={() => setIsOpen(false)}>Book Free Audit</Link>
-              </Button>
-              <Button variant="outline" size="sm" className="w-full border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground" asChild>
-                <a href="tel:+917875811148">
-                  <Phone className="h-4 w-4 mr-2" />
-                  Call Now
-                </a>
               </Button>
             </div>
           </div>

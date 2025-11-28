@@ -16,7 +16,8 @@ import {
   Clock, 
   Users,
   TrendingUp,
-  ArrowRight
+  ArrowRight,
+  Phone
 } from "lucide-react";
 
 const Index = () => {
@@ -151,6 +152,12 @@ const Index = () => {
                   </Button>
                   <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
                     <Link to="/amc-plans">View AMC Plans</Link>
+                  </Button>
+                  <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
+                    <a href="tel:+917875811148">
+                      <Phone className="h-5 w-5 mr-2" />
+                      Call Us
+                    </a>
                   </Button>
                 </div>
               </div>
@@ -377,8 +384,11 @@ const Index = () => {
                 <Button size="lg" variant="secondary" asChild>
                   <Link to="/contact">Book Free Audit</Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10" asChild>
-                  <a href="tel:+917875811148">Call Us Now</a>
+                <Button size="lg" variant="secondary" asChild>
+                  <a href="tel:+917875811148">
+                    <Phone className="h-5 w-5 mr-2" />
+                    Call Us Now
+                  </a>
                 </Button>
               </div>
             </div>
