@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Map from "@/components/Map";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -275,16 +276,11 @@ const Contact = () => {
               <Card className="shadow-medium overflow-hidden">
                 <CardContent className="p-0">
                   <div className="aspect-video">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3845.0!2d73.8!3d15.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDMwJzAwLjAiTiA3M8KwNDgnMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Stallion IT Solutions Location"
-                    ></iframe>
+                    <Map 
+                      latitude={15.54062014112252} 
+                      longitude={73.83183874496716} 
+                      zoom={15}
+                    />
                   </div>
                 </CardContent>
               </Card>
