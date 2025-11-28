@@ -28,7 +28,13 @@ const OurClients = () => {
       .select("*")
       .order("display_order", { ascending: true });
 
-    if (!error && data) {
+    if (error) {
+      console.error("Error fetching clients:", error);
+      return;
+    }
+
+    console.log("Clients fetched for testimonials page:", data);
+    if (data) {
       setClients(data);
     }
   };
