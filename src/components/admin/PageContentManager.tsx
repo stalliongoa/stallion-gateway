@@ -27,6 +27,7 @@ const PAGES = [
   { value: "services", label: "Services Page" },
   { value: "contact", label: "Contact Page" },
   { value: "amc-plans", label: "AMC Plans Page" },
+  { value: "stallion-cctv", label: "Stallion CCTV Page" },
 ];
 
 export default function PageContentManager() {

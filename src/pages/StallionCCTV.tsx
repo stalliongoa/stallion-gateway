@@ -83,42 +83,42 @@ const StallionCCTV = () => {
   const installations = [
     {
       title: "Corporate Office - 64 Camera Setup",
-      location: "Cyber City, Gurugram",
+      location: "Panjim, Goa",
       cameras: "64 IP Cameras + 2 NVR",
       features: "AI Analytics, Facial Recognition, License Plate Recognition",
       image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop"
     },
     {
       title: "Manufacturing Plant Security",
-      location: "Industrial Area, Delhi",
+      location: "Verna Industrial Estate, Goa",
       cameras: "128 Cameras + Central Monitoring",
       features: "Perimeter Security, Heat Detection, 24/7 Monitoring",
       image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop"
     },
     {
       title: "Retail Chain - Multi-Store",
-      location: "15 Locations Across Delhi NCR",
+      location: "15 Locations Across Goa",
       cameras: "320+ Cameras Network",
       features: "Centralized Monitoring, Cloud Storage, Mobile App",
       image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&auto=format&fit=crop"
     },
     {
       title: "Residential Complex",
-      location: "Dwarka, New Delhi",
+      location: "Porvorim, Goa",
       cameras: "96 Cameras + Gate Access Control",
       features: "Smart Entry, Visitor Management, Mobile Alerts",
       image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop"
     },
     {
       title: "Hospital Security System",
-      location: "South Delhi",
+      location: "Margao, Goa",
       cameras: "80 Cameras Multi-Floor",
       features: "Patient Safety, Emergency Response, Restricted Area Monitoring",
       image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop"
     },
     {
       title: "Educational Institution",
-      location: "Noida",
+      location: "Mapusa, Goa",
       cameras: "120 Cameras Campus-Wide",
       features: "Student Safety, Attendance System, Parent App Access",
       image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop"
@@ -210,7 +210,7 @@ const StallionCCTV = () => {
               Advanced Surveillance Solutions for Complete Security
             </p>
             <p className="text-lg md:text-xl mb-8 text-primary-foreground/80 max-w-3xl mx-auto">
-              Leading CCTV installation and security systems provider in Delhi NCR. Trusted by 1000+ clients across corporate, retail, residential & industrial sectors.
+              Leading CCTV installation and security systems provider in Goa. Trusted by 1000+ clients across corporate, retail, residential & industrial sectors.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" asChild>
