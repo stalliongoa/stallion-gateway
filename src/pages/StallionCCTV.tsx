@@ -26,6 +26,7 @@ import {
   Store
 } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import cctvHeroBg from "@/assets/cctv-hero-bg.jpg";
 
 const StallionCCTV = () => {
   const heroAnimation = useScrollAnimation();
@@ -196,7 +197,7 @@ const StallionCCTV = () => {
       
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-primary-foreground overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558002038-1055907df827?w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
+        <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url(${cctvHeroBg})` }}></div>
         <div className="container mx-auto px-4 relative z-10" ref={heroAnimation.ref}>
           <div className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${heroAnimation.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="flex justify-center mb-6">
@@ -221,6 +222,34 @@ const StallionCCTV = () => {
                   Call Now
                 </a>
               </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partner Brands Section */}
+      <section className="py-16 bg-background border-y">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Associate Partners</h2>
+            <p className="text-lg text-muted-foreground">Authorized dealers of world's leading CCTV brands</p>
+          </div>
+          <div className="relative overflow-hidden">
+            <div className="flex animate-[slide_30s_linear_infinite] gap-12 items-center">
+              {[
+                "CP Plus", "Hikvision", "Dahua", "Honeywell", "Bosch Security",
+                "Axis Communications", "Samsung Wisenet", "Uniview", "Hanwha Techwin",
+                "Panasonic", "Sony Professional", "Avigilon",
+                "CP Plus", "Hikvision", "Dahua", "Honeywell", "Bosch Security",
+                "Axis Communications", "Samsung Wisenet", "Uniview"
+              ].map((brand, index) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0 w-48 h-24 flex items-center justify-center bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <span className="text-lg font-semibold text-foreground px-4 text-center">{brand}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
