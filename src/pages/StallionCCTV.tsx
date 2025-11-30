@@ -41,6 +41,10 @@ import paiKaneImage from "@/assets/pai-kane.jpg";
 import nikhilChinappaImage from "@/assets/nikhil-chinappa.jpeg";
 import happyBracesImage from "@/assets/happy-braces.jpg";
 import materDeiImage from "@/assets/mater-dei.jpg";
+import nikhilChinappaTestimonialImage from "@/assets/nikhil-chinappa-testimonial.jpeg";
+import swapnilAsnodkarImage from "@/assets/swapnil-asnodkar.jpeg";
+import drVardhanBhobeImage from "@/assets/dr-vardhan-bhobe.jpg";
+import pvJayaprakashImage from "@/assets/pv-jayaprakash.jpg";
 
 const StallionCCTV = () => {
   const heroAnimation = useScrollAnimation();
@@ -155,36 +159,36 @@ const StallionCCTV = () => {
 
   const testimonials = [
     {
-      name: "Rajesh Kumar",
-      company: "TechCorp Industries",
-      role: "Security Head",
+      name: "Mr. Nikhil Chinappa",
+      company: "",
+      role: "Public Figure",
       rating: 5,
-      text: "Stallion CCTV transformed our factory security. The AI-powered cameras detected an intrusion attempt that saved us from potential losses. Professional team and excellent after-sales support.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop"
+      text: "Stallion IT Solutions and Services did an excellent job installing the CCTV system at my residence in Nerul. The team was professional, efficient, and ensured the entire setup was secure and seamlessly integrated. Their attention to detail and commitment to quality gave me complete peace of mind. Highly recommended.",
+      image: nikhilChinappaTestimonialImage
     },
     {
-      name: "Priya Sharma",
-      company: "Green Valley Apartments",
-      role: "RWA President",
+      name: "Mr. Swapnil Asnodkar",
+      company: "Goa",
+      role: "Cricketer",
       rating: 5,
-      text: "The residential security solution from Stallion has made our society much safer. Parents can now check on children's entry/exit through the mobile app. Highly recommend!",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop"
+      text: "Stallion IT Solutions and Services completed a customized CCTV project at my residence. The work involved servicing and troubleshooting the existing camera system, resolving connectivity and recording issues, and upgrading faulty components for improved performance. The team also optimized the layout by adding and realigning cameras to ensure better coverage, enhanced clarity, and a more reliable surveillance system overall. The upgraded setup now delivers smooth monitoring and long-term stability.",
+      image: swapnilAsnodkarImage
     },
     {
-      name: "Amit Verma",
-      company: "Style Mart Retail",
-      role: "Operations Manager",
+      name: "Dr. Vardhan Bhobe",
+      company: "Porvorim, Goa",
+      role: "Physician",
       rating: 5,
-      text: "Managing 15 stores was challenging until Stallion installed their centralized monitoring system. Now I can view all stores from my phone. Theft incidents have reduced by 80%.",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop"
+      text: "Stallion IT Solutions and Services completed a reliable CCTV surveillance installation at my residence in Porvorim, Goa. The setup was designed to provide complete home security with clear monitoring and stable performance. I have been a happy and satisfied customer for over 6 years, continuing to trust Stallion for regular maintenance, upgrades, and dependable IT support.",
+      image: drVardhanBhobeImage
     },
     {
-      name: "Dr. Neha Gupta",
-      company: "Wellness Hospital",
-      role: "Administrator",
+      name: "Mr. P.V. Jayaprakash",
+      company: "Sanquelim, Goa",
+      role: "Homeowner",
       rating: 5,
-      text: "Patient safety is our priority. Stallion's CCTV system with restricted area monitoring has greatly improved our security protocols. The team was professional and completed installation without disrupting operations.",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&auto=format&fit=crop"
+      text: "So we were looking for a CCTV for our home. We are connected with one of my friend who helped me in identifying Stallion IT Solutions And Services – Goa. We contacted with some of the customers of Stallion IT solutions and then we placed the order. They promptly come down and executed job. We have seen the quality of job. The team has been very cooperating with us to our requirement of how to do where it is to be put. They have done 2/3 trials also and demonstrating us subsequently. They have also shown us how to see the recorded audios and the videos of previous days and how to take backups. We are quite happy with the quality and pricing of the CCTV installation. Thank you.",
+      image: pvJayaprakashImage
     }
   ];
 
