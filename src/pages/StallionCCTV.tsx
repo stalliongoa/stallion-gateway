@@ -26,7 +26,7 @@ import {
   Store
 } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import cctvHeroBg from "@/assets/cctv-hero-bg.jpg";
+import cctvHeroBg from "@/assets/cctv-hero-bg.png";
 import ipCCTVImage from "@/assets/ip-cctv.jpg";
 import analogCamerasImage from "@/assets/analog-cameras.webp";
 import wifiCamerasImage from "@/assets/wifi-cameras.jpg";
