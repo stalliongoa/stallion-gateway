@@ -34,6 +34,7 @@ import ptzCamerasImage from "@/assets/ptz-cameras.jpeg";
 import accessControlImage from "@/assets/access-control.webp";
 import videoDoorPhoneImage from "@/assets/video-door-phone.webp";
 import cctvSoftwareImage from "@/assets/cctv-software.webp";
+import nvrDvrSystemImage from "@/assets/nvr-dvr-system.jpg";
 
 const StallionCCTV = () => {
   const heroAnimation = useScrollAnimation();
@@ -62,7 +63,7 @@ const StallionCCTV = () => {
       description: "Advanced recording and storage solutions",
       features: ["Up to 32 Channels", "Cloud Backup", "Mobile Viewing", "AI Analytics"],
       icon: HardDrive,
-      image: analogCamerasImage
+      image: nvrDvrSystemImage
     },
     {
       name: "PTZ Cameras",
