@@ -36,6 +36,8 @@ import videoDoorPhoneImage from "@/assets/video-door-phone.webp";
 import cctvSoftwareImage from "@/assets/cctv-software.webp";
 import nvrDvrSystemImage from "@/assets/nvr-dvr-system.jpg";
 import sapanaRajValleyImage from "@/assets/sapana-raj-valley.jpg";
+import hotelNavilExoticaImage from "@/assets/hotel-navil-exotica.webp";
+import paiKaneImage from "@/assets/pai-kane.jpg";
 
 const StallionCCTV = () => {
   const heroAnimation = useScrollAnimation();
@@ -112,18 +114,18 @@ const StallionCCTV = () => {
       image: sapanaRajValleyImage
     },
     {
-      title: "Manufacturing Plant Security",
-      location: "Verna Industrial Estate, Goa",
-      cameras: "128 Cameras + Central Monitoring",
-      features: "Perimeter Security, Heat Detection, 24/7 Monitoring",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop"
+      title: "Hotel Navil Exotica – Dabolim, Goa",
+      location: "Dabolim, Goa",
+      cameras: "22+ IP Cameras",
+      features: "LAN Integration, Remote Surveillance, Full Property Coverage",
+      image: hotelNavilExoticaImage
     },
     {
-      title: "Retail Chain - Multi-Store",
-      location: "15 Locations Across Goa",
-      cameras: "320+ Cameras Network",
-      features: "Centralized Monitoring, Cloud Storage, Mobile App",
-      image: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&auto=format&fit=crop"
+      title: "Pai Kane Industries – Tuem, Goa",
+      location: "Tuem, Goa",
+      cameras: "IP-based Surveillance System",
+      features: "Production Zone Monitoring, Network Integration, Scalable Architecture",
+      image: paiKaneImage
     },
     {
       title: "Residential Complex",
