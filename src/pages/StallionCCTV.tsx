@@ -228,8 +228,8 @@ const StallionCCTV = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-primary-foreground overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url(${cctvHeroBg})` }}></div>
+      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-primary/70 via-primary/60 to-primary/50 text-primary-foreground overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${cctvHeroBg})` }}></div>
         <div className="container mx-auto px-4 relative z-10" ref={heroAnimation.ref}>
           <div className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${heroAnimation.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="flex justify-center mb-6">
