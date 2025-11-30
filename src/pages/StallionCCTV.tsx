@@ -35,6 +35,7 @@ import accessControlImage from "@/assets/access-control.webp";
 import videoDoorPhoneImage from "@/assets/video-door-phone.webp";
 import cctvSoftwareImage from "@/assets/cctv-software.webp";
 import nvrDvrSystemImage from "@/assets/nvr-dvr-system.jpg";
+import sapanaRajValleyImage from "@/assets/sapana-raj-valley.jpg";
 
 const StallionCCTV = () => {
   const heroAnimation = useScrollAnimation();
@@ -104,11 +105,11 @@ const StallionCCTV = () => {
 
   const installations = [
     {
-      title: "Corporate Office - 64 Camera Setup",
-      location: "Panjim, Goa",
-      cameras: "64 IP Cameras + 2 NVR",
-      features: "AI Analytics, Facial Recognition, License Plate Recognition",
-      image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop"
+      title: "Sapana Raj Valley – Sangolda, Goa",
+      location: "Sangolda, Goa",
+      cameras: "64+ IP Cameras + 3 NVRs",
+      features: "Owl Vision Night-Vision, Multi-Location Integration, Analog CCTV Merge",
+      image: sapanaRajValleyImage
     },
     {
       title: "Manufacturing Plant Security",
