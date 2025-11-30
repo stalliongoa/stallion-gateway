@@ -27,6 +27,13 @@ import {
 } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import cctvHeroBg from "@/assets/cctv-hero-bg.jpg";
+import ipCCTVImage from "@/assets/ip-cctv.jpg";
+import analogCamerasImage from "@/assets/analog-cameras.webp";
+import wifiCamerasImage from "@/assets/wifi-cameras.jpg";
+import ptzCamerasImage from "@/assets/ptz-cameras.jpeg";
+import accessControlImage from "@/assets/access-control.webp";
+import videoDoorPhoneImage from "@/assets/video-door-phone.webp";
+import cctvSoftwareImage from "@/assets/cctv-software.webp";
 
 const StallionCCTV = () => {
   const heroAnimation = useScrollAnimation();
@@ -41,56 +48,56 @@ const StallionCCTV = () => {
       description: "High-resolution network cameras with advanced features",
       features: ["4K Resolution", "Night Vision", "Motion Detection", "Remote Access"],
       icon: Camera,
-      image: "https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?w=800&auto=format&fit=crop"
+      image: ipCCTVImage
     },
     {
       name: "Analog HD Cameras",
       description: "Cost-effective surveillance with HD quality",
       features: ["1080p HD", "Weatherproof", "Wide Angle", "IR Night Vision"],
       icon: Eye,
-      image: "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&auto=format&fit=crop"
+      image: analogCamerasImage
     },
     {
       name: "NVR & DVR Systems",
       description: "Advanced recording and storage solutions",
       features: ["Up to 32 Channels", "Cloud Backup", "Mobile Viewing", "AI Analytics"],
       icon: HardDrive,
-      image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&auto=format&fit=crop"
+      image: analogCamerasImage
     },
     {
       name: "PTZ Cameras",
       description: "Pan-Tilt-Zoom cameras for wide area coverage",
       features: ["360° Rotation", "30x Optical Zoom", "Auto Tracking", "Preset Positions"],
       icon: Monitor,
-      image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&auto=format&fit=crop"
+      image: ptzCamerasImage
     },
     {
       name: "Wireless Cameras",
       description: "Easy installation WiFi-enabled cameras",
       features: ["WiFi Connectivity", "Battery Backup", "2-Way Audio", "Mobile Alerts"],
       icon: Wifi,
-      image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=800&auto=format&fit=crop"
+      image: wifiCamerasImage
     },
     {
       name: "Access Control",
       description: "Integrated security access management",
       features: ["Biometric Access", "Card Readers", "Time Attendance", "Remote Control"],
       icon: Lock,
-      image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&auto=format&fit=crop"
+      image: accessControlImage
     },
     {
       name: "Video Door Phone",
       description: "Smart intercom with video monitoring",
       features: ["HD Video Call", "Remote Unlock", "Motion Detection", "Mobile Integration"],
       icon: Monitor,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop"
+      image: videoDoorPhoneImage
     },
     {
       name: "Centralized Monitoring Software",
       description: "Multi-location surveillance management platform",
       features: ["Multi-Site Access", "Real-time Alerts", "Custom Reports", "User Management"],
       icon: HardDrive,
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop"
+      image: cctvSoftwareImage
     }
   ];
 
