@@ -38,6 +38,9 @@ import nvrDvrSystemImage from "@/assets/nvr-dvr-system.jpg";
 import sapanaRajValleyImage from "@/assets/sapana-raj-valley.jpg";
 import hotelNavilExoticaImage from "@/assets/hotel-navil-exotica.webp";
 import paiKaneImage from "@/assets/pai-kane.jpg";
+import nikhilChinappaImage from "@/assets/nikhil-chinappa.jpeg";
+import happyBracesImage from "@/assets/happy-braces.jpg";
+import materDeiImage from "@/assets/mater-dei.jpg";
 
 const StallionCCTV = () => {
   const heroAnimation = useScrollAnimation();
@@ -128,25 +131,25 @@ const StallionCCTV = () => {
       image: paiKaneImage
     },
     {
-      title: "Residential Complex",
+      title: "Residential CCTV Installation – Mr. Nikhil Chinappa, Nerul, Goa",
+      location: "Nerul, Goa",
+      cameras: "Premium Home Surveillance",
+      features: "HD IP Cameras, Remote Monitoring, Full Privacy Protection",
+      image: nikhilChinappaImage
+    },
+    {
+      title: "Happy Braces Dental Clinic – Porvorim, Goa",
       location: "Porvorim, Goa",
-      cameras: "96 Cameras + Gate Access Control",
-      features: "Smart Entry, Visitor Management, Mobile Alerts",
-      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop"
+      cameras: "Analog CCTV System",
+      features: "Reception & Waiting Area Coverage, Cost-Effective Solution",
+      image: happyBracesImage
     },
     {
-      title: "Hospital Security System",
-      location: "Margao, Goa",
-      cameras: "80 Cameras Multi-Floor",
-      features: "Patient Safety, Emergency Response, Restricted Area Monitoring",
-      image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&auto=format&fit=crop"
-    },
-    {
-      title: "Educational Institution",
-      location: "Mapusa, Goa",
-      cameras: "120 Cameras Campus-Wide",
-      features: "Student Safety, Attendance System, Parent App Access",
-      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop"
+      title: "Mater Dei School – Saligao, Goa",
+      location: "Saligao, Goa",
+      cameras: "Campus-Wide Surveillance",
+      features: "Entrance & Corridor Monitoring, Student Safety, Staff Management",
+      image: materDeiImage
     }
   ];
 
