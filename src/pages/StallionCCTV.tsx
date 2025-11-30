@@ -193,18 +193,18 @@ const StallionCCTV = () => {
   ];
 
   const clientLogos = [
-    { name: "DLF Limited", sector: "Real Estate" },
-    { name: "Max Healthcare", sector: "Healthcare" },
-    { name: "Amity University", sector: "Education" },
-    { name: "Reliance Retail", sector: "Retail" },
-    { name: "Hero MotoCorp", sector: "Manufacturing" },
-    { name: "Godrej Properties", sector: "Real Estate" },
-    { name: "ICICI Bank", sector: "Banking" },
-    { name: "Apollo Hospitals", sector: "Healthcare" },
-    { name: "Shoppers Stop", sector: "Retail" },
-    { name: "Maruti Suzuki", sector: "Automotive" },
-    { name: "ITC Limited", sector: "FMCG" },
-    { name: "Fortis Hospital", sector: "Healthcare" }
+    { name: "Mahek-E-Punjab Restaurant", sector: "Restaurant" },
+    { name: "Sapana Raj Valley", sector: "Housing Society" },
+    { name: "Pai Kane Group", sector: "Industry" },
+    { name: "Lifeline Medicals", sector: "Pharmacy" },
+    { name: "Mahalaxmi Cement Products", sector: "Industry" },
+    { name: "Royal Orchid", sector: "Resort" },
+    { name: "Happy Braces", sector: "Clinic" },
+    { name: "Saini Motors", sector: "Automotive" },
+    { name: "Mater Dei", sector: "School" },
+    { name: "Jain Mandir Porvorim", sector: "Temple" },
+    { name: "The Lohias", sector: "Resort" },
+    { name: "Ashray Developers", sector: "Real Estate" }
   ];
 
   const features = [
