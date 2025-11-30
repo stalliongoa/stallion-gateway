@@ -77,6 +77,20 @@ const StallionCCTV = () => {
       features: ["Biometric Access", "Card Readers", "Time Attendance", "Remote Control"],
       icon: Lock,
       image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&auto=format&fit=crop"
+    },
+    {
+      name: "Video Door Phone",
+      description: "Smart intercom with video monitoring",
+      features: ["HD Video Call", "Remote Unlock", "Motion Detection", "Mobile Integration"],
+      icon: Monitor,
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop"
+    },
+    {
+      name: "Centralized Monitoring Software",
+      description: "Multi-location surveillance management platform",
+      features: ["Multi-Site Access", "Real-time Alerts", "Custom Reports", "User Management"],
+      icon: HardDrive,
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop"
     }
   ];
 
@@ -216,7 +230,7 @@ const StallionCCTV = () => {
               <Button size="lg" variant="secondary" asChild>
                 <a href="#contact">Get Free Quote</a>
               </Button>
-              <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10" asChild>
+              <Button size="lg" variant="secondary" asChild>
                 <a href="tel:+917875811148">
                   <Phone className="h-5 w-5 mr-2" />
                   Call Now
@@ -231,17 +245,18 @@ const StallionCCTV = () => {
       <section className="py-16 bg-background border-y">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Associate Partners</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Associated Brands</h2>
             <p className="text-lg text-muted-foreground">Authorized dealers of world's leading CCTV brands</p>
           </div>
           <div className="relative overflow-hidden">
             <div className="flex animate-[slide_30s_linear_infinite] gap-12 items-center">
               {[
-                "CP Plus", "Hikvision", "Dahua", "Honeywell", "Bosch Security",
+                "CP Plus", "Hikvision", "Dahua", "Honeywell", "TP-Link",
+                "D-Link", "UNV", "Active Pixel", "Digisol",
                 "Axis Communications", "Samsung Wisenet", "Uniview", "Hanwha Techwin",
                 "Panasonic", "Sony Professional", "Avigilon",
-                "CP Plus", "Hikvision", "Dahua", "Honeywell", "Bosch Security",
-                "Axis Communications", "Samsung Wisenet", "Uniview"
+                "CP Plus", "Hikvision", "Dahua", "Honeywell", "TP-Link",
+                "D-Link", "UNV", "Active Pixel", "Digisol"
               ].map((brand, index) => (
                 <div
                   key={index}
@@ -430,7 +445,7 @@ const StallionCCTV = () => {
               <Card className="p-6 bg-primary-foreground/10 border-primary-foreground/20">
                 <MapPin className="h-8 w-8 mx-auto mb-3 text-primary-foreground" />
                 <p className="text-sm mb-2">Visit Us</p>
-                <p className="font-bold text-lg">Delhi NCR</p>
+                <p className="font-bold text-lg">Porvorim, Goa</p>
               </Card>
             </div>
             <Button size="lg" variant="secondary" asChild>
