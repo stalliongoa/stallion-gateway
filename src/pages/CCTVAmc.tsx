@@ -174,7 +174,7 @@ const CCTVAmc = () => {
 
       <section className="relative min-h-[50vh] flex items-center justify-center text-white overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${cctvAmcBg})` }}></div>
-        <div className="absolute inset-0 bg-slate-900/30"></div>
+        <div className="absolute inset-0 bg-slate-900/50"></div>
         <div className="container mx-auto px-4 relative z-10 py-20" ref={heroAnimation.ref}>
           <div className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${heroAnimation.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="flex justify-center gap-4 mb-6">
