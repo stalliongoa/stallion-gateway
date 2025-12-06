@@ -45,6 +45,7 @@ import nikhilChinappaTestimonialImage from "@/assets/nikhil-chinappa-testimonial
 import swapnilAsnodkarImage from "@/assets/swapnil-asnodkar.jpeg";
 import drVardhanBhobeImage from "@/assets/dr-vardhan-bhobe.jpg";
 import pvJayaprakashImage from "@/assets/pv-jayaprakash.jpg";
+import cctvAmcBg from "@/assets/cctv-amc-bg.jpeg";
 
 const StallionCCTV = () => {
   const heroAnimation = useScrollAnimation();
@@ -441,6 +442,23 @@ const StallionCCTV = () => {
         </div>
       </section>
 
+      {/* CCTV Annual Maintenance Contract Section */}
+      <section className="relative py-20 text-primary-foreground overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${cctvAmcBg})` }}></div>
+        <div className="absolute inset-0 bg-primary/80"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">CCTV Annual Maintenance Contract (AMC)</h2>
+            <p className="text-lg mb-8 text-primary-foreground/90">
+              Protect your investment. Reliable CCTV maintenance for round-the-clock surveillance — tailored plans for housing societies, hotels and industries.
+            </p>
+            <Button size="lg" variant="secondary" asChild>
+              <Link to="/cctv-amc">Explore AMC Plans</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Contact CTA Section */}
       <section id="contact" className="py-20 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
         <div className="container mx-auto px-4">
@@ -466,9 +484,14 @@ const StallionCCTV = () => {
                 <p className="font-bold text-lg">Porvorim, Goa</p>
               </Card>
             </div>
-            <Button size="lg" variant="secondary" asChild>
-              <Link to="/contact">Schedule Free Site Survey</Link>
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" variant="secondary" asChild>
+                <Link to="/contact">Schedule Free Site Survey</Link>
+              </Button>
+              <Button size="lg" variant="secondary" asChild>
+                <Link to="/cctv-amc">CCTV AMC</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
