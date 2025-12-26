@@ -1,24 +1,45 @@
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowRight, Shield, Wifi, Camera, Network } from "lucide-react";
+import { Calendar, User, ArrowRight } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string | null;
+  image_url: string | null;
+  published: boolean | null;
+  created_at: string | null;
+}
 
 const Blog = () => {
-  const blogPosts: Array<{
-    id: number;
-    title: string;
-    excerpt: string;
-    category: string;
-    author: string;
-    date: string;
-    readTime: string;
-    icon: React.ReactNode;
-    image: string;
-  }> = [];
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const categories = ["All", "Security", "Networking", "Business", "Automation"];
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('published', true)
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('Error fetching blog posts:', error);
+      } else {
+        setBlogPosts(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchPosts();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -42,24 +63,6 @@ const Blog = () => {
           </div>
         </section>
 
-        {/* Categories Filter */}
-        <section className="py-8 bg-muted/30 sticky top-20 z-40 border-b border-border/50">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-wrap gap-2 justify-center">
-              {categories.map((category, index) => (
-                <Button
-                  key={index}
-                  variant={index === 0 ? "default" : "outline"}
-                  size="sm"
-                  className={index === 0 ? "bg-secondary text-secondary-foreground" : ""}
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Featured Post */}
         {blogPosts.length > 0 && (
           <section className="py-16">
@@ -69,16 +72,17 @@ const Blog = () => {
                 <Card className="shadow-gold overflow-hidden">
                   <div className="grid md:grid-cols-2 gap-0">
                     <div className="h-64 md:h-auto">
-                      <img
-                        src={blogPosts[0].image}
-                        alt={blogPosts[0].title}
-                        className="w-full h-full object-cover"
-                      />
+                      {blogPosts[0].image_url && (
+                        <img
+                          src={blogPosts[0].image_url}
+                          alt={blogPosts[0].title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                     </div>
                     <CardHeader className="p-8">
                       <div className="flex items-center gap-2 mb-4">
-                        <Badge variant="secondary">{blogPosts[0].category}</Badge>
-                        <span className="text-sm text-foreground/60">{blogPosts[0].readTime}</span>
+                        <Badge variant="secondary">Blog</Badge>
                       </div>
                       <CardTitle className="text-3xl text-primary mb-4">
                         {blogPosts[0].title}
@@ -87,10 +91,8 @@ const Blog = () => {
                         {blogPosts[0].excerpt}
                       </CardDescription>
                       <div className="flex items-center text-sm text-foreground/70 mb-6">
-                        <User className="h-4 w-4 mr-2" />
-                        <span className="mr-4">{blogPosts[0].author}</span>
                         <Calendar className="h-4 w-4 mr-2" />
-                        <span>{blogPosts[0].date}</span>
+                        <span>{blogPosts[0].created_at ? new Date(blogPosts[0].created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}</span>
                       </div>
                       <Button>
                         Read Full Article
@@ -108,7 +110,11 @@ const Blog = () => {
         <section className="py-16 bg-muted/30">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
-              {blogPosts.length === 0 ? (
+              {loading ? (
+                <div className="text-center py-16">
+                  <p className="text-foreground/70">Loading blog posts...</p>
+                </div>
+              ) : blogPosts.length === 0 ? (
                 <div className="text-center py-16">
                   <div className="text-6xl mb-4">📝</div>
                   <h3 className="text-2xl font-bold text-primary mb-2">Coming Soon</h3>
@@ -119,22 +125,23 @@ const Blog = () => {
                   {blogPosts.slice(1).map((post) => (
                     <Card key={post.id} className="shadow-medium hover:shadow-gold transition-all duration-300 overflow-hidden group">
                       <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={post.image}
-                          alt={post.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
+                        {post.image_url && (
+                          <img
+                            src={post.image_url}
+                            alt={post.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          />
+                        )}
                         <div className="absolute top-4 left-4">
-                          <Badge variant="secondary">{post.category}</Badge>
+                          <Badge variant="secondary">Blog</Badge>
                         </div>
                       </div>
                       <CardHeader>
                         <div className="flex items-center justify-between text-sm text-foreground/60 mb-2">
                           <div className="flex items-center">
                             <Calendar className="h-4 w-4 mr-1" />
-                            <span>{post.date}</span>
+                            <span>{post.created_at ? new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : ''}</span>
                           </div>
-                          <span>{post.readTime}</span>
                         </div>
                         <CardTitle className="text-xl text-primary mb-2 line-clamp-2">
                           {post.title}
@@ -144,11 +151,7 @@ const Blog = () => {
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-sm text-foreground/70">
-                            <User className="h-4 w-4 mr-2" />
-                            <span>{post.author}</span>
-                          </div>
+                        <div className="flex items-center justify-end">
                           <Button variant="ghost" size="sm" className="text-secondary hover:text-secondary/80">
                             Read More
                             <ArrowRight className="ml-2 h-4 w-4" />
