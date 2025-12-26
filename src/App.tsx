@@ -11,6 +11,7 @@ import OurTeam from "./pages/OurTeam";
 import OurClients from "./pages/OurClients";
 import Projects from "./pages/Projects";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/our-clients" element={<OurClients />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/stallion-cctv" element={<StallionCCTV />} />
           <Route path="/cctv-amc" element={<CCTVAmc />} />

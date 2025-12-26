@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface BlogPost {
@@ -94,9 +95,11 @@ const Blog = () => {
                         <Calendar className="h-4 w-4 mr-2" />
                         <span>{blogPosts[0].created_at ? new Date(blogPosts[0].created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}</span>
                       </div>
-                      <Button>
-                        Read Full Article
-                        <ArrowRight className="ml-2 h-5 w-5" />
+                      <Button asChild>
+                        <Link to={`/blog/${blogPosts[0].slug}`}>
+                          Read Full Article
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Link>
                       </Button>
                     </CardHeader>
                   </div>
@@ -152,9 +155,11 @@ const Blog = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center justify-end">
-                          <Button variant="ghost" size="sm" className="text-secondary hover:text-secondary/80">
-                            Read More
-                            <ArrowRight className="ml-2 h-4 w-4" />
+                          <Button asChild variant="ghost" size="sm" className="text-secondary hover:text-secondary/80">
+                            <Link to={`/blog/${post.slug}`}>
+                              Read More
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Link>
                           </Button>
                         </div>
                       </CardContent>
