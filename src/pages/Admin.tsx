@@ -12,6 +12,7 @@ import ClientsManager from "@/components/admin/ClientsManager";
 import BlogManager from "@/components/admin/BlogManager";
 import SettingsManager from "@/components/admin/SettingsManager";
 import PageContentManager from "@/components/admin/PageContentManager";
+import JobsManager from "@/components/admin/JobsManager";
 
 export default function Admin() {
   const [user, setUser] = useState<User | null>(null);
@@ -119,6 +120,7 @@ export default function Admin() {
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="team">Team Members</TabsTrigger>
             <TabsTrigger value="clients">Clients</TabsTrigger>
+            <TabsTrigger value="jobs">Jobs</TabsTrigger>
             <TabsTrigger value="blog">Blog Posts</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
@@ -137,6 +139,10 @@ export default function Admin() {
 
           <TabsContent value="clients">
             <ClientsManager />
+          </TabsContent>
+
+          <TabsContent value="jobs">
+            <JobsManager />
           </TabsContent>
 
           <TabsContent value="blog">

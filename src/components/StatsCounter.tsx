@@ -17,7 +17,7 @@ const StatsCounter = () => {
   const stats: StatItem[] = [
     {
       icon: <Clock className="h-8 w-8 text-secondary" />,
-      endValue: 10,
+      endValue: 14,
       suffix: "+",
       label: "Years Experience"
     },
