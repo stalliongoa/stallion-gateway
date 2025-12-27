@@ -8,9 +8,9 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Stallion Brand Colors */
-    --stallion-navy: 210 100% 13%;
-    --stallion-gold: 40 53% 65%;
+    /* Stallion Brand Colors - Navy & Gold from Logo */
+    --stallion-navy: 222 47% 25%;
+    --stallion-gold: 43 65% 50%;
     --stallion-black: 0 0% 4%;
     --stallion-grey: 0 0% 87%;
     --stallion-bg: 0 0% 96%;

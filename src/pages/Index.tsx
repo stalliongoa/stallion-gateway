@@ -111,48 +111,34 @@ const Index = () => {
       
       <main className="flex-1 overflow-x-hidden">
         {/* Hero Section with Banner */}
-        <section className="relative min-h-[60vh] lg:min-h-[70vh] flex items-center">
-          {/* Hero Banner Background */}
+        <section className="relative min-h-[50vh] lg:min-h-[60vh] flex items-end">
+          {/* Hero Banner Background - Full Image */}
           <div className="absolute inset-0 z-0">
             <img 
               src={heroBanner} 
               alt="Stallion IT Solutions - Unleash the Power of Reliable IT" 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/40 to-transparent"></div>
           </div>
           
-          {/* Content Overlay */}
-          <div className="container mx-auto px-4 max-w-7xl relative z-10">
-            <div className="max-w-2xl py-12 sm:py-16 lg:py-20">
-              <Badge className="mb-4 sm:mb-6 bg-secondary text-secondary-foreground">
-                Trusted Since 2012
-              </Badge>
-              
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg">
-                Your Trusted IT Partner for Hotels & Businesses
-              </h1>
-              
-              <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 drop-shadow">
-                Stallion is an all-in-one IT solution provider with skilled staff and years of hospitality industry experience. We deliver complete IT solutions focused on business continuity, guest experience and long-term value.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
-                  <Link to="/contact">
-                    Book Free IT Audit
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
-                  <Link to="/amc-plans">View AMC Plans</Link>
-                </Button>
-                <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
-                  <a href="tel:+917875811148">
-                    <Phone className="h-5 w-5 mr-2" />
-                    Call Us
-                  </a>
-                </Button>
-              </div>
+          {/* Buttons Overlay at Bottom */}
+          <div className="container mx-auto px-4 max-w-7xl relative z-10 pb-8 sm:pb-12">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center sm:justify-start">
+              <Button size="lg" className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold border-2 border-stallion-gold w-full sm:w-auto">
+                <Link to="/contact" className="flex items-center">
+                  Book Free IT Audit
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
+                <Link to="/amc-plans">View AMC Plans</Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
+                <a href="tel:+917875811148">
+                  <Phone className="h-5 w-5 mr-2" />
+                  Call Us
+                </a>
+              </Button>
             </div>
           </div>
         </section>
