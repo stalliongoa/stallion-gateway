@@ -1,11 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
+import SearchDialog from "@/components/SearchDialog";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  // Keyboard shortcut for search
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setSearchOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -17,6 +31,7 @@ const Navigation = () => {
     { name: "Projects", path: "/projects" },
     { name: "CCTV", path: "/stallion-cctv" },
     { name: "Blog", path: "/blog" },
+    { name: "Careers", path: "/careers" },
     { name: "Contact", path: "/contact" },
   ];
 
@@ -48,6 +63,15 @@ const Navigation = () => {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-4 flex-shrink-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSearchOpen(true)}
+              className="text-primary-foreground hover:text-secondary"
+            >
+              <Search className="h-4 w-4 mr-2" />
+              <span className="text-xs">⌘K</span>
+            </Button>
             <Button variant="secondary" size="sm" asChild>
               <Link to="/contact">Book Free Audit</Link>
             </Button>
@@ -83,6 +107,8 @@ const Navigation = () => {
           </div>
         )}
       </div>
+
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </nav>
   );
 };
