@@ -5,7 +5,8 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import stallionLogo from "@/assets/stallion-logo.png";
+import stallionLogo from "@/assets/stallion-gold-logo.png";
+import heroBanner from "@/assets/hero-banner.png";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Network, 
@@ -109,69 +110,48 @@ const Index = () => {
       <Navigation />
       
       <main className="flex-1 overflow-x-hidden">
-        {/* Hero Section */}
-        <section className="hero-gradient text-primary-foreground py-12 sm:py-16 lg:py-32">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              <div className="max-w-full">
-                <Badge className="mb-4 sm:mb-6 bg-secondary text-secondary-foreground">
-                  Trusted Since 2012
-                </Badge>
-                
-                {/* Mobile/Tablet: Text with logo inline on right */}
-                <div className="lg:hidden mb-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <h1 className="text-3xl sm:text-4xl font-bold leading-tight flex-1">
-                      Your Trusted IT Partner for Hotels & Businesses
-                    </h1>
-                    <div className="relative flex-shrink-0">
-                      <div className="absolute inset-0 bg-secondary/20 rounded-full blur-2xl"></div>
-                      <img 
-                        src={stallionLogo} 
-                        alt="Stallion IT Solutions" 
-                        className="relative h-16 w-16 sm:h-20 sm:w-20 animate-fade-in"
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Desktop: Normal heading */}
-                <h1 className="hidden lg:block text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                  Your Trusted IT Partner for Hotels & Businesses
-                </h1>
-                
-                <p className="text-base sm:text-lg md:text-xl text-primary-foreground/90 mb-6 sm:mb-8">
-                  Stallion is an all-in-one IT solution provider with skilled staff and years of hospitality industry experience. We deliver complete IT solutions focused on business continuity, guest experience and long-term value.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
-                    <Link to="/contact">
-                      Book Free IT Audit
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                  <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
-                    <Link to="/amc-plans">View AMC Plans</Link>
-                  </Button>
-                  <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
-                    <a href="tel:+917875811148">
-                      <Phone className="h-5 w-5 mr-2" />
-                      Call Us
-                    </a>
-                  </Button>
-                </div>
-              </div>
+        {/* Hero Section with Banner */}
+        <section className="relative min-h-[60vh] lg:min-h-[70vh] flex items-center">
+          {/* Hero Banner Background */}
+          <div className="absolute inset-0 z-0">
+            <img 
+              src={heroBanner} 
+              alt="Stallion IT Solutions - Unleash the Power of Reliable IT" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/40 to-transparent"></div>
+          </div>
+          
+          {/* Content Overlay */}
+          <div className="container mx-auto px-4 max-w-7xl relative z-10">
+            <div className="max-w-2xl py-12 sm:py-16 lg:py-20">
+              <Badge className="mb-4 sm:mb-6 bg-secondary text-secondary-foreground">
+                Trusted Since 2012
+              </Badge>
               
-              {/* Desktop: Large logo on right */}
-              <div className="hidden lg:flex justify-center lg:justify-end">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-secondary/20 rounded-full blur-3xl"></div>
-                  <img 
-                    src={stallionLogo} 
-                    alt="Stallion IT Solutions" 
-                    className="relative h-64 w-64 lg:h-80 lg:w-80 animate-fade-in"
-                  />
-                </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg">
+                Your Trusted IT Partner for Hotels & Businesses
+              </h1>
+              
+              <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 drop-shadow">
+                Stallion is an all-in-one IT solution provider with skilled staff and years of hospitality industry experience. We deliver complete IT solutions focused on business continuity, guest experience and long-term value.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
+                  <Link to="/contact">
+                    Book Free IT Audit
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
+                  <Link to="/amc-plans">View AMC Plans</Link>
+                </Button>
+                <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
+                  <a href="tel:+917875811148">
+                    <Phone className="h-5 w-5 mr-2" />
+                    Call Us
+                  </a>
+                </Button>
               </div>
             </div>
           </div>
