@@ -3,17 +3,15 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mail, Phone, Linkedin } from "lucide-react";
+
 import { supabase } from "@/integrations/supabase/client";
 
 interface TeamMember {
   id: string;
-  name: string;
-  position: string | null;
+  member_name: string;
+  member_position: string | null;
   bio: string | null;
   image_url: string | null;
-  email: string | null;
-  phone: string | null;
 }
 
 const OurTeam = () => {
@@ -24,10 +22,7 @@ const OurTeam = () => {
   }, []);
 
   const fetchTeamMembers = async () => {
-    const { data, error } = await supabase
-      .from("team_members")
-      .select("*")
-      .order("display_order", { ascending: true });
+    const { data, error } = await supabase.rpc("get_public_team_members");
 
     if (!error && data) {
       setTeamMembers(data);
@@ -69,46 +64,31 @@ const OurTeam = () => {
                         {member.image_url ? (
                           <img
                             src={member.image_url}
-                            alt={member.name}
+                            alt={member.member_name}
                             className="relative w-32 h-32 rounded-full object-cover border-4 border-secondary"
                           />
                         ) : (
                           <div className="relative w-32 h-32 rounded-full bg-secondary/20 flex items-center justify-center border-4 border-secondary">
                             <span className="text-4xl font-bold text-secondary">
-                              {member.name.charAt(0)}
+                              {member.member_name.charAt(0)}
                             </span>
                           </div>
                         )}
                       </div>
                     </div>
-                    <CardTitle className="text-xl text-primary mb-2">{member.name}</CardTitle>
-                    {member.position && (
+                    <CardTitle className="text-xl text-primary mb-2">{member.member_name}</CardTitle>
+                    {member.member_position && (
                       <div className="flex justify-center">
-                        <Badge variant="secondary" className="mb-2">{member.position}</Badge>
+                        <Badge variant="secondary" className="mb-2">{member.member_position}</Badge>
                       </div>
                     )}
                   </CardHeader>
                   <CardContent>
                     {member.bio && (
-                      <p className="text-sm text-foreground/70 text-center mb-4">
+                      <p className="text-sm text-foreground/70 text-center">
                         {member.bio}
                       </p>
                     )}
-                    <div className="flex justify-center space-x-4">
-                      {member.phone && (
-                        <a href={`tel:${member.phone}`} className="text-secondary hover:text-secondary/80 transition-colors">
-                          <Phone className="h-5 w-5" />
-                        </a>
-                      )}
-                      {member.email && (
-                        <a href={`mailto:${member.email}`} className="text-secondary hover:text-secondary/80 transition-colors">
-                          <Mail className="h-5 w-5" />
-                        </a>
-                      )}
-                      <a href="#" className="text-secondary hover:text-secondary/80 transition-colors">
-                        <Linkedin className="h-5 w-5" />
-                      </a>
-                    </div>
                   </CardContent>
                 </Card>
               ))}

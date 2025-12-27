@@ -375,41 +375,22 @@ export type Database = {
       }
     }
     Views: {
-      team_members_public: {
-        Row: {
-          bio: string | null
-          created_at: string | null
-          display_order: number | null
-          id: string | null
-          image_url: string | null
-          name: string | null
-          position: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          bio?: string | null
-          created_at?: string | null
-          display_order?: number | null
-          id?: string | null
-          image_url?: string | null
-          name?: string | null
-          position?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          bio?: string | null
-          created_at?: string | null
-          display_order?: number | null
-          id?: string | null
-          image_url?: string | null
-          name?: string | null
-          position?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
+      get_public_team_members: {
+        Args: never
+        Returns: {
+          bio: string
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string
+          member_name: string
+          member_position: string
+          updated_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
