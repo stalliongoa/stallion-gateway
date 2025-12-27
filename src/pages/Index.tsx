@@ -111,34 +111,36 @@ const Index = () => {
       
       <main className="flex-1 overflow-x-hidden">
         {/* Hero Section with Banner */}
-        <section className="relative min-h-[50vh] lg:min-h-[60vh] flex items-end">
-          {/* Hero Banner Background - Full Image */}
-          <div className="absolute inset-0 z-0">
+        <section className="relative w-full">
+          {/* Hero Banner Image - Full Width, Natural Height */}
+          <div className="w-full">
             <img 
               src={heroBanner} 
               alt="Stallion IT Solutions - Unleash the Power of Reliable IT" 
-              className="w-full h-full object-cover object-center"
+              className="w-full h-auto object-contain"
             />
           </div>
           
-          {/* Buttons Overlay at Bottom */}
-          <div className="container mx-auto px-4 max-w-7xl relative z-10 pb-8 sm:pb-12">
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center sm:justify-start">
-              <Button size="lg" className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold border-2 border-stallion-gold w-full sm:w-auto">
-                <Link to="/contact" className="flex items-center">
-                  Book Free IT Audit
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
-                <Link to="/amc-plans">View AMC Plans</Link>
-              </Button>
-              <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
-                <a href="tel:+917875811148">
-                  <Phone className="h-5 w-5 mr-2" />
-                  Call Us
-                </a>
-              </Button>
+          {/* Buttons Below Image */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 pb-4 sm:pb-8">
+            <div className="container mx-auto px-4 max-w-7xl">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center sm:justify-start">
+                <Button size="lg" className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold border-2 border-stallion-gold w-full sm:w-auto">
+                  <Link to="/contact" className="flex items-center">
+                    Book Free IT Audit
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
+                  <Link to="/amc-plans">View AMC Plans</Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
+                  <a href="tel:+917875811148">
+                    <Phone className="h-5 w-5 mr-2" />
+                    Call Us
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
