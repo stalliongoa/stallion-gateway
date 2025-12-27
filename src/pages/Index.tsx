@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import StatsCounter from "@/components/StatsCounter";
+import Certifications from "@/components/Certifications";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +16,6 @@ import {
   Wifi, 
   Shield, 
   CheckCircle2, 
-  Clock, 
-  Users,
-  TrendingUp,
   ArrowRight,
   Phone
 } from "lucide-react";
@@ -73,29 +72,6 @@ const Index = () => {
     }
   ];
 
-  const stats = [
-    {
-      icon: <Clock className="h-8 w-8 text-secondary" />,
-      value: "10+",
-      label: "Years Experience"
-    },
-    {
-      icon: <Users className="h-8 w-8 text-secondary" />,
-      value: "100+",
-      label: "AMC Clients"
-    },
-    {
-      icon: <Camera className="h-8 w-8 text-secondary" />,
-      value: "1000+",
-      label: "CCTV Setups"
-    },
-    {
-      icon: <TrendingUp className="h-8 w-8 text-secondary" />,
-      value: "24hr",
-      label: "Response Time"
-    }
-  ];
-
   const features = [
     "Specialized in hospitality industry IT solutions",
     "Experienced team with 10+ years in the field",
@@ -148,22 +124,8 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="py-12 sm:py-16 bg-muted/30">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-              {stats.map((stat, index) => (
-                <Card key={index} className="text-center shadow-subtle hover:shadow-gold transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex justify-center mb-3">{stat.icon}</div>
-                    <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
-                    <div className="text-sm text-foreground/70">{stat.label}</div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Animated Stats Counter */}
+        <StatsCounter />
 
         {/* Services Preview */}
         <section className="py-12 sm:py-16">
@@ -219,6 +181,9 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* Certifications & Awards */}
+        <Certifications />
 
         {/* Featured Project */}
         <section className="py-12 sm:py-16">

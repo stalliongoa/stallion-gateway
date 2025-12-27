@@ -92,6 +92,101 @@ export type Database = {
         }
         Relationships: []
       }
+      job_applications: {
+        Row: {
+          cover_letter: string | null
+          created_at: string
+          email: string
+          id: string
+          job_id: string | null
+          name: string
+          phone: string | null
+          resume_url: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          cover_letter?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          job_id?: string | null
+          name: string
+          phone?: string | null
+          resume_url?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cover_letter?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          job_id?: string | null
+          name?: string
+          phone?: string | null
+          resume_url?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_openings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_openings: {
+        Row: {
+          created_at: string
+          department: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          requirements: string | null
+          responsibilities: string | null
+          salary_range: string | null
+          title: string
+          type: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          requirements?: string | null
+          responsibilities?: string | null
+          salary_range?: string | null
+          title: string
+          type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          requirements?: string | null
+          responsibilities?: string | null
+          salary_range?: string | null
+          title?: string
+          type?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       page_sections: {
         Row: {
           content: string | null

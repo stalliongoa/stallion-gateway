@@ -18,6 +18,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import StallionCCTV from "./pages/StallionCCTV";
 import CCTVAmc from "./pages/CCTVAmc";
+import Careers from "./pages/Careers";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/stallion-cctv" element={<StallionCCTV />} />
           <Route path="/cctv-amc" element={<CCTVAmc />} />
+          <Route path="/careers" element={<Careers />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
