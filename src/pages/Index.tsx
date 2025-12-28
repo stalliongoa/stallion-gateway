@@ -100,10 +100,10 @@ const Index = () => {
             />
           </div>
           
-          {/* Buttons Below Video */}
-          <div className="absolute bottom-0 left-0 right-0 z-10 pb-4 sm:pb-8">
+          {/* Buttons - Below video on mobile, overlay on desktop */}
+          <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 py-4 sm:pb-8 bg-primary md:bg-transparent">
             <div className="container mx-auto px-4 max-w-7xl">
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center sm:justify-start">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
                 <Button size="lg" className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold border-2 border-stallion-gold w-full sm:w-auto">
                   <Link to="/contact" className="flex items-center">
                     Book Free IT Audit
