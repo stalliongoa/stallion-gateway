@@ -80,6 +80,7 @@ const Careers = () => {
     
     setSubmitting(true);
     try {
+      // Save to database
       const { error } = await supabase.from("job_applications").insert({
         job_id: selectedJob.id,
         name: data.name,
@@ -89,6 +90,17 @@ const Careers = () => {
       });
 
       if (error) throw error;
+
+      // Send email notification
+      await supabase.functions.invoke('send-career-application', {
+        body: {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          cover_letter: data.cover_letter || null,
+          job_title: selectedJob.title,
+        }
+      });
 
       toast({
         title: "Application Submitted!",
@@ -194,7 +206,7 @@ const Careers = () => {
                     We don't have any open positions at the moment, but we're always interested in meeting talented people.
                   </p>
                   <Button asChild>
-                    <a href="mailto:careers@stalliongoa.com">Send Your Resume</a>
+                    <a href="mailto:info@stallion.co.in">Send Your Resume</a>
                   </Button>
                 </CardContent>
               </Card>
@@ -264,7 +276,7 @@ const Careers = () => {
                   Send us your resume and we'll keep you in mind for future opportunities.
                 </p>
                 <Button size="lg" variant="outline" asChild>
-                  <a href="mailto:careers@stalliongoa.com">
+                  <a href="mailto:info@stallion.co.in">
                     Send General Application
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </a>

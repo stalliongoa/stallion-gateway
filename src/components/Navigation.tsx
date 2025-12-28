@@ -65,12 +65,11 @@ const Navigation = () => {
           <div className="hidden lg:flex items-center space-x-4 flex-shrink-0">
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={() => setSearchOpen(true)}
               className="text-primary-foreground hover:text-secondary"
             >
-              <Search className="h-4 w-4 mr-2" />
-              <span className="text-xs">⌘K</span>
+              <Search className="h-4 w-4" />
             </Button>
             <Button variant="secondary" size="sm" asChild>
               <Link to="/contact">Book Free Audit</Link>
