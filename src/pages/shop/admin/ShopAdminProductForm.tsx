@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Save, Upload, X } from 'lucide-react';
+import { ArrowLeft, Save, Upload, X, AlertCircle } from 'lucide-react';
 import { ShopAdminLayout } from './ShopAdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Select,
   SelectContent,
@@ -17,6 +18,19 @@ import {
 } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { Json } from '@/integrations/supabase/types';
+import CCTVCameraFields, { CCTVSpecs, defaultCCTVSpecs, validateCCTVSpecs } from '@/components/admin/CCTVCameraFields';
+
+const PRODUCT_TYPES = [
+  { value: 'general', label: 'General Product' },
+  { value: 'cctv_camera', label: 'CCTV Camera' },
+  { value: 'dvr', label: 'DVR' },
+  { value: 'nvr', label: 'NVR' },
+  { value: 'hdd', label: 'Hard Disk Drive' },
+  { value: 'power_supply', label: 'Power Supply' },
+  { value: 'cables', label: 'Cables & Connectors' },
+  { value: 'accessories', label: 'Accessories' },
+];
 
 interface Category {
   id: string;
@@ -45,6 +59,10 @@ export default function ShopAdminProductForm() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [vendors, setVendors] = useState<Vendor[]>([]);
+
+  const [productType, setProductType] = useState('general');
+  const [cctvSpecs, setCctvSpecs] = useState<CCTVSpecs>(defaultCCTVSpecs);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -109,6 +127,51 @@ export default function ShopAdminProductForm() {
       toast({ title: 'Error fetching product', description: error.message, variant: 'destructive' });
       navigate('/shop/admin/products');
     } else if (data) {
+      const specs = (data.specifications as Record<string, unknown>) || {};
+      
+      // Check if this is a CCTV camera by checking stored product_type
+      if (specs.product_type === 'cctv_camera') {
+        setProductType('cctv_camera');
+        setCctvSpecs({
+          cctv_system_type: (specs.cctv_system_type as string) || '',
+          camera_type: (specs.camera_type as string) || '',
+          indoor_outdoor: (specs.indoor_outdoor as string) || '',
+          resolution: (specs.resolution as string) || '',
+          megapixel: (specs.megapixel as string) || '',
+          lens_type: (specs.lens_type as string) || '',
+          lens_size: (specs.lens_size as string) || '',
+          frame_rate: (specs.frame_rate as string) || '',
+          ir_support: Boolean(specs.ir_support),
+          ir_range: (specs.ir_range as string) || '',
+          night_vision: Boolean(specs.night_vision),
+          bw_night_vision: Boolean(specs.bw_night_vision),
+          color_night_vision: Boolean(specs.color_night_vision),
+          audio_support: Boolean(specs.audio_support),
+          audio_type: (specs.audio_type as string) || '',
+          motion_detection: Boolean(specs.motion_detection),
+          human_detection: Boolean(specs.human_detection),
+          ai_features: (specs.ai_features as string[]) || [],
+          body_material: (specs.body_material as string) || '',
+          color: (specs.color as string) || '',
+          weatherproof_rating: (specs.weatherproof_rating as string) || '',
+          vertical_rotation: Boolean(specs.vertical_rotation),
+          horizontal_rotation: Boolean(specs.horizontal_rotation),
+          power_type: (specs.power_type as string) || '',
+          connector_type: (specs.connector_type as string) || '',
+          onboard_storage: Boolean(specs.onboard_storage),
+          sd_card_support: (specs.sd_card_support as string) || '',
+          compatible_with: (specs.compatible_with as string[]) || [],
+          supported_dvr_nvr_resolution: (specs.supported_dvr_nvr_resolution as string) || '',
+          warranty_period: (specs.warranty_period as string) || '',
+          warranty_type: (specs.warranty_type as string) || '',
+          installation_manual_url: (specs.installation_manual_url as string) || '',
+          show_in_store: specs.show_in_store !== false,
+          allow_in_quotation_builder: specs.allow_in_quotation_builder !== false,
+        });
+      } else if (specs.product_type) {
+        setProductType(specs.product_type as string);
+      }
+      
       setFormData({
         name: data.name || '',
         slug: data.slug || '',
@@ -137,7 +200,7 @@ export default function ShopAdminProductForm() {
         is_featured: data.is_featured ?? false,
         shopify_sync_enabled: data.shopify_sync_enabled ?? false,
         images: data.images || [],
-        specifications: (data.specifications as Record<string, string>) || {},
+        specifications: specs as Record<string, string>,
         tags: data.tags || [],
       });
     }
@@ -161,7 +224,55 @@ export default function ShopAdminProductForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationErrors([]);
+    
+    // Validate CCTV-specific fields if product type is cctv_camera
+    if (productType === 'cctv_camera') {
+      const cctvValidation = validateCCTVSpecs(cctvSpecs);
+      if (!cctvValidation.valid) {
+        setValidationErrors(cctvValidation.errors);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required CCTV camera fields',
+          variant: 'destructive',
+        });
+        setIsSaving(false);
+        return;
+      }
+    }
+    
+    // Validate common required fields for CCTV cameras
+    if (productType === 'cctv_camera') {
+      const commonErrors: string[] = [];
+      if (!formData.brand_id) commonErrors.push('Brand is required');
+      if (!formData.vendor_id) commonErrors.push('Vendor is required');
+      if (!formData.purchase_price) commonErrors.push('Purchase Price is required');
+      if (!formData.selling_price) commonErrors.push('Selling Price is required');
+      
+      if (commonErrors.length > 0) {
+        setValidationErrors((prev) => [...prev, ...commonErrors]);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required fields',
+          variant: 'destructive',
+        });
+        setIsSaving(false);
+        return;
+      }
+    }
+    
     setIsSaving(true);
+
+    // Build specifications object
+    let specifications: Record<string, unknown> = { ...formData.specifications, product_type: productType };
+    
+    if (productType === 'cctv_camera') {
+      specifications = {
+        ...specifications,
+        ...cctvSpecs,
+        product_type: 'cctv_camera',
+      };
+    }
 
     const productData = {
       name: formData.name,
@@ -191,7 +302,7 @@ export default function ShopAdminProductForm() {
       is_featured: formData.is_featured,
       shopify_sync_enabled: formData.shopify_sync_enabled,
       images: formData.images,
-      specifications: formData.specifications,
+      specifications: specifications as Json,
       tags: formData.tags,
     };
 
@@ -263,6 +374,60 @@ export default function ShopAdminProductForm() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Validation Errors */}
+          {validationErrors.length > 0 && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                <ul className="list-disc list-inside">
+                  {validationErrors.map((err, i) => (
+                    <li key={i}>{err}</li>
+                  ))}
+                </ul>
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          {/* Product Type Selector - Always visible at top */}
+          <Card className="border-2 border-primary/20 bg-primary/5">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Product Type</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="max-w-md">
+                <Label htmlFor="product_type" className="text-sm font-medium">
+                  Select Product Type *
+                </Label>
+                <Select
+                  value={productType}
+                  onValueChange={(v) => {
+                    setProductType(v);
+                    if (v === 'cctv_camera') {
+                      setCctvSpecs(defaultCCTVSpecs);
+                    }
+                  }}
+                  disabled={isEdit && productType === 'cctv_camera'}
+                >
+                  <SelectTrigger className="bg-background mt-1">
+                    <SelectValue placeholder="Select product type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PRODUCT_TYPES.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {isEdit && productType === 'cctv_camera' && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Product type cannot be changed after creation
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Main Info */}
             <div className="lg:col-span-2 space-y-6">
@@ -453,6 +618,16 @@ export default function ShopAdminProductForm() {
                   </Button>
                 </CardContent>
               </Card>
+              
+              {/* CCTV Camera Specific Fields */}
+              {productType === 'cctv_camera' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">CCTV Camera Specifications</h2>
+                    <CCTVCameraFields specs={cctvSpecs} onChange={setCctvSpecs} />
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}
