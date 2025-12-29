@@ -145,6 +145,7 @@ export default function ShopAdminProductForm() {
     name: '',
     slug: '',
     sku: '',
+    model_number: '',
     barcode: '',
     short_description: '',
     description: '',
@@ -159,6 +160,8 @@ export default function ShopAdminProductForm() {
     hsn_code: '',
     stock_quantity: '0',
     low_stock_threshold: '5',
+    minimum_stock_level: '5',
+    reorder_quantity: '10',
     weight_kg: '',
     dimensions_cm: '',
     warranty_months: '',
@@ -448,6 +451,7 @@ export default function ShopAdminProductForm() {
         name: data.name || '',
         slug: data.slug || '',
         sku: data.sku || '',
+        model_number: (data as any).model_number || '',
         barcode: data.barcode || '',
         short_description: data.short_description || '',
         description: data.description || '',
@@ -462,6 +466,8 @@ export default function ShopAdminProductForm() {
         hsn_code: data.hsn_code || '',
         stock_quantity: data.stock_quantity?.toString() || '0',
         low_stock_threshold: data.low_stock_threshold?.toString() || '5',
+        minimum_stock_level: (data as any).minimum_stock_level?.toString() || '5',
+        reorder_quantity: (data as any).reorder_quantity?.toString() || '10',
         weight_kg: data.weight_kg?.toString() || '',
         dimensions_cm: data.dimensions_cm || '',
         warranty_months: data.warranty_months?.toString() || '',
@@ -844,6 +850,7 @@ export default function ShopAdminProductForm() {
       name: formData.name,
       slug: formData.slug || generateSlug(formData.name),
       sku: formData.sku || null,
+      model_number: formData.model_number || null,
       barcode: formData.barcode || null,
       short_description: formData.short_description || null,
       description: formData.description || null,
@@ -858,6 +865,8 @@ export default function ShopAdminProductForm() {
       hsn_code: formData.hsn_code || null,
       stock_quantity: parseInt(formData.stock_quantity) || 0,
       low_stock_threshold: parseInt(formData.low_stock_threshold) || 5,
+      minimum_stock_level: parseInt(formData.minimum_stock_level) || 5,
+      reorder_quantity: parseInt(formData.reorder_quantity) || 10,
       weight_kg: formData.weight_kg ? parseFloat(formData.weight_kg) : null,
       dimensions_cm: formData.dimensions_cm || null,
       warranty_months: formData.warranty_months ? parseInt(formData.warranty_months) : null,
@@ -1044,6 +1053,15 @@ export default function ShopAdminProductForm() {
                         onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                       />
                     </div>
+                    <div>
+                      <Label htmlFor="model_number">Model Number</Label>
+                      <Input
+                        id="model_number"
+                        value={formData.model_number}
+                        onChange={(e) => setFormData({ ...formData, model_number: e.target.value })}
+                        placeholder="e.g., DS-2CD2143G2-I"
+                      />
+                    </div>
                   </div>
                   <div>
                     <Label htmlFor="short_description">Short Description</Label>
@@ -1153,6 +1171,24 @@ export default function ShopAdminProductForm() {
                       type="number"
                       value={formData.low_stock_threshold}
                       onChange={(e) => setFormData({ ...formData, low_stock_threshold: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="minimum_stock_level">Minimum Stock Level</Label>
+                    <Input
+                      id="minimum_stock_level"
+                      type="number"
+                      value={formData.minimum_stock_level}
+                      onChange={(e) => setFormData({ ...formData, minimum_stock_level: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="reorder_quantity">Reorder Quantity</Label>
+                    <Input
+                      id="reorder_quantity"
+                      type="number"
+                      value={formData.reorder_quantity}
+                      onChange={(e) => setFormData({ ...formData, reorder_quantity: e.target.value })}
                     />
                   </div>
                   <div>

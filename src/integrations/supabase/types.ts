@@ -367,6 +367,50 @@ export type Database = {
         }
         Relationships: []
       }
+      low_stock_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string
+          current_stock: number
+          id: string
+          is_acknowledged: boolean | null
+          minimum_level: number
+          product_id: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string
+          current_stock: number
+          id?: string
+          is_acknowledged?: boolean | null
+          minimum_level: number
+          product_id: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string
+          current_stock?: number
+          id?: string
+          is_acknowledged?: boolean | null
+          minimum_level?: number
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "low_stock_alerts_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "shop_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_sections: {
         Row: {
           content: string | null
@@ -468,6 +512,57 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      quotation_reservations: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          quantity: number
+          quotation_id: string
+          released_at: string | null
+          reserved_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          quantity: number
+          quotation_id: string
+          released_at?: string | null
+          reserved_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          quantity?: number
+          quotation_id?: string
+          released_at?: string | null
+          reserved_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_reservations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "shop_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_reservations_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "cctv_quotations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shop_brands: {
         Row: {
@@ -795,6 +890,7 @@ export type Database = {
           cost_price: number | null
           created_at: string
           datasheet_url: string | null
+          deleted_at: string | null
           description: string | null
           dimensions_cm: string | null
           hsn_code: string | null
@@ -802,12 +898,17 @@ export type Database = {
           images: string[] | null
           is_active: boolean | null
           is_featured: boolean | null
+          last_purchase_price: number | null
           low_stock_threshold: number | null
           meta_description: string | null
           meta_title: string | null
+          minimum_stock_level: number | null
+          model_number: string | null
           mrp: number | null
           name: string
           purchase_price: number | null
+          reorder_quantity: number | null
+          reserved_stock: number | null
           selling_price: number | null
           shopify_product_id: string | null
           shopify_sync_enabled: boolean | null
@@ -831,6 +932,7 @@ export type Database = {
           cost_price?: number | null
           created_at?: string
           datasheet_url?: string | null
+          deleted_at?: string | null
           description?: string | null
           dimensions_cm?: string | null
           hsn_code?: string | null
@@ -838,12 +940,17 @@ export type Database = {
           images?: string[] | null
           is_active?: boolean | null
           is_featured?: boolean | null
+          last_purchase_price?: number | null
           low_stock_threshold?: number | null
           meta_description?: string | null
           meta_title?: string | null
+          minimum_stock_level?: number | null
+          model_number?: string | null
           mrp?: number | null
           name: string
           purchase_price?: number | null
+          reorder_quantity?: number | null
+          reserved_stock?: number | null
           selling_price?: number | null
           shopify_product_id?: string | null
           shopify_sync_enabled?: boolean | null
@@ -867,6 +974,7 @@ export type Database = {
           cost_price?: number | null
           created_at?: string
           datasheet_url?: string | null
+          deleted_at?: string | null
           description?: string | null
           dimensions_cm?: string | null
           hsn_code?: string | null
@@ -874,12 +982,17 @@ export type Database = {
           images?: string[] | null
           is_active?: boolean | null
           is_featured?: boolean | null
+          last_purchase_price?: number | null
           low_stock_threshold?: number | null
           meta_description?: string | null
           meta_title?: string | null
+          minimum_stock_level?: number | null
+          model_number?: string | null
           mrp?: number | null
           name?: string
           purchase_price?: number | null
+          reorder_quantity?: number | null
+          reserved_stock?: number | null
           selling_price?: number | null
           shopify_product_id?: string | null
           shopify_sync_enabled?: boolean | null
@@ -924,11 +1037,16 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          gst_amount: number | null
+          gst_rate: number | null
           id: string
           invoice_date: string | null
           invoice_number: string | null
+          invoice_url: string | null
           notes: string | null
+          payment_status: string | null
           product_id: string | null
+          purchase_date: string | null
           purchase_number: string
           quantity: number
           total_cost: number
@@ -938,11 +1056,16 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
+          gst_amount?: number | null
+          gst_rate?: number | null
           id?: string
           invoice_date?: string | null
           invoice_number?: string | null
+          invoice_url?: string | null
           notes?: string | null
+          payment_status?: string | null
           product_id?: string | null
+          purchase_date?: string | null
           purchase_number: string
           quantity: number
           total_cost: number
@@ -952,11 +1075,16 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
+          gst_amount?: number | null
+          gst_rate?: number | null
           id?: string
           invoice_date?: string | null
           invoice_number?: string | null
+          invoice_url?: string | null
           notes?: string | null
+          payment_status?: string | null
           product_id?: string | null
+          purchase_date?: string | null
           purchase_number?: string
           quantity?: number
           total_cost?: number
@@ -1134,6 +1262,119 @@ export type Database = {
         }
         Relationships: []
       }
+      stock_adjustments: {
+        Row: {
+          adjusted_by: string | null
+          adjustment_type: string
+          attachment_url: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          product_id: string
+          quantity: number
+          reason: string
+          warehouse_id: string | null
+        }
+        Insert: {
+          adjusted_by?: string | null
+          adjustment_type: string
+          attachment_url?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          product_id: string
+          quantity: number
+          reason: string
+          warehouse_id?: string | null
+        }
+        Update: {
+          adjusted_by?: string | null
+          adjustment_type?: string
+          attachment_url?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          product_id?: string
+          quantity?: number
+          reason?: string
+          warehouse_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_adjustments_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "shop_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_adjustments_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_movements: {
+        Row: {
+          action_type: string
+          attachment_url: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          product_id: string
+          quantity_after: number
+          quantity_before: number
+          quantity_change: number
+          reason: string | null
+          reference_id: string | null
+          reference_type: string | null
+          user_id: string | null
+          warehouse_id: string | null
+        }
+        Insert: {
+          action_type: string
+          attachment_url?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          product_id: string
+          quantity_after: number
+          quantity_before: number
+          quantity_change: number
+          reason?: string | null
+          reference_id?: string | null
+          reference_type?: string | null
+          user_id?: string | null
+          warehouse_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          attachment_url?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          product_id?: string
+          quantity_after?: number
+          quantity_before?: number
+          quantity_change?: number
+          reason?: string | null
+          reference_id?: string | null
+          reference_type?: string | null
+          user_id?: string | null
+          warehouse_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "shop_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       team_members: {
         Row: {
           bio: string | null
@@ -1194,6 +1435,102 @@ export type Database = {
         }
         Relationships: []
       }
+      warehouse_stock: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          quantity: number
+          reserved_quantity: number
+          updated_at: string
+          warehouse_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          quantity?: number
+          reserved_quantity?: number
+          updated_at?: string
+          warehouse_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          quantity?: number
+          reserved_quantity?: number
+          updated_at?: string
+          warehouse_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "warehouse_stock_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "shop_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "warehouse_stock_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      warehouses: {
+        Row: {
+          address: string | null
+          city: string | null
+          code: string
+          contact_person: string | null
+          created_at: string
+          email: string | null
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          name: string
+          phone: string | null
+          pincode: string | null
+          state: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          code: string
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          name: string
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          code?: string
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          name?: string
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -1229,7 +1566,7 @@ export type Database = {
       is_cctv_engineer: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "admin" | "user" | "cctv_engineer"
+      app_role: "admin" | "user" | "cctv_engineer" | "inventory_manager"
       customer_status: "pending" | "approved" | "blocked"
       quotation_status: "draft" | "sent" | "approved" | "rejected" | "converted"
     }
@@ -1359,7 +1696,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user", "cctv_engineer"],
+      app_role: ["admin", "user", "cctv_engineer", "inventory_manager"],
       customer_status: ["pending", "approved", "blocked"],
       quotation_status: ["draft", "sent", "approved", "rejected", "converted"],
     },
