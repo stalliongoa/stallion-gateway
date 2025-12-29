@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, User, Search, Menu, X, ChevronDown } from 'lucide-react';
+import { ShoppingCart, User, Search, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,16 +42,16 @@ export function ShopHeader() {
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b shadow-sm">
-      {/* Top bar */}
-      <div className="bg-stallion-navy text-white text-sm py-2">
+      {/* Top bar - Navy Blue */}
+      <div className="bg-shop-navy text-white text-sm py-2">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <span>Welcome to Shoppie Stallion - Your Electronics Partner</span>
           <div className="hidden md:flex items-center gap-4">
-            <Link to="/" className="hover:text-stallion-gold transition-colors">
+            <Link to="/" className="hover:text-shop-orange transition-colors">
               Back to Stallion.co.in
             </Link>
             <span>|</span>
-            <a href="tel:+918322513159" className="hover:text-stallion-gold transition-colors">
+            <a href="tel:+918322513159" className="hover:text-shop-orange transition-colors">
               +91 832 251 3159
             </a>
           </div>
@@ -72,14 +72,14 @@ export function ShopHeader() {
               <Input
                 type="search"
                 placeholder="Search products..."
-                className="w-full pr-12 border-stallion-navy/30 focus:border-stallion-gold"
+                className="w-full pr-12 border-shop-navy/30 focus:border-shop-orange focus-visible:ring-shop-orange"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <Button 
                 type="submit" 
                 size="sm" 
-                className="absolute right-1 top-1/2 -translate-y-1/2 bg-stallion-gold hover:bg-stallion-gold/90"
+                className="absolute right-1 top-1/2 -translate-y-1/2 bg-shop-orange hover:bg-shop-orange-dark text-white"
               >
                 <Search className="h-4 w-4" />
               </Button>
@@ -90,10 +90,10 @@ export function ShopHeader() {
           <div className="flex items-center gap-2 md:gap-4">
             {/* Cart */}
             <Link to="/shop/cart" className="relative">
-              <Button variant="ghost" size="icon" className="relative">
+              <Button variant="ghost" size="icon" className="relative text-shop-navy hover:text-shop-orange hover:bg-shop-orange/10">
                 <ShoppingCart className="h-5 w-5" />
                 {itemCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-stallion-gold text-stallion-navy text-xs">
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-shop-orange text-white text-xs border-0">
                     {itemCount}
                   </Badge>
                 )}
@@ -104,7 +104,7 @@ export function ShopHeader() {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" className="text-shop-navy hover:text-shop-orange hover:bg-shop-orange/10">
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -122,21 +122,21 @@ export function ShopHeader() {
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
-                        <Link to="/shop/admin" className="text-stallion-gold font-medium">
+                        <Link to="/shop/admin" className="text-shop-orange font-medium">
                           Admin Dashboard
                         </Link>
                       </DropdownMenuItem>
                     </>
                   )}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={signOut}>
+                  <DropdownMenuItem onClick={signOut} className="text-destructive">
                     Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <Link to="/shop/auth">
-                <Button variant="outline" size="sm" className="border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-white">
+                <Button size="sm" className="bg-shop-orange hover:bg-shop-orange-dark text-white border-0">
                   Login
                 </Button>
               </Link>
@@ -146,7 +146,7 @@ export function ShopHeader() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden text-shop-navy"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -160,14 +160,14 @@ export function ShopHeader() {
             <Input
               type="search"
               placeholder="Search products..."
-              className="w-full pr-12"
+              className="w-full pr-12 border-shop-navy/30"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <Button 
               type="submit" 
               size="sm" 
-              className="absolute right-1 top-1/2 -translate-y-1/2 bg-stallion-gold"
+              className="absolute right-1 top-1/2 -translate-y-1/2 bg-shop-orange hover:bg-shop-orange-dark text-white"
             >
               <Search className="h-4 w-4" />
             </Button>
@@ -175,14 +175,14 @@ export function ShopHeader() {
         </form>
       </div>
 
-      {/* Category navigation */}
-      <nav className="hidden md:block bg-gray-50 border-t">
+      {/* Category navigation - Navy background */}
+      <nav className="hidden md:block bg-shop-navy">
         <div className="container mx-auto px-4">
           <ul className="flex items-center gap-1 overflow-x-auto py-2">
             <li>
               <Link
                 to="/shop/products"
-                className="px-3 py-2 text-sm font-medium text-stallion-navy hover:text-stallion-gold transition-colors whitespace-nowrap"
+                className="px-3 py-2 text-sm font-medium text-white hover:text-shop-orange transition-colors whitespace-nowrap"
               >
                 All Products
               </Link>
@@ -191,7 +191,7 @@ export function ShopHeader() {
               <li key={cat.slug}>
                 <Link
                   to={`/shop/category/${cat.slug}`}
-                  className="px-3 py-2 text-sm font-medium text-stallion-navy hover:text-stallion-gold transition-colors whitespace-nowrap"
+                  className="px-3 py-2 text-sm font-medium text-white/90 hover:text-shop-orange transition-colors whitespace-nowrap"
                 >
                   {cat.name}
                 </Link>
@@ -208,7 +208,7 @@ export function ShopHeader() {
             <li>
               <Link
                 to="/shop/products"
-                className="block px-4 py-2 text-sm font-medium text-stallion-navy hover:bg-gray-50"
+                className="block px-4 py-2 text-sm font-medium text-shop-navy hover:bg-shop-orange/10 hover:text-shop-orange"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 All Products
@@ -218,7 +218,7 @@ export function ShopHeader() {
               <li key={cat.slug}>
                 <Link
                   to={`/shop/category/${cat.slug}`}
-                  className="block px-4 py-2 text-sm text-stallion-navy hover:bg-gray-50"
+                  className="block px-4 py-2 text-sm text-shop-navy hover:bg-shop-orange/10 hover:text-shop-orange"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {cat.name}

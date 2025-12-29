@@ -15,6 +15,13 @@ All colors MUST be HSL.
     --stallion-grey: 0 0% 87%;
     --stallion-bg: 0 0% 96%;
     
+    /* Shop Brand Colors - Navy Blue & Orange from Shoppie Logo */
+    --shop-navy: 220 60% 20%;
+    --shop-navy-light: 220 50% 30%;
+    --shop-orange: 25 95% 53%;
+    --shop-orange-light: 25 90% 60%;
+    --shop-orange-dark: 25 95% 45%;
+    
     /* Theme Colors */
     --background: 0 0% 96%;
     --foreground: 0 0% 4%;
@@ -49,11 +56,13 @@ All colors MUST be HSL.
     /* Gradients */
     --gradient-navy-gold: linear-gradient(135deg, hsl(var(--stallion-navy)), hsl(var(--stallion-gold)));
     --gradient-gold-navy: linear-gradient(135deg, hsl(var(--stallion-gold)), hsl(var(--stallion-navy)));
+    --gradient-shop: linear-gradient(135deg, hsl(var(--shop-navy)), hsl(var(--shop-orange)));
     
     /* Shadows */
     --shadow-subtle: 0 3px 8px rgba(0, 0, 0, 0.08);
     --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.12);
     --shadow-gold: 0 4px 16px rgba(205, 170, 125, 0.25);
+    --shadow-shop: 0 4px 16px rgba(255, 120, 50, 0.2);
     
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
