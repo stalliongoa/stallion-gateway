@@ -23,6 +23,7 @@ import CCTVCameraFields, { CCTVSpecs, defaultCCTVSpecs, validateCCTVSpecs } from
 import { DVRFields, validateDVRSpecs } from '@/components/admin/DVRFields';
 import { NVRFields, validateNVRSpecs } from '@/components/admin/NVRFields';
 import { HDDFields, validateHDDSpecs } from '@/components/admin/HDDFields';
+import { UPSFields, validateUPSSpecs } from '@/components/admin/UPSFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -30,6 +31,7 @@ const PRODUCT_TYPES = [
   { value: 'dvr', label: 'DVR' },
   { value: 'nvr', label: 'NVR' },
   { value: 'hdd', label: 'Hard Disk Drive' },
+  { value: 'ups', label: 'UPS' },
   { value: 'power_supply', label: 'Power Supply' },
   { value: 'cables', label: 'Cables & Connectors' },
   { value: 'accessories', label: 'Accessories' },
@@ -74,6 +76,9 @@ export default function ShopAdminProductForm() {
     allow_in_quotation: true,
   });
   const [hddSpecs, setHddSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [upsSpecs, setUpsSpecs] = useState<Record<string, any>>({
     allow_in_quotation: true,
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -248,6 +253,23 @@ export default function ShopAdminProductForm() {
           warranty_period: specs.warranty_period as string || '',
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'ups') {
+        setProductType('ups');
+        setUpsSpecs({
+          ups_type: specs.ups_type as string || '',
+          capacity_va: specs.capacity_va as string || '',
+          output_power_watts: specs.output_power_watts as string || '',
+          backup_time: specs.backup_time as string || '',
+          battery_type: specs.battery_type as string || '',
+          battery_count: specs.battery_count as string || '',
+          input_voltage_range: specs.input_voltage_range as string || '',
+          output_voltage: specs.output_voltage as string || '230V AC',
+          socket_type: specs.socket_type as string || '',
+          recommended_for: (specs.recommended_for as string[]) || [],
+          max_load_watts: specs.max_load_watts as string || '',
+          warranty_period: specs.warranty_period as string || '',
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -362,8 +384,22 @@ export default function ShopAdminProductForm() {
       }
     }
     
-    // Validate common required fields for CCTV cameras, DVRs, NVRs, and HDDs
-    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd') {
+    // Validate UPS-specific fields if product type is ups
+    if (productType === 'ups') {
+      const upsValidation = validateUPSSpecs(upsSpecs);
+      if (upsValidation.length > 0) {
+        setValidationErrors(upsValidation);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required UPS fields',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
+    // Validate common required fields for CCTV cameras, DVRs, NVRs, HDDs, and UPS
+    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -409,6 +445,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...hddSpecs,
         product_type: 'hdd',
+      };
+    } else if (productType === 'ups') {
+      specifications = {
+        ...specifications,
+        ...upsSpecs,
+        product_type: 'ups',
       };
     }
 
@@ -548,9 +590,11 @@ export default function ShopAdminProductForm() {
                       setNvrSpecs({ cctv_system_type: 'ip', allow_in_quotation: true });
                     } else if (v === 'hdd') {
                       setHddSpecs({ allow_in_quotation: true });
+                    } else if (v === 'ups') {
+                      setUpsSpecs({ allow_in_quotation: true });
                     }
                   }}
-                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd')}
+                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups')}
                 >
                   <SelectTrigger className="bg-background mt-1">
                     <SelectValue placeholder="Select product type" />
@@ -563,7 +607,7 @@ export default function ShopAdminProductForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd') && (
+                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups') && (
                   <p className="text-xs text-muted-foreground mt-1">
                     Product type cannot be changed after creation
                   </p>
@@ -807,6 +851,19 @@ export default function ShopAdminProductForm() {
                     <HDDFields 
                       specs={hddSpecs} 
                       onSpecChange={(key, value) => setHddSpecs(prev => ({ ...prev, [key]: value }))} 
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* UPS Specific Fields */}
+              {productType === 'ups' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">UPS Specifications</h2>
+                    <UPSFields 
+                      specs={upsSpecs} 
+                      onSpecChange={(key, value) => setUpsSpecs(prev => ({ ...prev, [key]: value }))} 
                     />
                   </div>
                 </div>
