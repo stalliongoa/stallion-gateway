@@ -21,6 +21,7 @@ import { toast } from '@/hooks/use-toast';
 import { Json } from '@/integrations/supabase/types';
 import CCTVCameraFields, { CCTVSpecs, defaultCCTVSpecs, validateCCTVSpecs } from '@/components/admin/CCTVCameraFields';
 import { DVRFields, validateDVRSpecs } from '@/components/admin/DVRFields';
+import { NVRFields, validateNVRSpecs } from '@/components/admin/NVRFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -65,6 +66,10 @@ export default function ShopAdminProductForm() {
   const [cctvSpecs, setCctvSpecs] = useState<CCTVSpecs>(defaultCCTVSpecs);
   const [dvrSpecs, setDvrSpecs] = useState<Record<string, any>>({
     cctv_system_type: 'analog',
+    allow_in_quotation: true,
+  });
+  const [nvrSpecs, setNvrSpecs] = useState<Record<string, any>>({
+    cctv_system_type: 'ip',
     allow_in_quotation: true,
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -199,6 +204,30 @@ export default function ShopAdminProductForm() {
           warranty_period: specs.warranty_period as string || '',
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'nvr') {
+        setProductType('nvr');
+        setNvrSpecs({
+          cctv_system_type: 'ip',
+          channel_capacity: specs.channel_capacity as string || '',
+          supported_camera_resolution: (specs.supported_camera_resolution as string[]) || [],
+          incoming_bandwidth: specs.incoming_bandwidth as string || '',
+          sata_ports: specs.sata_ports as string || '',
+          max_hdd_capacity: specs.max_hdd_capacity as string || '',
+          raid_support: Boolean(specs.raid_support),
+          poe_ports: specs.poe_ports as string || '',
+          poe_standard: specs.poe_standard as string || '',
+          lan_ports: specs.lan_ports as string || '',
+          video_output_ports: (specs.video_output_ports as string[]) || [],
+          audio_input: Boolean(specs.audio_input),
+          audio_output: Boolean(specs.audio_output),
+          ai_features: (specs.ai_features as string[]) || [],
+          onvif_support: Boolean(specs.onvif_support),
+          mobile_app: specs.mobile_app as string || '',
+          body_material: specs.body_material as string || '',
+          cooling_fan: Boolean(specs.cooling_fan),
+          warranty_period: specs.warranty_period as string || '',
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -285,8 +314,22 @@ export default function ShopAdminProductForm() {
       }
     }
     
-    // Validate common required fields for CCTV cameras and DVRs
-    if (productType === 'cctv_camera' || productType === 'dvr') {
+    // Validate NVR-specific fields if product type is nvr
+    if (productType === 'nvr') {
+      const nvrValidation = validateNVRSpecs(nvrSpecs);
+      if (nvrValidation.length > 0) {
+        setValidationErrors(nvrValidation);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required NVR fields',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
+    // Validate common required fields for CCTV cameras, DVRs, and NVRs
+    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -320,6 +363,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...dvrSpecs,
         product_type: 'dvr',
+      };
+    } else if (productType === 'nvr') {
+      specifications = {
+        ...specifications,
+        ...nvrSpecs,
+        product_type: 'nvr',
       };
     }
 
@@ -455,9 +504,11 @@ export default function ShopAdminProductForm() {
                       setCctvSpecs(defaultCCTVSpecs);
                     } else if (v === 'dvr') {
                       setDvrSpecs({ cctv_system_type: 'analog', allow_in_quotation: true });
+                    } else if (v === 'nvr') {
+                      setNvrSpecs({ cctv_system_type: 'ip', allow_in_quotation: true });
                     }
                   }}
-                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr')}
+                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr')}
                 >
                   <SelectTrigger className="bg-background mt-1">
                     <SelectValue placeholder="Select product type" />
@@ -470,7 +521,7 @@ export default function ShopAdminProductForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {isEdit && (productType === 'cctv_camera' || productType === 'dvr') && (
+                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr') && (
                   <p className="text-xs text-muted-foreground mt-1">
                     Product type cannot be changed after creation
                   </p>
@@ -688,6 +739,19 @@ export default function ShopAdminProductForm() {
                     <DVRFields 
                       specs={dvrSpecs} 
                       onSpecChange={(key, value) => setDvrSpecs(prev => ({ ...prev, [key]: value }))} 
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* NVR Specific Fields */}
+              {productType === 'nvr' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">NVR Specifications</h2>
+                    <NVRFields 
+                      specs={nvrSpecs} 
+                      onSpecChange={(key, value) => setNvrSpecs(prev => ({ ...prev, [key]: value }))} 
                     />
                   </div>
                 </div>
