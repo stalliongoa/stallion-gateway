@@ -29,6 +29,7 @@ import { RackFields, validateRackSpecs } from '@/components/admin/RackFields';
 import { PoESwitchFields, validatePoESwitchSpecs } from '@/components/admin/PoESwitchFields';
 import { BNCConnectorFields, validateBNCConnectorSpecs } from '@/components/admin/BNCConnectorFields';
 import RJ45ConnectorFields, { validateRJ45ConnectorSpecs } from '@/components/admin/RJ45ConnectorFields';
+import DCPinFields, { validateDCPinSpecs } from '@/components/admin/DCPinFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -43,6 +44,7 @@ const PRODUCT_TYPES = [
   { value: 'poe_switch', label: 'PoE Switch' },
   { value: 'bnc_connector', label: 'BNC Connector' },
   { value: 'rj45_connector', label: 'RJ45 Connector' },
+  { value: 'dc_pin', label: 'DC Pin' },
   { value: 'accessories', label: 'Accessories' },
 ];
 
@@ -103,6 +105,9 @@ export default function ShopAdminProductForm() {
     allow_in_quotation: true,
   });
   const [rj45ConnectorSpecs, setRj45ConnectorSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [dcPinSpecs, setDcPinSpecs] = useState<Record<string, any>>({
     allow_in_quotation: true,
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -349,6 +354,14 @@ export default function ShopAdminProductForm() {
           pack_size: specs.pack_size || 0,
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'dc_pin') {
+        setProductType('dc_pin');
+        setDcPinSpecs({
+          pin_type: specs.pin_type as string || '',
+          voltage_rating: specs.voltage_rating as string || '',
+          pack_size: specs.pack_size || 0,
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -547,8 +560,22 @@ export default function ShopAdminProductForm() {
       }
     }
     
+    // Validate DC Pin-specific fields
+    if (productType === 'dc_pin') {
+      const dcPinValidation = validateDCPinSpecs(dcPinSpecs);
+      if (dcPinValidation) {
+        setValidationErrors([dcPinValidation]);
+        toast({
+          title: 'Validation Error',
+          description: dcPinValidation,
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
     // Validate common required fields
-    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector' || productType === 'rj45_connector') {
+    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector' || productType === 'rj45_connector' || productType === 'dc_pin') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -630,6 +657,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...rj45ConnectorSpecs,
         product_type: 'rj45_connector',
+      };
+    } else if (productType === 'dc_pin') {
+      specifications = {
+        ...specifications,
+        ...dcPinSpecs,
+        product_type: 'dc_pin',
       };
     }
 
@@ -1156,6 +1189,19 @@ export default function ShopAdminProductForm() {
                     <RJ45ConnectorFields 
                       specifications={rj45ConnectorSpecs} 
                       onSpecificationChange={(key, value) => setRj45ConnectorSpecs(prev => ({ ...prev, [key]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* DC Pin Specific Fields */}
+              {productType === 'dc_pin' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">DC Pin Specifications</h2>
+                    <DCPinFields 
+                      specifications={dcPinSpecs} 
+                      onSpecificationChange={(key, value) => setDcPinSpecs(prev => ({ ...prev, [key]: value }))}
                     />
                   </div>
                 </div>
