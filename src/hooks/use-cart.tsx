@@ -15,6 +15,8 @@ interface CartItem {
     mrp: number;
     images: string[];
     stock_quantity: number;
+    sku?: string | null;
+    tax_rate?: number | null;
   };
 }
 
@@ -58,7 +60,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
           selling_price,
           mrp,
           images,
-          stock_quantity
+          stock_quantity,
+          sku,
+          tax_rate
         )
       `)
       .eq('user_id', user.id);

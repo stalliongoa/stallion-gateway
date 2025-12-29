@@ -26,6 +26,20 @@ import ProductList from "./pages/shop/ProductList";
 import ProductDetail from "./pages/shop/ProductDetail";
 import ShopAuth from "./pages/shop/ShopAuth";
 import ShopCart from "./pages/shop/ShopCart";
+import ShopCheckout from "./pages/shop/ShopCheckout";
+import ShopOrderSuccess from "./pages/shop/ShopOrderSuccess";
+import ShopOrders from "./pages/shop/ShopOrders";
+
+// Shop Admin pages
+import { ShopAdminLayout } from "./pages/shop/admin/ShopAdminLayout";
+import ShopAdminDashboard from "./pages/shop/admin/ShopAdminDashboard";
+import ShopAdminProducts from "./pages/shop/admin/ShopAdminProducts";
+import ShopAdminProductForm from "./pages/shop/admin/ShopAdminProductForm";
+import ShopAdminOrders from "./pages/shop/admin/ShopAdminOrders";
+import ShopAdminCategories from "./pages/shop/admin/ShopAdminCategories";
+import ShopAdminBrands from "./pages/shop/admin/ShopAdminBrands";
+import ShopAdminVendors from "./pages/shop/admin/ShopAdminVendors";
+import ShopAdminCustomers from "./pages/shop/admin/ShopAdminCustomers";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +73,20 @@ const App = () => (
           <Route path="/shop/product/:productSlug" element={<ProductDetail />} />
           <Route path="/shop/auth" element={<ShopAuth />} />
           <Route path="/shop/cart" element={<ShopCart />} />
+          <Route path="/shop/checkout" element={<ShopCheckout />} />
+          <Route path="/shop/order-success" element={<ShopOrderSuccess />} />
+          <Route path="/shop/orders" element={<ShopOrders />} />
+          
+          {/* Shop Admin Routes */}
+          <Route path="/shop/admin" element={<ShopAdminLayout><ShopAdminDashboard /></ShopAdminLayout>} />
+          <Route path="/shop/admin/products" element={<ShopAdminLayout><ShopAdminProducts /></ShopAdminLayout>} />
+          <Route path="/shop/admin/products/new" element={<ShopAdminLayout><ShopAdminProductForm /></ShopAdminLayout>} />
+          <Route path="/shop/admin/products/:id" element={<ShopAdminLayout><ShopAdminProductForm /></ShopAdminLayout>} />
+          <Route path="/shop/admin/orders" element={<ShopAdminLayout><ShopAdminOrders /></ShopAdminLayout>} />
+          <Route path="/shop/admin/categories" element={<ShopAdminLayout><ShopAdminCategories /></ShopAdminLayout>} />
+          <Route path="/shop/admin/brands" element={<ShopAdminLayout><ShopAdminBrands /></ShopAdminLayout>} />
+          <Route path="/shop/admin/vendors" element={<ShopAdminLayout><ShopAdminVendors /></ShopAdminLayout>} />
+          <Route path="/shop/admin/customers" element={<ShopAdminLayout><ShopAdminCustomers /></ShopAdminLayout>} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
