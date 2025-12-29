@@ -22,6 +22,7 @@ import { Json } from '@/integrations/supabase/types';
 import CCTVCameraFields, { CCTVSpecs, defaultCCTVSpecs, validateCCTVSpecs } from '@/components/admin/CCTVCameraFields';
 import { DVRFields, validateDVRSpecs } from '@/components/admin/DVRFields';
 import { NVRFields, validateNVRSpecs } from '@/components/admin/NVRFields';
+import { HDDFields, validateHDDSpecs } from '@/components/admin/HDDFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -70,6 +71,9 @@ export default function ShopAdminProductForm() {
   });
   const [nvrSpecs, setNvrSpecs] = useState<Record<string, any>>({
     cctv_system_type: 'ip',
+    allow_in_quotation: true,
+  });
+  const [hddSpecs, setHddSpecs] = useState<Record<string, any>>({
     allow_in_quotation: true,
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -228,6 +232,22 @@ export default function ShopAdminProductForm() {
           warranty_period: specs.warranty_period as string || '',
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'hdd') {
+        setProductType('hdd');
+        setHddSpecs({
+          storage_capacity: specs.storage_capacity as string || '',
+          hdd_type: specs.hdd_type as string || '',
+          rpm: specs.rpm as string || '',
+          cache_memory: specs.cache_memory as string || '',
+          compatible_with: (specs.compatible_with as string[]) || [],
+          max_cameras: specs.max_cameras as string || '',
+          interface_type: specs.interface_type as string || '',
+          power_consumption: specs.power_consumption as string || '',
+          operation_24x7: Boolean(specs.operation_24x7),
+          workload_rating: specs.workload_rating as string || '',
+          warranty_period: specs.warranty_period as string || '',
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -328,8 +348,22 @@ export default function ShopAdminProductForm() {
       }
     }
     
-    // Validate common required fields for CCTV cameras, DVRs, and NVRs
-    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr') {
+    // Validate HDD-specific fields if product type is hdd
+    if (productType === 'hdd') {
+      const hddValidation = validateHDDSpecs(hddSpecs);
+      if (hddValidation.length > 0) {
+        setValidationErrors(hddValidation);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required Hard Drive fields',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
+    // Validate common required fields for CCTV cameras, DVRs, NVRs, and HDDs
+    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -369,6 +403,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...nvrSpecs,
         product_type: 'nvr',
+      };
+    } else if (productType === 'hdd') {
+      specifications = {
+        ...specifications,
+        ...hddSpecs,
+        product_type: 'hdd',
       };
     }
 
@@ -506,9 +546,11 @@ export default function ShopAdminProductForm() {
                       setDvrSpecs({ cctv_system_type: 'analog', allow_in_quotation: true });
                     } else if (v === 'nvr') {
                       setNvrSpecs({ cctv_system_type: 'ip', allow_in_quotation: true });
+                    } else if (v === 'hdd') {
+                      setHddSpecs({ allow_in_quotation: true });
                     }
                   }}
-                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr')}
+                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd')}
                 >
                   <SelectTrigger className="bg-background mt-1">
                     <SelectValue placeholder="Select product type" />
@@ -521,7 +563,7 @@ export default function ShopAdminProductForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr') && (
+                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd') && (
                   <p className="text-xs text-muted-foreground mt-1">
                     Product type cannot be changed after creation
                   </p>
@@ -752,6 +794,19 @@ export default function ShopAdminProductForm() {
                     <NVRFields 
                       specs={nvrSpecs} 
                       onSpecChange={(key, value) => setNvrSpecs(prev => ({ ...prev, [key]: value }))} 
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* HDD Specific Fields */}
+              {productType === 'hdd' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">Hard Drive Specifications</h2>
+                    <HDDFields 
+                      specs={hddSpecs} 
+                      onSpecChange={(key, value) => setHddSpecs(prev => ({ ...prev, [key]: value }))} 
                     />
                   </div>
                 </div>
