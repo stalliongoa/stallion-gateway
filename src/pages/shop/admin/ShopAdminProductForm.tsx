@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Save, Upload, X, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Save, Upload, X, AlertCircle, Sparkles, Loader2, Link as LinkIcon } from 'lucide-react';
 import { ShopAdminLayout } from './ShopAdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -143,6 +143,10 @@ export default function ShopAdminProductForm() {
   });
   const [wifiCameraSpecs, setWifiCameraSpecs] = useState<WiFiCameraSpecs>(defaultWiFiCameraSpecs);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  
+  // AI URL extraction
+  const [productUrl, setProductUrl] = useState('');
+  const [isExtracting, setIsExtracting] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -543,6 +547,123 @@ export default function ShopAdminProductForm() {
       name,
       slug: prev.slug || generateSlug(name),
     }));
+  };
+
+  // AI URL extraction handler
+  const handleExtractFromUrl = async () => {
+    if (!productUrl.trim()) {
+      toast({ title: 'Error', description: 'Please enter a product URL', variant: 'destructive' });
+      return;
+    }
+
+    setIsExtracting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('extract-product-info', {
+        body: { url: productUrl.trim() }
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (!data?.success) {
+        throw new Error(data?.error || 'Failed to extract product info');
+      }
+
+      const info = data.data;
+      console.log('Extracted product info:', info);
+
+      // Update form data with extracted info
+      setFormData(prev => ({
+        ...prev,
+        name: info.name || prev.name,
+        model_number: info.model_number || prev.model_number,
+        short_description: info.short_description || prev.short_description,
+        description: info.description || prev.description,
+        dimensions_cm: info.dimensions_cm || prev.dimensions_cm,
+        weight_kg: info.weight_kg?.toString() || prev.weight_kg,
+        warranty_months: info.warranty_months?.toString() || prev.warranty_months,
+        mrp: info.mrp?.toString() || prev.mrp,
+        slug: info.name ? generateSlug(info.name) : prev.slug,
+      }));
+
+      // Try to match brand from extracted info
+      if (info.brand) {
+        const matchedBrand = brands.find(b => 
+          b.name.toLowerCase() === info.brand?.toLowerCase() ||
+          b.name.toLowerCase().includes(info.brand?.toLowerCase()) ||
+          info.brand?.toLowerCase().includes(b.name.toLowerCase())
+        );
+        if (matchedBrand) {
+          setFormData(prev => ({ ...prev, brand_id: matchedBrand.id }));
+        }
+      }
+
+      // Update specifications if available
+      if (info.specifications) {
+        const specs = info.specifications;
+        
+        // Update WiFi Camera specs if product type matches
+        if (productType === 'wifi_camera') {
+          setWifiCameraSpecs(prev => ({
+            ...prev,
+            resolution: specs.resolution || prev.resolution,
+            megapixel: specs.megapixel || prev.megapixel,
+            night_vision: specs.night_vision === 'Yes' || prev.night_vision,
+            night_vision_type: specs.night_vision_type || prev.night_vision_type,
+            ir_range: specs.ir_range || prev.ir_range,
+            wifi_band: specs.wifi_band || prev.wifi_band,
+            power_type: specs.power_type || prev.power_type,
+            two_way_audio: specs.two_way_audio === 'Yes' || prev.two_way_audio,
+            motion_detection: specs.motion_detection === 'Yes' || prev.motion_detection,
+            weatherproof_rating: specs.weatherproof_rating || prev.weatherproof_rating,
+            lens_type: specs.lens_type || prev.lens_type,
+            field_of_view: specs.field_of_view || prev.field_of_view,
+            pan_support: specs.pan_support === 'Yes' || prev.pan_support,
+            tilt_support: specs.tilt_support === 'Yes' || prev.tilt_support,
+          }));
+        }
+        
+        // Update CCTV Camera specs
+        if (productType === 'cctv_camera') {
+          setCctvSpecs(prev => ({
+            ...prev,
+            resolution: specs.resolution || prev.resolution,
+            megapixel: specs.megapixel || prev.megapixel,
+            night_vision: specs.night_vision === 'Yes' || prev.night_vision,
+            ir_range: specs.ir_range || prev.ir_range,
+            weatherproof_rating: specs.weatherproof_rating || prev.weatherproof_rating,
+            lens_type: specs.lens_type || prev.lens_type,
+          }));
+        }
+        
+        // Update DVR/NVR specs
+        if (productType === 'dvr' || productType === 'nvr') {
+          const targetSpecs = productType === 'dvr' ? setDvrSpecs : setNvrSpecs;
+          targetSpecs((prev: Record<string, any>) => ({
+            ...prev,
+            channel_capacity: specs.channels?.toString() || prev.channel_capacity,
+            max_hdd_capacity: specs.hdd_capacity || prev.max_hdd_capacity,
+            poe_ports: specs.poe_support === 'Yes' ? prev.poe_ports : prev.poe_ports,
+          }));
+        }
+      }
+
+      toast({ 
+        title: 'Success', 
+        description: `Product information extracted: ${info.name || 'Details found'}` 
+      });
+
+    } catch (error) {
+      console.error('Extraction error:', error);
+      toast({ 
+        title: 'Extraction Failed', 
+        description: error instanceof Error ? error.message : 'Could not extract product info from the URL',
+        variant: 'destructive' 
+      });
+    } finally {
+      setIsExtracting(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -1026,6 +1147,53 @@ export default function ShopAdminProductForm() {
                 </ul>
               </AlertDescription>
             </Alert>
+          )}
+          
+          {/* AI Product Extraction */}
+          {!isEdit && (
+            <Card className="border-2 border-dashed border-orange-300 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-orange-500" />
+                  AI Auto-Fill from Product URL
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Paste a product page URL and let AI automatically extract product name, model number, dimensions, specifications, and more.
+                </p>
+                <div className="flex gap-2">
+                  <div className="flex-1 relative">
+                    <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="https://example.com/product-page"
+                      value={productUrl}
+                      onChange={(e) => setProductUrl(e.target.value)}
+                      className="pl-10"
+                      disabled={isExtracting}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={handleExtractFromUrl}
+                    disabled={isExtracting || !productUrl.trim()}
+                    className="bg-orange-500 hover:bg-orange-600 text-white"
+                  >
+                    {isExtracting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Extracting...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Extract Info
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           )}
           
           {/* Product Type Selector - Always visible at top */}
