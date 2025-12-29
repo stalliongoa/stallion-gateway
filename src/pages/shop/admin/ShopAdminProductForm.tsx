@@ -599,54 +599,76 @@ export default function ShopAdminProductForm() {
         }
       }
 
-      // Update specifications if available
+      // Update specifications for ALL product types (pre-populate for when type is selected)
       if (info.specifications) {
         const specs = info.specifications;
         
-        // Update WiFi Camera specs if product type matches
-        if (productType === 'wifi_camera') {
-          setWifiCameraSpecs(prev => ({
-            ...prev,
-            resolution: specs.resolution || prev.resolution,
-            megapixel: specs.megapixel || prev.megapixel,
-            night_vision: specs.night_vision === 'Yes' || prev.night_vision,
-            night_vision_type: specs.night_vision_type || prev.night_vision_type,
-            ir_range: specs.ir_range || prev.ir_range,
-            wifi_band: specs.wifi_band || prev.wifi_band,
-            power_type: specs.power_type || prev.power_type,
-            two_way_audio: specs.two_way_audio === 'Yes' || prev.two_way_audio,
-            motion_detection: specs.motion_detection === 'Yes' || prev.motion_detection,
-            weatherproof_rating: specs.weatherproof_rating || prev.weatherproof_rating,
-            lens_type: specs.lens_type || prev.lens_type,
-            field_of_view: specs.field_of_view || prev.field_of_view,
-            pan_support: specs.pan_support === 'Yes' || prev.pan_support,
-            tilt_support: specs.tilt_support === 'Yes' || prev.tilt_support,
-          }));
+        // Auto-detect product type from specs if not already set
+        let detectedType = productType;
+        if (productType === 'general') {
+          if (specs.wifi_band) {
+            detectedType = 'wifi_camera';
+          } else if (specs.channels && specs.poe_support === 'Yes') {
+            detectedType = 'nvr';
+          } else if (specs.channels) {
+            detectedType = 'dvr';
+          } else if (specs.resolution || specs.megapixel) {
+            detectedType = 'cctv_camera';
+          }
+          
+          if (detectedType !== 'general') {
+            setProductType(detectedType);
+            toast({
+              title: 'Product Type Detected',
+              description: `Detected as: ${PRODUCT_TYPES.find(t => t.value === detectedType)?.label || detectedType}`,
+            });
+          }
         }
         
-        // Update CCTV Camera specs
-        if (productType === 'cctv_camera') {
-          setCctvSpecs(prev => ({
-            ...prev,
-            resolution: specs.resolution || prev.resolution,
-            megapixel: specs.megapixel || prev.megapixel,
-            night_vision: specs.night_vision === 'Yes' || prev.night_vision,
-            ir_range: specs.ir_range || prev.ir_range,
-            weatherproof_rating: specs.weatherproof_rating || prev.weatherproof_rating,
-            lens_type: specs.lens_type || prev.lens_type,
-          }));
-        }
+        // Always update WiFi Camera specs
+        setWifiCameraSpecs(prev => ({
+          ...prev,
+          resolution: specs.resolution || prev.resolution,
+          megapixel: specs.megapixel || prev.megapixel,
+          night_vision: specs.night_vision === 'Yes' ? true : prev.night_vision,
+          night_vision_type: specs.night_vision_type || prev.night_vision_type,
+          ir_range: specs.ir_range || prev.ir_range,
+          wifi_band: specs.wifi_band || prev.wifi_band,
+          power_type: specs.power_type || prev.power_type,
+          two_way_audio: specs.two_way_audio === 'Yes' ? true : prev.two_way_audio,
+          motion_detection: specs.motion_detection === 'Yes' ? true : prev.motion_detection,
+          weatherproof_rating: specs.weatherproof_rating || prev.weatherproof_rating,
+          lens_type: specs.lens_type || prev.lens_type,
+          field_of_view: specs.field_of_view || prev.field_of_view,
+          pan_support: specs.pan_support === 'Yes' ? true : prev.pan_support,
+          tilt_support: specs.tilt_support === 'Yes' ? true : prev.tilt_support,
+        }));
         
-        // Update DVR/NVR specs
-        if (productType === 'dvr' || productType === 'nvr') {
-          const targetSpecs = productType === 'dvr' ? setDvrSpecs : setNvrSpecs;
-          targetSpecs((prev: Record<string, any>) => ({
-            ...prev,
-            channel_capacity: specs.channels?.toString() || prev.channel_capacity,
-            max_hdd_capacity: specs.hdd_capacity || prev.max_hdd_capacity,
-            poe_ports: specs.poe_support === 'Yes' ? prev.poe_ports : prev.poe_ports,
-          }));
-        }
+        // Always update CCTV Camera specs
+        setCctvSpecs(prev => ({
+          ...prev,
+          resolution: specs.resolution || prev.resolution,
+          megapixel: specs.megapixel || prev.megapixel,
+          night_vision: specs.night_vision === 'Yes' ? true : prev.night_vision,
+          ir_range: specs.ir_range || prev.ir_range,
+          weatherproof_rating: specs.weatherproof_rating || prev.weatherproof_rating,
+          lens_type: specs.lens_type || prev.lens_type,
+        }));
+        
+        // Always update DVR specs
+        setDvrSpecs((prev: Record<string, any>) => ({
+          ...prev,
+          channel_capacity: specs.channels?.toString() || prev.channel_capacity,
+          max_hdd_capacity: specs.hdd_capacity || prev.max_hdd_capacity,
+        }));
+        
+        // Always update NVR specs
+        setNvrSpecs((prev: Record<string, any>) => ({
+          ...prev,
+          channel_capacity: specs.channels?.toString() || prev.channel_capacity,
+          max_hdd_capacity: specs.hdd_capacity || prev.max_hdd_capacity,
+          poe_ports: specs.poe_support === 'Yes' ? (prev.poe_ports || '8') : prev.poe_ports,
+        }));
       }
 
       toast({ 
