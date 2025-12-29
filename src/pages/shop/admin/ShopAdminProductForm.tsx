@@ -20,6 +20,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Json } from '@/integrations/supabase/types';
 import CCTVCameraFields, { CCTVSpecs, defaultCCTVSpecs, validateCCTVSpecs } from '@/components/admin/CCTVCameraFields';
+import { DVRFields, validateDVRSpecs } from '@/components/admin/DVRFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -62,6 +63,10 @@ export default function ShopAdminProductForm() {
 
   const [productType, setProductType] = useState('general');
   const [cctvSpecs, setCctvSpecs] = useState<CCTVSpecs>(defaultCCTVSpecs);
+  const [dvrSpecs, setDvrSpecs] = useState<Record<string, any>>({
+    cctv_system_type: 'analog',
+    allow_in_quotation: true,
+  });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
@@ -168,6 +173,32 @@ export default function ShopAdminProductForm() {
           show_in_store: specs.show_in_store !== false,
           allow_in_quotation_builder: specs.allow_in_quotation_builder !== false,
         });
+      } else if (specs.product_type === 'dvr') {
+        setProductType('dvr');
+        setDvrSpecs({
+          cctv_system_type: 'analog',
+          channel_capacity: specs.channel_capacity as string || '',
+          supported_camera_resolution: (specs.supported_camera_resolution as string[]) || [],
+          recording_resolution: specs.recording_resolution as string || '',
+          sata_ports: specs.sata_ports as string || '',
+          max_hdd_capacity: specs.max_hdd_capacity as string || '',
+          supported_hdd_type: specs.supported_hdd_type as string || '',
+          power_supply_type: specs.power_supply_type as string || '',
+          power_input: specs.power_input as string || '12V DC',
+          video_input_type: (specs.video_input_type as string[]) || [],
+          video_output_ports: (specs.video_output_ports as string[]) || [],
+          audio_input: Boolean(specs.audio_input),
+          audio_output: Boolean(specs.audio_output),
+          audio_channels: specs.audio_channels as string || '',
+          lan_port: specs.lan_port as string || '',
+          remote_viewing: Boolean(specs.remote_viewing),
+          mobile_app: specs.mobile_app as string || '',
+          ai_features: (specs.ai_features as string[]) || [],
+          body_material: specs.body_material as string || '',
+          cooling_fan: Boolean(specs.cooling_fan),
+          warranty_period: specs.warranty_period as string || '',
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -236,13 +267,26 @@ export default function ShopAdminProductForm() {
           description: 'Please fill all required CCTV camera fields',
           variant: 'destructive',
         });
-        setIsSaving(false);
         return;
       }
     }
     
-    // Validate common required fields for CCTV cameras
-    if (productType === 'cctv_camera') {
+    // Validate DVR-specific fields if product type is dvr
+    if (productType === 'dvr') {
+      const dvrValidation = validateDVRSpecs(dvrSpecs);
+      if (dvrValidation.length > 0) {
+        setValidationErrors(dvrValidation);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required DVR fields',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
+    // Validate common required fields for CCTV cameras and DVRs
+    if (productType === 'cctv_camera' || productType === 'dvr') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -256,7 +300,6 @@ export default function ShopAdminProductForm() {
           description: 'Please fill all required fields',
           variant: 'destructive',
         });
-        setIsSaving(false);
         return;
       }
     }
@@ -271,6 +314,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...cctvSpecs,
         product_type: 'cctv_camera',
+      };
+    } else if (productType === 'dvr') {
+      specifications = {
+        ...specifications,
+        ...dvrSpecs,
+        product_type: 'dvr',
       };
     }
 
@@ -404,9 +453,11 @@ export default function ShopAdminProductForm() {
                     setProductType(v);
                     if (v === 'cctv_camera') {
                       setCctvSpecs(defaultCCTVSpecs);
+                    } else if (v === 'dvr') {
+                      setDvrSpecs({ cctv_system_type: 'analog', allow_in_quotation: true });
                     }
                   }}
-                  disabled={isEdit && productType === 'cctv_camera'}
+                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr')}
                 >
                   <SelectTrigger className="bg-background mt-1">
                     <SelectValue placeholder="Select product type" />
@@ -419,7 +470,7 @@ export default function ShopAdminProductForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {isEdit && productType === 'cctv_camera' && (
+                {isEdit && (productType === 'cctv_camera' || productType === 'dvr') && (
                   <p className="text-xs text-muted-foreground mt-1">
                     Product type cannot be changed after creation
                   </p>
@@ -625,6 +676,19 @@ export default function ShopAdminProductForm() {
                   <div className="border-t pt-6">
                     <h2 className="text-xl font-bold text-orange-600 mb-4">CCTV Camera Specifications</h2>
                     <CCTVCameraFields specs={cctvSpecs} onChange={setCctvSpecs} />
+                  </div>
+                </div>
+              )}
+              
+              {/* DVR Specific Fields */}
+              {productType === 'dvr' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">DVR Specifications</h2>
+                    <DVRFields 
+                      specs={dvrSpecs} 
+                      onSpecChange={(key, value) => setDvrSpecs(prev => ({ ...prev, [key]: value }))} 
+                    />
                   </div>
                 </div>
               )}
