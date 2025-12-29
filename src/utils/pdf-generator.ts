@@ -1,3 +1,4 @@
+/* PDF Generation Utility for CCTV Quotations */
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
