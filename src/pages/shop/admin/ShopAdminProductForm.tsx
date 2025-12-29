@@ -27,6 +27,7 @@ import { UPSFields, validateUPSSpecs } from '@/components/admin/UPSFields';
 import { CableFields, validateCableSpecs } from '@/components/admin/CableFields';
 import { RackFields, validateRackSpecs } from '@/components/admin/RackFields';
 import { PoESwitchFields, validatePoESwitchSpecs } from '@/components/admin/PoESwitchFields';
+import { BNCConnectorFields, validateBNCConnectorSpecs } from '@/components/admin/BNCConnectorFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -39,6 +40,7 @@ const PRODUCT_TYPES = [
   { value: 'cables', label: 'Cables & Connectors' },
   { value: 'rack', label: 'Rack' },
   { value: 'poe_switch', label: 'PoE Switch' },
+  { value: 'bnc_connector', label: 'BNC Connector' },
   { value: 'accessories', label: 'Accessories' },
 ];
 
@@ -93,6 +95,9 @@ export default function ShopAdminProductForm() {
     allow_in_quotation: true,
   });
   const [poeSwitchSpecs, setPoeSwitchSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [bncConnectorSpecs, setBncConnectorSpecs] = useState<Record<string, any>>({
     allow_in_quotation: true,
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -322,6 +327,15 @@ export default function ShopAdminProductForm() {
           warranty_period: specs.warranty_period as string || '',
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'bnc_connector') {
+        setProductType('bnc_connector');
+        setBncConnectorSpecs({
+          connector_type: specs.connector_type as string || '',
+          material: specs.material as string || '',
+          compatible_cable: specs.compatible_cable as string || '',
+          pack_size: specs.pack_size as string || '',
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -492,8 +506,22 @@ export default function ShopAdminProductForm() {
       }
     }
     
+    // Validate BNC Connector-specific fields
+    if (productType === 'bnc_connector') {
+      const bncValidation = validateBNCConnectorSpecs(bncConnectorSpecs);
+      if (bncValidation.length > 0) {
+        setValidationErrors(bncValidation);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required BNC Connector fields',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
     // Validate common required fields
-    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch') {
+    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -563,6 +591,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...poeSwitchSpecs,
         product_type: 'poe_switch',
+      };
+    } else if (productType === 'bnc_connector') {
+      specifications = {
+        ...specifications,
+        ...bncConnectorSpecs,
+        product_type: 'bnc_connector',
       };
     }
 
@@ -710,9 +744,11 @@ export default function ShopAdminProductForm() {
                       setRackSpecs({ allow_in_quotation: true });
                     } else if (v === 'poe_switch') {
                       setPoeSwitchSpecs({ allow_in_quotation: true });
+                    } else if (v === 'bnc_connector') {
+                      setBncConnectorSpecs({ allow_in_quotation: true });
                     }
                   }}
-                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch')}
+                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector')}
                 >
                   <SelectTrigger className="bg-background mt-1">
                     <SelectValue placeholder="Select product type" />
@@ -725,7 +761,7 @@ export default function ShopAdminProductForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch') && (
+                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector') && (
                   <p className="text-xs text-muted-foreground mt-1">
                     Product type cannot be changed after creation
                   </p>
@@ -1041,6 +1077,29 @@ export default function ShopAdminProductForm() {
                     <PoESwitchFields 
                       specs={poeSwitchSpecs} 
                       onChange={setPoeSwitchSpecs}
+                      vendors={vendors}
+                      formData={{
+                        vendor_id: formData.vendor_id,
+                        purchase_price: formData.purchase_price,
+                        selling_price: formData.selling_price,
+                        stock_quantity: formData.stock_quantity,
+                        low_stock_threshold: formData.low_stock_threshold,
+                        tax_rate: formData.tax_rate,
+                      }}
+                      onFormDataChange={(field, value) => setFormData(prev => ({ ...prev, [field]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* BNC Connector Specific Fields */}
+              {productType === 'bnc_connector' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">BNC Connector Specifications</h2>
+                    <BNCConnectorFields 
+                      specs={bncConnectorSpecs} 
+                      onChange={setBncConnectorSpecs}
                       vendors={vendors}
                       formData={{
                         vendor_id: formData.vendor_id,
