@@ -3,11 +3,11 @@ import { QuotationState } from '@/hooks/use-quotation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { generateQuotationPDF } from '@/utils/pdf-generator';
 import { 
   Save, 
   Send, 
@@ -18,7 +18,8 @@ import {
   Building2,
   MapPin,
   Phone,
-  Mail
+  Mail,
+  Download
 } from 'lucide-react';
 
 interface QuotationSummaryProps {
@@ -40,6 +41,7 @@ export function QuotationSummary({
   isLoading 
 }: QuotationSummaryProps) {
   const [discountInput, setDiscountInput] = useState(state.discountPercentage.toString());
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
   const totals = calculateTotals();
 
@@ -150,9 +152,43 @@ Contact us for any questions!
             Send Quotation
           </Button>
           <Separator orientation="vertical" className="h-8" />
+          <Button 
+            variant="outline" 
+            onClick={async () => {
+              setIsGeneratingPdf(true);
+              try {
+                await generateQuotationPDF({
+                  customer_name: state.customerDetails.customer_name,
+                  customer_mobile: state.customerDetails.customer_mobile,
+                  customer_email: state.customerDetails.customer_email,
+                  installation_address: state.customerDetails.installation_address,
+                  city: state.customerDetails.city,
+                  gst_number: state.customerDetails.gst_number,
+                  cctv_system_type: state.systemType,
+                  notes: state.customerDetails.notes,
+                  subtotal: totals.subtotal,
+                  discount_percentage: state.discountPercentage,
+                  discount_amount: totals.discountAmount,
+                  tax_amount: totals.taxAmount,
+                  total_amount: totals.totalAmount,
+                  items: state.items,
+                });
+                toast.success('PDF generated successfully');
+              } catch (error) {
+                console.error('Error generating PDF:', error);
+                toast.error('Failed to generate PDF');
+              } finally {
+                setIsGeneratingPdf(false);
+              }
+            }}
+            disabled={isGeneratingPdf}
+          >
+            {isGeneratingPdf ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+            Download PDF
+          </Button>
           <Button variant="outline" onClick={handlePrint}>
             <Printer className="h-4 w-4 mr-2" />
-            Print PDF
+            Print
           </Button>
           <Button variant="outline" onClick={() => handleShare('whatsapp')}>
             <Share2 className="h-4 w-4 mr-2" />

@@ -24,6 +24,7 @@ import Careers from "./pages/Careers";
 import CCTVQuotationBuilder from "./pages/CCTVQuotationBuilder";
 import QuotationList from "./pages/QuotationList";
 import QuotationDetail from "./pages/QuotationDetail";
+import EngineerDashboard from "./pages/EngineerDashboard";
 
 // Shop pages
 import ShopHome from "./pages/shop/ShopHome";
@@ -77,6 +78,7 @@ const App = () => (
           <Route path="/admin" element={<Admin />} />
           
           {/* CCTV Quotation Builder Routes */}
+          <Route path="/engineer-dashboard" element={<EngineerDashboard />} />
           <Route path="/quotation-builder" element={<CCTVQuotationBuilder />} />
           <Route path="/quotation-list" element={<QuotationList />} />
           <Route path="/quotation/:id" element={<QuotationDetail />} />
