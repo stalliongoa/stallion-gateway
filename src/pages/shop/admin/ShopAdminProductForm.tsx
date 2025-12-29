@@ -26,6 +26,7 @@ import { HDDFields, validateHDDSpecs } from '@/components/admin/HDDFields';
 import { UPSFields, validateUPSSpecs } from '@/components/admin/UPSFields';
 import { CableFields, validateCableSpecs } from '@/components/admin/CableFields';
 import { RackFields, validateRackSpecs } from '@/components/admin/RackFields';
+import { PoESwitchFields, validatePoESwitchSpecs } from '@/components/admin/PoESwitchFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -37,6 +38,7 @@ const PRODUCT_TYPES = [
   { value: 'power_supply', label: 'Power Supply' },
   { value: 'cables', label: 'Cables & Connectors' },
   { value: 'rack', label: 'Rack' },
+  { value: 'poe_switch', label: 'PoE Switch' },
   { value: 'accessories', label: 'Accessories' },
 ];
 
@@ -88,6 +90,9 @@ export default function ShopAdminProductForm() {
     allow_in_quotation: true,
   });
   const [rackSpecs, setRackSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [poeSwitchSpecs, setPoeSwitchSpecs] = useState<Record<string, any>>({
     allow_in_quotation: true,
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -304,6 +309,19 @@ export default function ShopAdminProductForm() {
           warranty_period: specs.warranty_period as string || '',
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'poe_switch') {
+        setProductType('poe_switch');
+        setPoeSwitchSpecs({
+          model: specs.model as string || '',
+          total_ports: specs.total_ports as string || '',
+          poe_ports: specs.poe_ports as string || '',
+          poe_standard: specs.poe_standard as string || '',
+          is_managed: specs.is_managed as string || '',
+          total_poe_power: specs.total_poe_power as string || '',
+          uplink_ports: specs.uplink_ports as string || '',
+          warranty_period: specs.warranty_period as string || '',
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -460,8 +478,22 @@ export default function ShopAdminProductForm() {
       }
     }
     
-    // Validate common required fields for CCTV cameras, DVRs, NVRs, HDDs, UPS, Cables, and Racks
-    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack') {
+    // Validate PoE Switch-specific fields
+    if (productType === 'poe_switch') {
+      const poeSwitchValidation = validatePoESwitchSpecs(poeSwitchSpecs);
+      if (poeSwitchValidation.length > 0) {
+        setValidationErrors(poeSwitchValidation);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required PoE Switch fields',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
+    // Validate common required fields
+    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -525,6 +557,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...rackSpecs,
         product_type: 'rack',
+      };
+    } else if (productType === 'poe_switch') {
+      specifications = {
+        ...specifications,
+        ...poeSwitchSpecs,
+        product_type: 'poe_switch',
       };
     }
 
@@ -670,9 +708,11 @@ export default function ShopAdminProductForm() {
                       setCableSpecs({ allow_in_quotation: true });
                     } else if (v === 'rack') {
                       setRackSpecs({ allow_in_quotation: true });
+                    } else if (v === 'poe_switch') {
+                      setPoeSwitchSpecs({ allow_in_quotation: true });
                     }
                   }}
-                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack')}
+                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch')}
                 >
                   <SelectTrigger className="bg-background mt-1">
                     <SelectValue placeholder="Select product type" />
@@ -685,7 +725,7 @@ export default function ShopAdminProductForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack') && (
+                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch') && (
                   <p className="text-xs text-muted-foreground mt-1">
                     Product type cannot be changed after creation
                   </p>
@@ -978,6 +1018,29 @@ export default function ShopAdminProductForm() {
                     <RackFields 
                       specs={rackSpecs} 
                       onChange={setRackSpecs}
+                      vendors={vendors}
+                      formData={{
+                        vendor_id: formData.vendor_id,
+                        purchase_price: formData.purchase_price,
+                        selling_price: formData.selling_price,
+                        stock_quantity: formData.stock_quantity,
+                        low_stock_threshold: formData.low_stock_threshold,
+                        tax_rate: formData.tax_rate,
+                      }}
+                      onFormDataChange={(field, value) => setFormData(prev => ({ ...prev, [field]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* PoE Switch Specific Fields */}
+              {productType === 'poe_switch' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">PoE Switch Specifications</h2>
+                    <PoESwitchFields 
+                      specs={poeSwitchSpecs} 
+                      onChange={setPoeSwitchSpecs}
                       vendors={vendors}
                       formData={{
                         vendor_id: formData.vendor_id,
