@@ -56,6 +56,186 @@ export type Database = {
         }
         Relationships: []
       }
+      cctv_quotation_items: {
+        Row: {
+          category_type: string
+          created_at: string
+          display_order: number | null
+          id: string
+          notes: string | null
+          product_id: string | null
+          product_name: string
+          product_sku: string | null
+          quantity: number
+          quotation_id: string
+          specifications: Json | null
+          total_price: number
+          unit_price: number
+        }
+        Insert: {
+          category_type: string
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          notes?: string | null
+          product_id?: string | null
+          product_name: string
+          product_sku?: string | null
+          quantity?: number
+          quotation_id: string
+          specifications?: Json | null
+          total_price: number
+          unit_price: number
+        }
+        Update: {
+          category_type?: string
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          notes?: string | null
+          product_id?: string | null
+          product_name?: string
+          product_sku?: string | null
+          quantity?: number
+          quotation_id?: string
+          specifications?: Json | null
+          total_price?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cctv_quotation_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "shop_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cctv_quotation_items_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "cctv_quotations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cctv_quotations: {
+        Row: {
+          approved_at: string | null
+          cctv_system_type: string
+          city: string
+          created_at: string
+          customer_email: string | null
+          customer_mobile: string
+          customer_name: string
+          discount_amount: number | null
+          discount_percentage: number | null
+          engineer_id: string
+          gst_number: string | null
+          id: string
+          installation_address: string
+          notes: string | null
+          quotation_number: string
+          sent_at: string | null
+          status: Database["public"]["Enums"]["quotation_status"]
+          subtotal: number
+          tax_amount: number | null
+          terms_conditions: string | null
+          total_amount: number
+          updated_at: string
+          valid_until: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          cctv_system_type: string
+          city: string
+          created_at?: string
+          customer_email?: string | null
+          customer_mobile: string
+          customer_name: string
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          engineer_id: string
+          gst_number?: string | null
+          id?: string
+          installation_address: string
+          notes?: string | null
+          quotation_number: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["quotation_status"]
+          subtotal?: number
+          tax_amount?: number | null
+          terms_conditions?: string | null
+          total_amount?: number
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          cctv_system_type?: string
+          city?: string
+          created_at?: string
+          customer_email?: string | null
+          customer_mobile?: string
+          customer_name?: string
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          engineer_id?: string
+          gst_number?: string | null
+          id?: string
+          installation_address?: string
+          notes?: string | null
+          quotation_number?: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["quotation_status"]
+          subtotal?: number
+          tax_amount?: number | null
+          terms_conditions?: string | null
+          total_amount?: number
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Relationships: []
+      }
+      cctv_spec_definitions: {
+        Row: {
+          category_type: string
+          created_at: string
+          display_order: number | null
+          field_type: string
+          id: string
+          is_filterable: boolean | null
+          is_required: boolean | null
+          options: Json | null
+          spec_key: string
+          spec_label: string
+        }
+        Insert: {
+          category_type: string
+          created_at?: string
+          display_order?: number | null
+          field_type?: string
+          id?: string
+          is_filterable?: boolean | null
+          is_required?: boolean | null
+          options?: Json | null
+          spec_key: string
+          spec_label: string
+        }
+        Update: {
+          category_type?: string
+          created_at?: string
+          display_order?: number | null
+          field_type?: string
+          id?: string
+          is_filterable?: boolean | null
+          is_required?: boolean | null
+          options?: Json | null
+          spec_key?: string
+          spec_label?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           company: string | null
@@ -1021,6 +1201,7 @@ export type Database = {
     Functions: {
       generate_order_number: { Args: never; Returns: string }
       generate_purchase_number: { Args: never; Returns: string }
+      generate_quotation_number: { Args: never; Returns: string }
       generate_sku: {
         Args: { brand_slug: string; category_slug: string }
         Returns: string
@@ -1045,10 +1226,12 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_cctv_engineer: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user" | "cctv_engineer"
       customer_status: "pending" | "approved" | "blocked"
+      quotation_status: "draft" | "sent" | "approved" | "rejected" | "converted"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1178,6 +1361,7 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "user", "cctv_engineer"],
       customer_status: ["pending", "approved", "blocked"],
+      quotation_status: ["draft", "sent", "approved", "rejected", "converted"],
     },
   },
 } as const
