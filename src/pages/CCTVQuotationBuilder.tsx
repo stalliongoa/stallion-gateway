@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuotationAuth } from '@/hooks/use-quotation-auth';
-import { useQuotation, QuotationState } from '@/hooks/use-quotation';
-import { WIZARD_STEPS, CCTVSystemType, QuotationItem } from '@/types/quotation';
+import { useQuotationAuth, QuotationAuthProvider } from '@/hooks/use-quotation-auth';
+import { useQuotation } from '@/hooks/use-quotation';
+import { WIZARD_STEPS, CCTVSystemType } from '@/types/quotation';
 import { QuotationWizardProgress } from '@/components/quotation/QuotationWizardProgress';
 import { QuotationWizardStep } from '@/components/quotation/QuotationWizardStep';
 import { QuotationProductPanel } from '@/components/quotation/QuotationProductPanel';
@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 
-export default function CCTVQuotationBuilder() {
+function CCTVQuotationBuilderContent() {
   const navigate = useNavigate();
   const { user, isLoading: authLoading, canAccessQuotations } = useQuotationAuth();
   const quotation = useQuotation();
@@ -266,5 +266,13 @@ export default function CCTVQuotationBuilder() {
       </div>
       <Footer />
     </>
+  );
+}
+
+export default function CCTVQuotationBuilder() {
+  return (
+    <QuotationAuthProvider>
+      <CCTVQuotationBuilderContent />
+    </QuotationAuthProvider>
   );
 }

@@ -20,6 +20,11 @@ import StallionCCTV from "./pages/StallionCCTV";
 import CCTVAmc from "./pages/CCTVAmc";
 import Careers from "./pages/Careers";
 
+// Quotation Builder pages
+import CCTVQuotationBuilder from "./pages/CCTVQuotationBuilder";
+import QuotationList from "./pages/QuotationList";
+import QuotationDetail from "./pages/QuotationDetail";
+
 // Shop pages
 import ShopHome from "./pages/shop/ShopHome";
 import ProductList from "./pages/shop/ProductList";
@@ -70,6 +75,11 @@ const App = () => (
           <Route path="/careers" element={<Careers />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
+          
+          {/* CCTV Quotation Builder Routes */}
+          <Route path="/quotation-builder" element={<CCTVQuotationBuilder />} />
+          <Route path="/quotation-list" element={<QuotationList />} />
+          <Route path="/quotation/:id" element={<QuotationDetail />} />
           
           {/* Shop Routes */}
           <Route path="/shop" element={<ShopHome />} />
