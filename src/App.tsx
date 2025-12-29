@@ -51,6 +51,11 @@ import ShopAdminReports from "./pages/shop/admin/ShopAdminReports";
 import ShopAdminSettings from "./pages/shop/admin/ShopAdminSettings";
 import ShopAdminManagement from "./pages/shop/admin/ShopAdminManagement";
 import ShopAdminInvoices from "./pages/shop/admin/ShopAdminInvoices";
+import ShopAdminInventory from "./pages/shop/admin/ShopAdminInventory";
+import ShopAdminStockMovements from "./pages/shop/admin/ShopAdminStockMovements";
+import ShopAdminLowStockAlerts from "./pages/shop/admin/ShopAdminLowStockAlerts";
+import ShopAdminPurchases from "./pages/shop/admin/ShopAdminPurchases";
+import ShopAdminInventoryReports from "./pages/shop/admin/ShopAdminInventoryReports";
 
 const queryClient = new QueryClient();
 
@@ -108,9 +113,13 @@ const App = () => (
           <Route path="/shop/admin/customers" element={<ShopAdminLayout><ShopAdminCustomers /></ShopAdminLayout>} />
           <Route path="/shop/admin/reports" element={<ShopAdminLayout><ShopAdminReports /></ShopAdminLayout>} />
           <Route path="/shop/admin/invoices" element={<ShopAdminLayout><ShopAdminInvoices /></ShopAdminLayout>} />
+          <Route path="/shop/admin/inventory" element={<ShopAdminLayout><ShopAdminInventory /></ShopAdminLayout>} />
+          <Route path="/shop/admin/inventory/movements" element={<ShopAdminLayout><ShopAdminStockMovements /></ShopAdminLayout>} />
+          <Route path="/shop/admin/inventory/alerts" element={<ShopAdminLayout><ShopAdminLowStockAlerts /></ShopAdminLayout>} />
+          <Route path="/shop/admin/purchases" element={<ShopAdminLayout><ShopAdminPurchases /></ShopAdminLayout>} />
+          <Route path="/shop/admin/inventory/reports" element={<ShopAdminLayout><ShopAdminInventoryReports /></ShopAdminLayout>} />
           <Route path="/shop/admin/management" element={<ShopAdminLayout><ShopAdminManagement /></ShopAdminLayout>} />
           <Route path="/shop/admin/settings" element={<ShopAdminLayout><ShopAdminSettings /></ShopAdminLayout>} />
-          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
