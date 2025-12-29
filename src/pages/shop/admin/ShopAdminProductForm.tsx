@@ -28,6 +28,7 @@ import { CableFields, validateCableSpecs } from '@/components/admin/CableFields'
 import { RackFields, validateRackSpecs } from '@/components/admin/RackFields';
 import { PoESwitchFields, validatePoESwitchSpecs } from '@/components/admin/PoESwitchFields';
 import { BNCConnectorFields, validateBNCConnectorSpecs } from '@/components/admin/BNCConnectorFields';
+import RJ45ConnectorFields, { validateRJ45ConnectorSpecs } from '@/components/admin/RJ45ConnectorFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -41,6 +42,7 @@ const PRODUCT_TYPES = [
   { value: 'rack', label: 'Rack' },
   { value: 'poe_switch', label: 'PoE Switch' },
   { value: 'bnc_connector', label: 'BNC Connector' },
+  { value: 'rj45_connector', label: 'RJ45 Connector' },
   { value: 'accessories', label: 'Accessories' },
 ];
 
@@ -98,6 +100,9 @@ export default function ShopAdminProductForm() {
     allow_in_quotation: true,
   });
   const [bncConnectorSpecs, setBncConnectorSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [rj45ConnectorSpecs, setRj45ConnectorSpecs] = useState<Record<string, any>>({
     allow_in_quotation: true,
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -336,6 +341,14 @@ export default function ShopAdminProductForm() {
           pack_size: specs.pack_size as string || '',
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'rj45_connector') {
+        setProductType('rj45_connector');
+        setRj45ConnectorSpecs({
+          cable_category: specs.cable_category as string || '',
+          connector_type: specs.connector_type as string || '',
+          pack_size: specs.pack_size || 0,
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -520,8 +533,22 @@ export default function ShopAdminProductForm() {
       }
     }
     
+    // Validate RJ45 Connector-specific fields
+    if (productType === 'rj45_connector') {
+      const rj45Validation = validateRJ45ConnectorSpecs(rj45ConnectorSpecs);
+      if (rj45Validation) {
+        setValidationErrors([rj45Validation]);
+        toast({
+          title: 'Validation Error',
+          description: rj45Validation,
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
     // Validate common required fields
-    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector') {
+    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector' || productType === 'rj45_connector') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -597,6 +624,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...bncConnectorSpecs,
         product_type: 'bnc_connector',
+      };
+    } else if (productType === 'rj45_connector') {
+      specifications = {
+        ...specifications,
+        ...rj45ConnectorSpecs,
+        product_type: 'rj45_connector',
       };
     }
 
@@ -1110,6 +1143,19 @@ export default function ShopAdminProductForm() {
                         tax_rate: formData.tax_rate,
                       }}
                       onFormDataChange={(field, value) => setFormData(prev => ({ ...prev, [field]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* RJ45 Connector Specific Fields */}
+              {productType === 'rj45_connector' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">RJ45 Connector Specifications</h2>
+                    <RJ45ConnectorFields 
+                      specifications={rj45ConnectorSpecs} 
+                      onSpecificationChange={(key, value) => setRj45ConnectorSpecs(prev => ({ ...prev, [key]: value }))}
                     />
                   </div>
                 </div>
