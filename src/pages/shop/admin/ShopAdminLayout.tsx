@@ -12,7 +12,11 @@ import {
   ArrowLeft,
   BarChart3,
   FileText,
-  Shield
+  Shield,
+  Warehouse,
+  PackageSearch,
+  AlertTriangle,
+  ClipboardList
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ShopAuthProvider, useShopAuth } from '@/hooks/use-shop-auth';
@@ -30,9 +34,14 @@ const navItems = [
   { href: '/shop/admin/brands', icon: Tags, label: 'Brands' },
   { href: '/shop/admin/orders', icon: ShoppingCart, label: 'Orders' },
   { href: '/shop/admin/invoices', icon: FileText, label: 'Invoices' },
+  { href: '/shop/admin/inventory', icon: Warehouse, label: 'Inventory' },
+  { href: '/shop/admin/inventory/movements', icon: PackageSearch, label: 'Stock Movements' },
+  { href: '/shop/admin/inventory/alerts', icon: AlertTriangle, label: 'Low Stock Alerts' },
+  { href: '/shop/admin/inventory/reports', icon: BarChart3, label: 'Inventory Reports' },
+  { href: '/shop/admin/purchases', icon: ClipboardList, label: 'Purchases' },
   { href: '/shop/admin/customers', icon: Users, label: 'Customers' },
   { href: '/shop/admin/vendors', icon: Truck, label: 'Vendors' },
-  { href: '/shop/admin/reports', icon: BarChart3, label: 'Reports' },
+  { href: '/shop/admin/reports', icon: BarChart3, label: 'Sales Reports' },
   { href: '/shop/admin/management', icon: Shield, label: 'Admin Access' },
   { href: '/shop/admin/settings', icon: Settings, label: 'Settings' },
 ];
