@@ -36,10 +36,12 @@ import HDMISplitterFields, { validateHDMISplitterSpecs } from '@/components/admi
 import LANToHDMIConverterFields, { validateLANToHDMIConverterSpecs } from '@/components/admin/LANToHDMIConverterFields';
 import LANToUSBConverterFields, { validateLANToUSBConverterSpecs } from '@/components/admin/LANToUSBConverterFields';
 import SMPSFields, { validateSMPSSpecs } from '@/components/admin/SMPSFields';
+import WiFiCameraFields, { WiFiCameraSpecs, defaultWiFiCameraSpecs, validateWiFiCameraSpecs } from '@/components/admin/WiFiCameraFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
   { value: 'cctv_camera', label: 'CCTV Camera' },
+  { value: 'wifi_camera', label: 'WiFi Camera' },
   { value: 'dvr', label: 'DVR' },
   { value: 'nvr', label: 'NVR' },
   { value: 'hdd', label: 'Hard Disk Drive' },
@@ -139,6 +141,7 @@ export default function ShopAdminProductForm() {
   const [smpsSpecs, setSmpsSpecs] = useState<Record<string, any>>({
     allow_in_quotation: true,
   });
+  const [wifiCameraSpecs, setWifiCameraSpecs] = useState<WiFiCameraSpecs>(defaultWiFiCameraSpecs);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
@@ -443,6 +446,48 @@ export default function ShopAdminProductForm() {
           metal_body: Boolean(specs.metal_body),
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'wifi_camera') {
+        setProductType('wifi_camera');
+        setWifiCameraSpecs({
+          wifi_camera_type: (specs.wifi_camera_type as string) || '',
+          indoor_outdoor: (specs.indoor_outdoor as string) || '',
+          resolution: (specs.resolution as string) || '',
+          megapixel: (specs.megapixel as string) || '',
+          lens_type: (specs.lens_type as string) || '',
+          field_of_view: (specs.field_of_view as string) || '',
+          frame_rate: (specs.frame_rate as string) || '',
+          night_vision: Boolean(specs.night_vision),
+          night_vision_type: (specs.night_vision_type as string) || '',
+          ir_range: (specs.ir_range as string) || '',
+          pan_support: Boolean(specs.pan_support),
+          tilt_support: Boolean(specs.tilt_support),
+          zoom_support: (specs.zoom_support as string) || '',
+          pan_range: (specs.pan_range as string) || '',
+          tilt_range: (specs.tilt_range as string) || '',
+          two_way_audio: Boolean(specs.two_way_audio),
+          built_in_mic_speaker: Boolean(specs.built_in_mic_speaker),
+          motion_detection: Boolean(specs.motion_detection),
+          human_detection: Boolean(specs.human_detection),
+          ai_features: (specs.ai_features as string[]) || [],
+          wifi_band: (specs.wifi_band as string) || '',
+          lan_port: Boolean(specs.lan_port),
+          mobile_app: (specs.mobile_app as string) || '',
+          cloud_storage: Boolean(specs.cloud_storage),
+          sd_card_support: (specs.sd_card_support as string) || '',
+          power_type: (specs.power_type as string) || '',
+          battery_capacity: (specs.battery_capacity as string) || '',
+          solar_panel_included: Boolean(specs.solar_panel_included),
+          body_material: (specs.body_material as string) || '',
+          weatherproof_rating: (specs.weatherproof_rating as string) || '',
+          color: (specs.color as string) || '',
+          recording_modes: (specs.recording_modes as string[]) || [],
+          warranty_period: (specs.warranty_period as string) || '',
+          datasheet_url: (specs.datasheet_url as string) || '',
+          manual_url: (specs.manual_url as string) || '',
+          video_url: (specs.video_url as string) || '',
+          show_in_store: specs.show_in_store !== false,
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -718,8 +763,22 @@ export default function ShopAdminProductForm() {
       }
     }
     
+    // Validate WiFi Camera-specific fields
+    if (productType === 'wifi_camera') {
+      const wifiValidation = validateWiFiCameraSpecs(wifiCameraSpecs);
+      if (wifiValidation.length > 0) {
+        setValidationErrors(wifiValidation);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required WiFi Camera fields',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
     // Validate common required fields
-    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector' || productType === 'rj45_connector' || productType === 'dc_pin' || productType === 'video_balun' || productType === 'hdmi_cable' || productType === 'hdmi_splitter' || productType === 'lan_to_hdmi' || productType === 'lan_to_usb' || productType === 'smps') {
+    if (productType === 'cctv_camera' || productType === 'wifi_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector' || productType === 'rj45_connector' || productType === 'dc_pin' || productType === 'video_balun' || productType === 'hdmi_cable' || productType === 'hdmi_splitter' || productType === 'lan_to_hdmi' || productType === 'lan_to_usb' || productType === 'smps') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -843,6 +902,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...smpsSpecs,
         product_type: 'smps',
+      };
+    } else if (productType === 'wifi_camera') {
+      specifications = {
+        ...specifications,
+        ...wifiCameraSpecs,
+        product_type: 'wifi_camera',
       };
     }
 
@@ -995,9 +1060,11 @@ export default function ShopAdminProductForm() {
                       setPoeSwitchSpecs({ allow_in_quotation: true });
                     } else if (v === 'bnc_connector') {
                       setBncConnectorSpecs({ allow_in_quotation: true });
+                    } else if (v === 'wifi_camera') {
+                      setWifiCameraSpecs(defaultWiFiCameraSpecs);
                     }
                   }}
-                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector')}
+                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'wifi_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector')}
                 >
                   <SelectTrigger className="bg-background mt-1">
                     <SelectValue placeholder="Select product type" />
@@ -1255,6 +1322,29 @@ export default function ShopAdminProductForm() {
                     <DVRFields 
                       specs={dvrSpecs} 
                       onSpecChange={(key, value) => setDvrSpecs(prev => ({ ...prev, [key]: value }))} 
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* WiFi Camera Specific Fields */}
+              {productType === 'wifi_camera' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-blue-600 mb-4">WiFi Camera Specifications</h2>
+                    <WiFiCameraFields 
+                      specs={wifiCameraSpecs} 
+                      onChange={setWifiCameraSpecs}
+                      vendors={vendors}
+                      formData={{
+                        vendor_id: formData.vendor_id,
+                        purchase_price: formData.purchase_price,
+                        selling_price: formData.selling_price,
+                        stock_quantity: formData.stock_quantity,
+                        low_stock_threshold: formData.low_stock_threshold,
+                        tax_rate: formData.tax_rate,
+                      }}
+                      onFormDataChange={(field, value) => setFormData(prev => ({ ...prev, [field]: value }))}
                     />
                   </div>
                 </div>
