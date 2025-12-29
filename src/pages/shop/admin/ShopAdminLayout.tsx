@@ -10,7 +10,9 @@ import {
   FolderTree,
   Settings,
   ArrowLeft,
-  BarChart3
+  BarChart3,
+  FileText,
+  Shield
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useShopAuth } from '@/hooks/use-shop-auth';
@@ -27,9 +29,11 @@ const navItems = [
   { href: '/shop/admin/categories', icon: FolderTree, label: 'Categories' },
   { href: '/shop/admin/brands', icon: Tags, label: 'Brands' },
   { href: '/shop/admin/orders', icon: ShoppingCart, label: 'Orders' },
+  { href: '/shop/admin/invoices', icon: FileText, label: 'Invoices' },
   { href: '/shop/admin/customers', icon: Users, label: 'Customers' },
   { href: '/shop/admin/vendors', icon: Truck, label: 'Vendors' },
   { href: '/shop/admin/reports', icon: BarChart3, label: 'Reports' },
+  { href: '/shop/admin/management', icon: Shield, label: 'Admin Access' },
   { href: '/shop/admin/settings', icon: Settings, label: 'Settings' },
 ];
 
