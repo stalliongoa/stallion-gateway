@@ -5,6 +5,7 @@ import { ShopAdminLayout } from './ShopAdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Table,
   TableBody,
@@ -46,6 +47,8 @@ export default function ShopAdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -94,6 +97,28 @@ export default function ShopAdminProducts() {
       toast({ title: 'Error deleting product', description: error.message, variant: 'destructive' });
     } else {
       toast({ title: 'Product deleted successfully' });
+      setSelectedProducts(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
+      fetchProducts();
+    }
+  };
+
+  const deleteSelectedProducts = async () => {
+    const idsToDelete = Array.from(selectedProducts);
+    const { error } = await supabase
+      .from('shop_products')
+      .delete()
+      .in('id', idsToDelete);
+
+    if (error) {
+      toast({ title: 'Error deleting products', description: error.message, variant: 'destructive' });
+    } else {
+      toast({ title: `${idsToDelete.length} products deleted successfully` });
+      setSelectedProducts(new Set());
+      setBulkDeleteOpen(false);
       fetchProducts();
     }
   };
@@ -103,6 +128,29 @@ export default function ShopAdminProducts() {
     product.sku?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedProducts(new Set(filteredProducts.map(p => p.id)));
+    } else {
+      setSelectedProducts(new Set());
+    }
+  };
+
+  const handleSelectProduct = (id: string, checked: boolean) => {
+    setSelectedProducts(prev => {
+      const newSet = new Set(prev);
+      if (checked) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return newSet;
+    });
+  };
+
+  const isAllSelected = filteredProducts.length > 0 && filteredProducts.every(p => selectedProducts.has(p.id));
+  const isSomeSelected = filteredProducts.some(p => selectedProducts.has(p.id));
+
   return (
     <ShopAdminLayout>
       <div className="p-6">
@@ -111,17 +159,46 @@ export default function ShopAdminProducts() {
             <h1 className="text-2xl font-bold">Products</h1>
             <p className="text-muted-foreground">Manage your product catalog</p>
           </div>
-          <Link to="/shop/admin/products/new">
-            <Button className="bg-shop-orange hover:bg-shop-orange-dark">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Product
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            {selectedProducts.size > 0 && (
+              <AlertDialog open={bulkDeleteOpen} onOpenChange={setBulkDeleteOpen}>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete Selected ({selectedProducts.size})
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete Selected Products</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete {selectedProducts.size} selected products? This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={deleteSelectedProducts}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Delete All
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+            <Link to="/shop/admin/products/new">
+              <Button className="bg-shop-orange hover:bg-shop-orange-dark">
+                <Plus className="mr-2 h-4 w-4" />
+                Add Product
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Search */}
-        <div className="mb-6">
-          <div className="relative max-w-sm">
+        <div className="mb-6 flex items-center gap-4">
+          <div className="relative max-w-sm flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search products..."
@@ -130,6 +207,11 @@ export default function ShopAdminProducts() {
               className="pl-10"
             />
           </div>
+          {filteredProducts.length > 0 && (
+            <span className="text-sm text-muted-foreground">
+              {selectedProducts.size} of {filteredProducts.length} selected
+            </span>
+          )}
         </div>
 
         {/* Products Table */}
@@ -137,6 +219,14 @@ export default function ShopAdminProducts() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-12">
+                  <Checkbox
+                    checked={isAllSelected}
+                    onCheckedChange={handleSelectAll}
+                    aria-label="Select all"
+                    className={isSomeSelected && !isAllSelected ? "opacity-50" : ""}
+                  />
+                </TableHead>
                 <TableHead>Product</TableHead>
                 <TableHead>SKU</TableHead>
                 <TableHead>Category</TableHead>
@@ -151,19 +241,26 @@ export default function ShopAdminProducts() {
             <TableBody>
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center py-8">
+                  <TableCell colSpan={10} className="text-center py-8">
                     Loading products...
                   </TableCell>
                 </TableRow>
               ) : filteredProducts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center py-8">
+                  <TableCell colSpan={10} className="text-center py-8">
                     No products found
                   </TableCell>
                 </TableRow>
               ) : (
                 filteredProducts.map((product) => (
-                  <TableRow key={product.id}>
+                  <TableRow key={product.id} className={selectedProducts.has(product.id) ? "bg-muted/50" : ""}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedProducts.has(product.id)}
+                        onCheckedChange={(checked) => handleSelectProduct(product.id, checked as boolean)}
+                        aria-label={`Select ${product.name}`}
+                      />
+                    </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         {product.images?.[0] ? (
