@@ -20,6 +20,13 @@ import StallionCCTV from "./pages/StallionCCTV";
 import CCTVAmc from "./pages/CCTVAmc";
 import Careers from "./pages/Careers";
 
+// Shop pages
+import ShopHome from "./pages/shop/ShopHome";
+import ProductList from "./pages/shop/ProductList";
+import ProductDetail from "./pages/shop/ProductDetail";
+import ShopAuth from "./pages/shop/ShopAuth";
+import ShopCart from "./pages/shop/ShopCart";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -44,6 +51,15 @@ const App = () => (
           <Route path="/careers" element={<Careers />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
+          
+          {/* Shop Routes */}
+          <Route path="/shop" element={<ShopHome />} />
+          <Route path="/shop/products" element={<ProductList />} />
+          <Route path="/shop/category/:categorySlug" element={<ProductList />} />
+          <Route path="/shop/product/:productSlug" element={<ProductDetail />} />
+          <Route path="/shop/auth" element={<ShopAuth />} />
+          <Route path="/shop/cart" element={<ShopCart />} />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
