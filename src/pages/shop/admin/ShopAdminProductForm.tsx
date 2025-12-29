@@ -30,6 +30,12 @@ import { PoESwitchFields, validatePoESwitchSpecs } from '@/components/admin/PoES
 import { BNCConnectorFields, validateBNCConnectorSpecs } from '@/components/admin/BNCConnectorFields';
 import RJ45ConnectorFields, { validateRJ45ConnectorSpecs } from '@/components/admin/RJ45ConnectorFields';
 import DCPinFields, { validateDCPinSpecs } from '@/components/admin/DCPinFields';
+import VideoBalunFields, { validateVideoBalunSpecs } from '@/components/admin/VideoBalunFields';
+import HDMICableFields, { validateHDMICableSpecs } from '@/components/admin/HDMICableFields';
+import HDMISplitterFields, { validateHDMISplitterSpecs } from '@/components/admin/HDMISplitterFields';
+import LANToHDMIConverterFields, { validateLANToHDMIConverterSpecs } from '@/components/admin/LANToHDMIConverterFields';
+import LANToUSBConverterFields, { validateLANToUSBConverterSpecs } from '@/components/admin/LANToUSBConverterFields';
+import SMPSFields, { validateSMPSSpecs } from '@/components/admin/SMPSFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -38,13 +44,18 @@ const PRODUCT_TYPES = [
   { value: 'nvr', label: 'NVR' },
   { value: 'hdd', label: 'Hard Disk Drive' },
   { value: 'ups', label: 'UPS' },
-  { value: 'power_supply', label: 'Power Supply' },
+  { value: 'smps', label: 'SMPS (Power Supply)' },
   { value: 'cables', label: 'Cables & Connectors' },
   { value: 'rack', label: 'Rack' },
   { value: 'poe_switch', label: 'PoE Switch' },
   { value: 'bnc_connector', label: 'BNC Connector' },
   { value: 'rj45_connector', label: 'RJ45 Connector' },
   { value: 'dc_pin', label: 'DC Pin' },
+  { value: 'video_balun', label: 'Video Balun' },
+  { value: 'hdmi_cable', label: 'HDMI Cable' },
+  { value: 'hdmi_splitter', label: 'HDMI Splitter' },
+  { value: 'lan_to_hdmi', label: 'LAN to HDMI Converter' },
+  { value: 'lan_to_usb', label: 'LAN to USB Converter' },
   { value: 'accessories', label: 'Accessories' },
 ];
 
@@ -108,6 +119,24 @@ export default function ShopAdminProductForm() {
     allow_in_quotation: true,
   });
   const [dcPinSpecs, setDcPinSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [videoBalunSpecs, setVideoBalunSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [hdmiCableSpecs, setHdmiCableSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [hdmiSplitterSpecs, setHdmiSplitterSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [lanToHdmiSpecs, setLanToHdmiSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [lanToUsbSpecs, setLanToUsbSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [smpsSpecs, setSmpsSpecs] = useState<Record<string, any>>({
     allow_in_quotation: true,
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -362,6 +391,55 @@ export default function ShopAdminProductForm() {
           pack_size: specs.pack_size || 0,
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'video_balun') {
+        setProductType('video_balun');
+        setVideoBalunSpecs({
+          balun_type: specs.balun_type as string || '',
+          distance_supported: specs.distance_supported as string || '',
+          compatible_cable: specs.compatible_cable as string || '',
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
+      } else if (specs.product_type === 'hdmi_cable') {
+        setProductType('hdmi_cable');
+        setHdmiCableSpecs({
+          hdmi_version: specs.hdmi_version as string || '',
+          cable_length: specs.cable_length as string || '',
+          support_4k: Boolean(specs.support_4k),
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
+      } else if (specs.product_type === 'hdmi_splitter') {
+        setProductType('hdmi_splitter');
+        setHdmiSplitterSpecs({
+          input_ports: specs.input_ports || 0,
+          output_ports: specs.output_ports || 0,
+          support_4k: Boolean(specs.support_4k),
+          power_adapter_included: Boolean(specs.power_adapter_included),
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
+      } else if (specs.product_type === 'lan_to_hdmi') {
+        setProductType('lan_to_hdmi');
+        setLanToHdmiSpecs({
+          max_distance: specs.max_distance as string || '',
+          resolution_support: specs.resolution_support as string || '',
+          power_supply: specs.power_supply as string || '',
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
+      } else if (specs.product_type === 'lan_to_usb') {
+        setProductType('lan_to_usb');
+        setLanToUsbSpecs({
+          supported_device: specs.supported_device as string || '',
+          driver_required: Boolean(specs.driver_required),
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
+      } else if (specs.product_type === 'smps') {
+        setProductType('smps');
+        setSmpsSpecs({
+          channels: specs.channels as string || '',
+          output_voltage: specs.output_voltage as string || '',
+          amperage: specs.amperage as string || '',
+          metal_body: Boolean(specs.metal_body),
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -574,8 +652,68 @@ export default function ShopAdminProductForm() {
       }
     }
     
+    // Validate Video Balun-specific fields
+    if (productType === 'video_balun') {
+      const validation = validateVideoBalunSpecs(videoBalunSpecs);
+      if (validation) {
+        setValidationErrors([validation]);
+        toast({ title: 'Validation Error', description: validation, variant: 'destructive' });
+        return;
+      }
+    }
+    
+    // Validate HDMI Cable-specific fields
+    if (productType === 'hdmi_cable') {
+      const validation = validateHDMICableSpecs(hdmiCableSpecs);
+      if (validation) {
+        setValidationErrors([validation]);
+        toast({ title: 'Validation Error', description: validation, variant: 'destructive' });
+        return;
+      }
+    }
+    
+    // Validate HDMI Splitter-specific fields
+    if (productType === 'hdmi_splitter') {
+      const validation = validateHDMISplitterSpecs(hdmiSplitterSpecs);
+      if (validation) {
+        setValidationErrors([validation]);
+        toast({ title: 'Validation Error', description: validation, variant: 'destructive' });
+        return;
+      }
+    }
+    
+    // Validate LAN to HDMI Converter-specific fields
+    if (productType === 'lan_to_hdmi') {
+      const validation = validateLANToHDMIConverterSpecs(lanToHdmiSpecs);
+      if (validation) {
+        setValidationErrors([validation]);
+        toast({ title: 'Validation Error', description: validation, variant: 'destructive' });
+        return;
+      }
+    }
+    
+    // Validate LAN to USB Converter-specific fields
+    if (productType === 'lan_to_usb') {
+      const validation = validateLANToUSBConverterSpecs(lanToUsbSpecs);
+      if (validation) {
+        setValidationErrors([validation]);
+        toast({ title: 'Validation Error', description: validation, variant: 'destructive' });
+        return;
+      }
+    }
+    
+    // Validate SMPS-specific fields
+    if (productType === 'smps') {
+      const validation = validateSMPSSpecs(smpsSpecs);
+      if (validation) {
+        setValidationErrors([validation]);
+        toast({ title: 'Validation Error', description: validation, variant: 'destructive' });
+        return;
+      }
+    }
+    
     // Validate common required fields
-    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector' || productType === 'rj45_connector' || productType === 'dc_pin') {
+    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector' || productType === 'rj45_connector' || productType === 'dc_pin' || productType === 'video_balun' || productType === 'hdmi_cable' || productType === 'hdmi_splitter' || productType === 'lan_to_hdmi' || productType === 'lan_to_usb' || productType === 'smps') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -663,6 +801,42 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...dcPinSpecs,
         product_type: 'dc_pin',
+      };
+    } else if (productType === 'video_balun') {
+      specifications = {
+        ...specifications,
+        ...videoBalunSpecs,
+        product_type: 'video_balun',
+      };
+    } else if (productType === 'hdmi_cable') {
+      specifications = {
+        ...specifications,
+        ...hdmiCableSpecs,
+        product_type: 'hdmi_cable',
+      };
+    } else if (productType === 'hdmi_splitter') {
+      specifications = {
+        ...specifications,
+        ...hdmiSplitterSpecs,
+        product_type: 'hdmi_splitter',
+      };
+    } else if (productType === 'lan_to_hdmi') {
+      specifications = {
+        ...specifications,
+        ...lanToHdmiSpecs,
+        product_type: 'lan_to_hdmi',
+      };
+    } else if (productType === 'lan_to_usb') {
+      specifications = {
+        ...specifications,
+        ...lanToUsbSpecs,
+        product_type: 'lan_to_usb',
+      };
+    } else if (productType === 'smps') {
+      specifications = {
+        ...specifications,
+        ...smpsSpecs,
+        product_type: 'smps',
       };
     }
 
@@ -1202,6 +1376,84 @@ export default function ShopAdminProductForm() {
                     <DCPinFields 
                       specifications={dcPinSpecs} 
                       onSpecificationChange={(key, value) => setDcPinSpecs(prev => ({ ...prev, [key]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* Video Balun Specific Fields */}
+              {productType === 'video_balun' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">Video Balun Specifications</h2>
+                    <VideoBalunFields 
+                      specifications={videoBalunSpecs} 
+                      onSpecificationChange={(key, value) => setVideoBalunSpecs(prev => ({ ...prev, [key]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* HDMI Cable Specific Fields */}
+              {productType === 'hdmi_cable' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">HDMI Cable Specifications</h2>
+                    <HDMICableFields 
+                      specifications={hdmiCableSpecs} 
+                      onSpecificationChange={(key, value) => setHdmiCableSpecs(prev => ({ ...prev, [key]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* HDMI Splitter Specific Fields */}
+              {productType === 'hdmi_splitter' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">HDMI Splitter Specifications</h2>
+                    <HDMISplitterFields 
+                      specifications={hdmiSplitterSpecs} 
+                      onSpecificationChange={(key, value) => setHdmiSplitterSpecs(prev => ({ ...prev, [key]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* LAN to HDMI Converter Specific Fields */}
+              {productType === 'lan_to_hdmi' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">LAN to HDMI Converter Specifications</h2>
+                    <LANToHDMIConverterFields 
+                      specifications={lanToHdmiSpecs} 
+                      onSpecificationChange={(key, value) => setLanToHdmiSpecs(prev => ({ ...prev, [key]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* LAN to USB Converter Specific Fields */}
+              {productType === 'lan_to_usb' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">LAN to USB Converter Specifications</h2>
+                    <LANToUSBConverterFields 
+                      specifications={lanToUsbSpecs} 
+                      onSpecificationChange={(key, value) => setLanToUsbSpecs(prev => ({ ...prev, [key]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* SMPS Specific Fields */}
+              {productType === 'smps' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">SMPS (Power Supply) Specifications</h2>
+                    <SMPSFields 
+                      specifications={smpsSpecs} 
+                      onSpecificationChange={(key, value) => setSmpsSpecs(prev => ({ ...prev, [key]: value }))}
                     />
                   </div>
                 </div>
