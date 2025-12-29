@@ -24,6 +24,7 @@ import { DVRFields, validateDVRSpecs } from '@/components/admin/DVRFields';
 import { NVRFields, validateNVRSpecs } from '@/components/admin/NVRFields';
 import { HDDFields, validateHDDSpecs } from '@/components/admin/HDDFields';
 import { UPSFields, validateUPSSpecs } from '@/components/admin/UPSFields';
+import { CableFields, validateCableSpecs } from '@/components/admin/CableFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -79,6 +80,9 @@ export default function ShopAdminProductForm() {
     allow_in_quotation: true,
   });
   const [upsSpecs, setUpsSpecs] = useState<Record<string, any>>({
+    allow_in_quotation: true,
+  });
+  const [cableSpecs, setCableSpecs] = useState<Record<string, any>>({
     allow_in_quotation: true,
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -270,6 +274,21 @@ export default function ShopAdminProductForm() {
           warranty_period: specs.warranty_period as string || '',
           allow_in_quotation: specs.allow_in_quotation !== false,
         });
+      } else if (specs.product_type === 'cables') {
+        setProductType('cables');
+        setCableSpecs({
+          cable_category: specs.cable_category as string || '',
+          model_number: specs.model_number as string || '',
+          cable_type: specs.cable_type as string || '',
+          length: specs.length as string || '',
+          conductor_material: specs.conductor_material as string || '',
+          shielding: specs.shielding as string || '',
+          compatible_with: (specs.compatible_with as string[]) || [],
+          warranty_period: specs.warranty_period as string || '',
+          datasheet_url: specs.datasheet_url as string || '',
+          is_active: specs.is_active !== false,
+          allow_in_quotation: specs.allow_in_quotation !== false,
+        });
       } else if (specs.product_type) {
         setProductType(specs.product_type as string);
       }
@@ -398,8 +417,22 @@ export default function ShopAdminProductForm() {
       }
     }
     
-    // Validate common required fields for CCTV cameras, DVRs, NVRs, HDDs, and UPS
-    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups') {
+    // Validate Cable-specific fields if product type is cables
+    if (productType === 'cables') {
+      const cableValidation = validateCableSpecs(cableSpecs);
+      if (cableValidation.length > 0) {
+        setValidationErrors(cableValidation);
+        toast({
+          title: 'Validation Error',
+          description: 'Please fill all required Cable fields',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
+    // Validate common required fields for CCTV cameras, DVRs, NVRs, HDDs, UPS, and Cables
+    if (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -451,6 +484,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...upsSpecs,
         product_type: 'ups',
+      };
+    } else if (productType === 'cables') {
+      specifications = {
+        ...specifications,
+        ...cableSpecs,
+        product_type: 'cables',
       };
     }
 
@@ -592,9 +631,11 @@ export default function ShopAdminProductForm() {
                       setHddSpecs({ allow_in_quotation: true });
                     } else if (v === 'ups') {
                       setUpsSpecs({ allow_in_quotation: true });
+                    } else if (v === 'cables') {
+                      setCableSpecs({ allow_in_quotation: true });
                     }
                   }}
-                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups')}
+                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables')}
                 >
                   <SelectTrigger className="bg-background mt-1">
                     <SelectValue placeholder="Select product type" />
@@ -607,7 +648,7 @@ export default function ShopAdminProductForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups') && (
+                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables') && (
                   <p className="text-xs text-muted-foreground mt-1">
                     Product type cannot be changed after creation
                   </p>
@@ -864,6 +905,29 @@ export default function ShopAdminProductForm() {
                     <UPSFields 
                       specs={upsSpecs} 
                       onSpecChange={(key, value) => setUpsSpecs(prev => ({ ...prev, [key]: value }))} 
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* Cable Specific Fields */}
+              {productType === 'cables' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">Cable Specifications</h2>
+                    <CableFields 
+                      specs={cableSpecs} 
+                      onChange={setCableSpecs}
+                      vendors={vendors}
+                      formData={{
+                        vendor_id: formData.vendor_id,
+                        purchase_price: formData.purchase_price,
+                        selling_price: formData.selling_price,
+                        stock_quantity: formData.stock_quantity,
+                        low_stock_threshold: formData.low_stock_threshold,
+                        tax_rate: formData.tax_rate,
+                      }}
+                      onFormDataChange={(field, value) => setFormData(prev => ({ ...prev, [field]: value }))}
                     />
                   </div>
                 </div>
