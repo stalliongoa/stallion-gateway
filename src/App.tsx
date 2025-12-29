@@ -43,6 +43,8 @@ import ShopAdminVendors from "./pages/shop/admin/ShopAdminVendors";
 import ShopAdminCustomers from "./pages/shop/admin/ShopAdminCustomers";
 import ShopAdminReports from "./pages/shop/admin/ShopAdminReports";
 import ShopAdminSettings from "./pages/shop/admin/ShopAdminSettings";
+import ShopAdminManagement from "./pages/shop/admin/ShopAdminManagement";
+import ShopAdminInvoices from "./pages/shop/admin/ShopAdminInvoices";
 
 const queryClient = new QueryClient();
 
@@ -93,6 +95,8 @@ const App = () => (
           <Route path="/shop/admin/vendors" element={<ShopAdminLayout><ShopAdminVendors /></ShopAdminLayout>} />
           <Route path="/shop/admin/customers" element={<ShopAdminLayout><ShopAdminCustomers /></ShopAdminLayout>} />
           <Route path="/shop/admin/reports" element={<ShopAdminLayout><ShopAdminReports /></ShopAdminLayout>} />
+          <Route path="/shop/admin/invoices" element={<ShopAdminLayout><ShopAdminInvoices /></ShopAdminLayout>} />
+          <Route path="/shop/admin/management" element={<ShopAdminLayout><ShopAdminManagement /></ShopAdminLayout>} />
           <Route path="/shop/admin/settings" element={<ShopAdminLayout><ShopAdminSettings /></ShopAdminLayout>} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
