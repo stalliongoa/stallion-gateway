@@ -113,7 +113,7 @@ export default function EngineerRoleManager() {
 
       const { error } = await supabase
         .from("user_roles")
-        .insert({ user_id: userId, role });
+        .insert({ user_id: userId, role: role as "admin" | "cctv_engineer" | "user" });
 
       if (error) throw error;
 
@@ -133,7 +133,7 @@ export default function EngineerRoleManager() {
     }
   };
 
-  const removeRole = async (userId: string, role: string) => {
+  const removeRole = async (userId: string, role: "admin" | "cctv_engineer" | "user") => {
     try {
       const { error } = await supabase
         .from("user_roles")
@@ -335,7 +335,7 @@ export default function EngineerRoleManager() {
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
-                                  onClick={() => removeRole(user.user_id, role)}
+                                  onClick={() => removeRole(user.user_id, role as "admin" | "cctv_engineer" | "user")}
                                   className="bg-destructive text-destructive-foreground"
                                 >
                                   Remove
