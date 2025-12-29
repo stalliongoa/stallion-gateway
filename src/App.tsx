@@ -29,6 +29,7 @@ import ShopCart from "./pages/shop/ShopCart";
 import ShopCheckout from "./pages/shop/ShopCheckout";
 import ShopOrderSuccess from "./pages/shop/ShopOrderSuccess";
 import ShopOrders from "./pages/shop/ShopOrders";
+import ShopAccount from "./pages/shop/ShopAccount";
 
 // Shop Admin pages
 import { ShopAdminLayout } from "./pages/shop/admin/ShopAdminLayout";
@@ -78,6 +79,8 @@ const App = () => (
           <Route path="/shop/checkout" element={<ShopCheckout />} />
           <Route path="/shop/order-success" element={<ShopOrderSuccess />} />
           <Route path="/shop/orders" element={<ShopOrders />} />
+          <Route path="/shop/orders/:orderId" element={<ShopOrders />} />
+          <Route path="/shop/account" element={<ShopAccount />} />
           
           {/* Shop Admin Routes */}
           <Route path="/shop/admin" element={<ShopAdminLayout><ShopAdminDashboard /></ShopAdminLayout>} />
