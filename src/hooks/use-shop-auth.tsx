@@ -21,42 +21,55 @@ export function ShopAuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          setTimeout(() => {
-            checkAdminRole(session.user.id);
-          }, 0);
-        } else {
-          setIsAdmin(false);
-        }
-      }
-    );
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Listener first to avoid missing events
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
+
       if (session?.user) {
-        checkAdminRole(session.user.id);
+        // Gate routes until admin role is resolved (avoid redirect race)
+        setIsLoading(true);
+        setTimeout(async () => {
+          await checkAdminRole(session.user.id);
+          setIsLoading(false);
+        }, 0);
+      } else {
+        setIsAdmin(false);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     });
+
+    (async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+      setUser(session?.user ?? null);
+
+      if (session?.user) {
+        await checkAdminRole(session.user.id);
+      }
+
+      setIsLoading(false);
+    })();
 
     return () => subscription.unsubscribe();
   }, []);
 
   const checkAdminRole = async (userId: string) => {
-    const { data } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', userId)
-      .eq('role', 'admin')
-      .maybeSingle();
-    
-    setIsAdmin(!!data);
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (error) throw error;
+      setIsAdmin(!!data);
+      return !!data;
+    } catch {
+      setIsAdmin(false);
+      return false;
+    }
   };
 
   const signIn = async (email: string, password: string) => {
