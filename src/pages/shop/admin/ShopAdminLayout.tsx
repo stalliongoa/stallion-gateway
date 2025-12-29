@@ -15,7 +15,7 @@ import {
   Shield
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useShopAuth } from '@/hooks/use-shop-auth';
+import { ShopAuthProvider, useShopAuth } from '@/hooks/use-shop-auth';
 import { Button } from '@/components/ui/button';
 import shoppieLogo from '@/assets/shoppie-logo.png';
 
@@ -37,7 +37,7 @@ const navItems = [
   { href: '/shop/admin/settings', icon: Settings, label: 'Settings' },
 ];
 
-export function ShopAdminLayout({ children }: ShopAdminLayoutProps) {
+function ShopAdminLayoutContent({ children }: ShopAdminLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAdmin, isLoading } = useShopAuth();
@@ -114,5 +114,13 @@ export function ShopAdminLayout({ children }: ShopAdminLayoutProps) {
         </div>
       </main>
     </div>
+  );
+}
+
+export function ShopAdminLayout({ children }: ShopAdminLayoutProps) {
+  return (
+    <ShopAuthProvider>
+      <ShopAdminLayoutContent>{children}</ShopAdminLayoutContent>
+    </ShopAuthProvider>
   );
 }
