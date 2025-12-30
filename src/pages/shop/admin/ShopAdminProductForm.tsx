@@ -644,15 +644,44 @@ export default function ShopAdminProductForm() {
           tilt_support: specs.tilt_support === 'Yes' ? true : prev.tilt_support,
         }));
         
-        // Always update CCTV Camera specs
+        // Always update CCTV Camera specs with comprehensive mapping
         setCctvSpecs(prev => ({
           ...prev,
+          // System Classification
+          cctv_system_type: specs.cctv_system_type?.toLowerCase() || prev.cctv_system_type,
+          camera_type: specs.camera_type?.toLowerCase() || prev.camera_type,
+          indoor_outdoor: specs.indoor_outdoor?.toLowerCase() || prev.indoor_outdoor,
+          // Video & Image
           resolution: specs.resolution || prev.resolution,
           megapixel: specs.megapixel || prev.megapixel,
-          night_vision: specs.night_vision === 'Yes' ? true : prev.night_vision,
+          lens_type: specs.lens_type?.toLowerCase() || prev.lens_type,
+          lens_size: specs.lens_size || prev.lens_size,
+          frame_rate: specs.frame_rate || prev.frame_rate,
+          // Night Vision & IR
+          ir_support: specs.ir_support === 'Yes' ? true : prev.ir_support,
           ir_range: specs.ir_range || prev.ir_range,
-          weatherproof_rating: specs.weatherproof_rating || prev.weatherproof_rating,
-          lens_type: specs.lens_type || prev.lens_type,
+          night_vision: specs.night_vision === 'Yes' ? true : prev.night_vision,
+          bw_night_vision: specs.bw_night_vision === 'Yes' ? true : prev.bw_night_vision,
+          color_night_vision: specs.color_night_vision === 'Yes' ? true : prev.color_night_vision,
+          // Audio & Smart Features
+          audio_support: specs.audio_support === 'Yes' ? true : prev.audio_support,
+          audio_type: specs.audio_type || prev.audio_type,
+          motion_detection: specs.motion_detection === 'Yes' ? true : prev.motion_detection,
+          human_detection: specs.human_detection === 'Yes' ? true : prev.human_detection,
+          ai_features: specs.ai_features?.length ? specs.ai_features : prev.ai_features,
+          // Hardware & Body
+          body_material: specs.body_material?.toLowerCase() || prev.body_material,
+          color: specs.color?.toLowerCase() || prev.color,
+          weatherproof_rating: specs.weatherproof_rating?.toUpperCase() || prev.weatherproof_rating,
+          // Connectivity & Power
+          power_type: specs.power_type || prev.power_type,
+          connector_type: specs.connector_type?.toUpperCase() || prev.connector_type,
+          onboard_storage: specs.onboard_storage === 'Yes' ? true : prev.onboard_storage,
+          sd_card_support: specs.sd_card_support || prev.sd_card_support,
+          // Compatibility
+          compatible_with: specs.compatible_with?.length ? specs.compatible_with : prev.compatible_with,
+          // Warranty
+          warranty_period: specs.warranty_period || prev.warranty_period,
         }));
         
         // Always update DVR specs

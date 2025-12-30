@@ -65,7 +65,7 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a product information extractor. Extract product details from the HTML content provided. Return ONLY a valid JSON object with the following fields (use null for missing values):
+            content: `You are a CCTV/Security product information extractor. Extract product details from the HTML content provided. Return ONLY a valid JSON object with the following fields (use null for missing values):
 {
   "name": "product name",
   "brand": "brand name",
@@ -77,28 +77,48 @@ serve(async (req) => {
   "warranty_months": "warranty period in months as number",
   "mrp": "maximum retail price as number",
   "specifications": {
-    "resolution": "e.g., 1080p, 2K, 4K",
-    "megapixel": "e.g., 2 MP, 4 MP",
+    "cctv_system_type": "IP or Analog or HD-CVI or HD-TVI (determine from product specs)",
+    "camera_type": "Dome or Bullet or PTZ or Box or Fisheye or Turret",
+    "indoor_outdoor": "Indoor or Outdoor or Both",
+    "resolution": "1080p or 2K or 4K or 5MP or 8MP",
+    "megapixel": "2 MP or 3 MP or 4 MP or 5 MP or 8 MP",
+    "lens_type": "Fixed or Varifocal or Motorized",
+    "lens_size": "2.8mm or 3.6mm or 6mm or 2.8-12mm or other",
+    "frame_rate": "25 fps or 30 fps or 15 fps",
     "night_vision": "Yes or No",
-    "night_vision_type": "e.g., IR, Full Color",
-    "ir_range": "e.g., 20m, 30m",
-    "wifi_band": "e.g., 2.4 GHz, Dual Band",
-    "power_type": "e.g., Adapter, Battery, Solar",
-    "two_way_audio": "Yes or No",
+    "night_vision_type": "IR or Full Color or Dual Light",
+    "ir_support": "Yes or No",
+    "ir_range": "20m or 30m or 40m or 50m",
+    "bw_night_vision": "Yes or No",
+    "color_night_vision": "Yes or No",
+    "audio_support": "Yes or No",
+    "audio_type": "Built-in Mic or Built-in Mic & Speaker or External",
     "motion_detection": "Yes or No",
-    "weatherproof_rating": "e.g., IP65, IP66, IP67",
-    "storage_type": "e.g., SD Card, Cloud",
-    "lens_type": "e.g., Fixed, Wide Angle",
-    "field_of_view": "e.g., 110°, 130°",
+    "human_detection": "Yes or No",
+    "ai_features": ["Face Detection", "Line Crossing", "Intrusion Detection"],
+    "body_material": "Plastic or Metal or Aluminum",
+    "color": "White or Black or Grey",
+    "weatherproof_rating": "IP65 or IP66 or IP67 or None",
+    "power_type": "12V DC or PoE or Dual (PoE/12V DC)",
+    "connector_type": "BNC or RJ45",
+    "onboard_storage": "Yes or No",
+    "sd_card_support": "Up to 128 GB or Up to 256 GB or Up to 512 GB or None",
+    "wifi_band": "2.4 GHz or Dual Band (2.4 + 5 GHz)",
+    "two_way_audio": "Yes or No",
     "pan_support": "Yes or No",
     "tilt_support": "Yes or No",
+    "field_of_view": "90° or 110° or 130°",
     "channels": "number of channels for DVR/NVR",
-    "hdd_capacity": "e.g., 1TB, 2TB",
-    "poe_support": "Yes or No"
+    "hdd_capacity": "1TB or 2TB or 4TB",
+    "poe_support": "Yes or No",
+    "compatible_with": ["Hikvision", "Dahua", "CP Plus"],
+    "warranty_period": "1 Year or 2 Years or 3 Years or 5 Years"
   },
   "images": ["array of image URLs found"]
 }
 
+IMPORTANT: Determine cctv_system_type from the product - if it mentions IP/Network camera use "IP", if analog use "Analog", if HD-CVI/TVI use appropriate type.
+For camera_type, analyze the product name and description to determine if it's Dome, Bullet, PTZ, etc.
 Extract as much information as possible. For specifications, only include fields that are found in the content.`
           },
           {
@@ -127,24 +147,42 @@ Extract as much information as possible. For specifications, only include fields
                   specifications: {
                     type: "object",
                     properties: {
+                      cctv_system_type: { type: "string" },
+                      camera_type: { type: "string" },
+                      indoor_outdoor: { type: "string" },
                       resolution: { type: "string" },
                       megapixel: { type: "string" },
+                      lens_type: { type: "string" },
+                      lens_size: { type: "string" },
+                      frame_rate: { type: "string" },
                       night_vision: { type: "string" },
                       night_vision_type: { type: "string" },
+                      ir_support: { type: "string" },
                       ir_range: { type: "string" },
-                      wifi_band: { type: "string" },
-                      power_type: { type: "string" },
-                      two_way_audio: { type: "string" },
+                      bw_night_vision: { type: "string" },
+                      color_night_vision: { type: "string" },
+                      audio_support: { type: "string" },
+                      audio_type: { type: "string" },
                       motion_detection: { type: "string" },
+                      human_detection: { type: "string" },
+                      ai_features: { type: "array", items: { type: "string" } },
+                      body_material: { type: "string" },
+                      color: { type: "string" },
                       weatherproof_rating: { type: "string" },
-                      storage_type: { type: "string" },
-                      lens_type: { type: "string" },
-                      field_of_view: { type: "string" },
+                      power_type: { type: "string" },
+                      connector_type: { type: "string" },
+                      onboard_storage: { type: "string" },
+                      sd_card_support: { type: "string" },
+                      wifi_band: { type: "string" },
+                      two_way_audio: { type: "string" },
                       pan_support: { type: "string" },
                       tilt_support: { type: "string" },
+                      field_of_view: { type: "string" },
                       channels: { type: "number" },
                       hdd_capacity: { type: "string" },
-                      poe_support: { type: "string" }
+                      poe_support: { type: "string" },
+                      compatible_with: { type: "array", items: { type: "string" } },
+                      warranty_period: { type: "string" }
                     }
                   },
                   images: { type: "array", items: { type: "string" } }
