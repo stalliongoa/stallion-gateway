@@ -556,6 +556,7 @@ export default function CCTVCameraFields({ specs, onChange }: CCTVCameraFieldsPr
                 <SelectItem value="1_year">1 Year</SelectItem>
                 <SelectItem value="2_years">2 Years</SelectItem>
                 <SelectItem value="3_years">3 Years</SelectItem>
+                <SelectItem value="5_years">5 Years</SelectItem>
               </SelectContent>
             </Select>
           </div>

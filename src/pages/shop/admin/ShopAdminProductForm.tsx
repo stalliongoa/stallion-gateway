@@ -644,28 +644,149 @@ export default function ShopAdminProductForm() {
           tilt_support: specs.tilt_support === 'Yes' ? true : prev.tilt_support,
         }));
         
+        // Helper functions to normalize AI values to dropdown values
+        const normalizeSystemType = (val: string | undefined): string => {
+          if (!val) return '';
+          const v = val.toLowerCase();
+          if (v.includes('ip') || v.includes('network')) return 'ip';
+          if (v.includes('analog')) return 'analog';
+          if (v.includes('wifi') || v.includes('wi-fi')) return 'wifi';
+          return v;
+        };
+        
+        const normalizeCameraType = (val: string | undefined): string => {
+          if (!val) return '';
+          const v = val.toLowerCase();
+          if (v.includes('dome')) return 'dome';
+          if (v.includes('bullet')) return 'bullet';
+          if (v.includes('ptz')) return 'ptz';
+          return v;
+        };
+        
+        const normalizeIndoorOutdoor = (val: string | undefined): string => {
+          if (!val) return '';
+          const v = val.toLowerCase();
+          if (v === 'indoor') return 'indoor';
+          if (v === 'outdoor') return 'outdoor';
+          if (v === 'both' || v.includes('indoor') && v.includes('outdoor')) return 'both';
+          return v;
+        };
+        
+        const normalizeMegapixel = (val: string | undefined): string => {
+          if (!val) return '';
+          const v = val.replace(/\s/g, '').toUpperCase();
+          if (v.includes('2')) return '2MP';
+          if (v.includes('4')) return '4MP';
+          if (v.includes('5')) return '5MP';
+          if (v.includes('8')) return '8MP';
+          return v;
+        };
+        
+        const normalizeLensSize = (val: string | undefined): string => {
+          if (!val) return '';
+          if (val.includes('2.8')) return '2.8mm';
+          if (val.includes('3.6')) return '3.6mm';
+          if (val.includes('6')) return '6mm';
+          return 'other';
+        };
+        
+        const normalizeFrameRate = (val: string | undefined): string => {
+          if (!val) return '';
+          if (val.includes('15')) return '15fps';
+          if (val.includes('20')) return '20fps';
+          if (val.includes('25')) return '25fps';
+          if (val.includes('30')) return '30fps';
+          return val.replace(/\s/g, '').toLowerCase();
+        };
+        
+        const normalizeIRRange = (val: string | undefined): string => {
+          if (!val) return '';
+          if (val.includes('20')) return '20m';
+          if (val.includes('30')) return '30m';
+          if (val.includes('40')) return '40m';
+          if (val.includes('50') || parseInt(val) >= 50) return '50m+';
+          return val;
+        };
+        
+        const normalizeAudioType = (val: string | undefined): string => {
+          if (!val) return '';
+          const v = val.toLowerCase();
+          if (v.includes('speaker') || v.includes('mic & speaker')) return 'mic_speaker';
+          if (v.includes('mic') || v.includes('built-in')) return 'built_in_mic';
+          if (v.includes('external')) return 'external';
+          return v;
+        };
+        
+        const normalizePowerType = (val: string | undefined): string => {
+          if (!val) return '';
+          const v = val.toLowerCase();
+          if (v.includes('poe')) return 'poe';
+          if (v.includes('12v') || v.includes('dc') || v.includes('adapter')) return '12v_adapter';
+          if (v.includes('battery')) return 'battery';
+          return v;
+        };
+        
+        const normalizeConnectorType = (val: string | undefined): string => {
+          if (!val) return '';
+          const v = val.toLowerCase();
+          if (v.includes('bnc')) return 'bnc';
+          if (v.includes('rj45') || v.includes('rj-45') || v.includes('ethernet')) return 'rj45';
+          if (v.includes('wifi')) return 'wifi_only';
+          return v;
+        };
+        
+        const normalizeSDCard = (val: string | undefined): string => {
+          if (!val) return '';
+          if (val.includes('256')) return '256gb';
+          if (val.includes('128')) return '128gb';
+          return val;
+        };
+        
+        const normalizeWarranty = (val: string | undefined): string => {
+          if (!val) return '';
+          const v = val.toLowerCase();
+          if (v.includes('6 month')) return '6_months';
+          if (v.includes('1 year') || v.includes('1year')) return '1_year';
+          if (v.includes('2 year') || v.includes('2year')) return '2_years';
+          if (v.includes('3 year') || v.includes('3year')) return '3_years';
+          if (v.includes('5 year') || v.includes('5year')) return '5_years';
+          return v;
+        };
+        
+        const normalizeCompatibleWith = (val: string[] | undefined): string[] => {
+          if (!val || !val.length) return ['DVR', 'NVR']; // Default for IP cameras
+          const result: string[] = [];
+          val.forEach(v => {
+            const lower = v.toLowerCase();
+            if (lower.includes('dvr')) result.push('DVR');
+            if (lower.includes('nvr')) result.push('NVR');
+          });
+          // If it's an IP camera, it should be compatible with NVR
+          return result.length ? result : ['DVR', 'NVR'];
+        };
+        
         // Always update CCTV Camera specs with comprehensive mapping
         setCctvSpecs(prev => ({
           ...prev,
           // System Classification
-          cctv_system_type: specs.cctv_system_type?.toLowerCase() || prev.cctv_system_type,
-          camera_type: specs.camera_type?.toLowerCase() || prev.camera_type,
-          indoor_outdoor: specs.indoor_outdoor?.toLowerCase() || prev.indoor_outdoor,
+          cctv_system_type: normalizeSystemType(specs.cctv_system_type) || prev.cctv_system_type,
+          camera_type: normalizeCameraType(specs.camera_type) || prev.camera_type,
+          indoor_outdoor: normalizeIndoorOutdoor(specs.indoor_outdoor) || prev.indoor_outdoor,
           // Video & Image
           resolution: specs.resolution || prev.resolution,
-          megapixel: specs.megapixel || prev.megapixel,
+          megapixel: normalizeMegapixel(specs.megapixel) || prev.megapixel,
           lens_type: specs.lens_type?.toLowerCase() || prev.lens_type,
-          lens_size: specs.lens_size || prev.lens_size,
-          frame_rate: specs.frame_rate || prev.frame_rate,
+          lens_size: normalizeLensSize(specs.lens_size) || prev.lens_size,
+          frame_rate: normalizeFrameRate(specs.frame_rate) || prev.frame_rate,
           // Night Vision & IR
-          ir_support: specs.ir_support === 'Yes' ? true : prev.ir_support,
-          ir_range: specs.ir_range || prev.ir_range,
-          night_vision: specs.night_vision === 'Yes' ? true : prev.night_vision,
-          bw_night_vision: specs.bw_night_vision === 'Yes' ? true : prev.bw_night_vision,
-          color_night_vision: specs.color_night_vision === 'Yes' ? true : prev.color_night_vision,
+          ir_support: specs.ir_support === 'Yes' || specs.ir_range ? true : prev.ir_support,
+          ir_range: normalizeIRRange(specs.ir_range) || prev.ir_range,
+          night_vision: specs.night_vision === 'Yes' || specs.ir_range ? true : prev.night_vision,
+          bw_night_vision: specs.bw_night_vision === 'Yes' || (specs.night_vision_type?.toLowerCase().includes('ir')) ? true : prev.bw_night_vision,
+          color_night_vision: specs.color_night_vision === 'Yes' || (specs.night_vision_type?.toLowerCase().includes('color')) ? true : prev.color_night_vision,
           // Audio & Smart Features
-          audio_support: specs.audio_support === 'Yes' ? true : prev.audio_support,
-          audio_type: specs.audio_type || prev.audio_type,
+          audio_support: specs.audio_support === 'Yes' || specs.audio_type ? true : prev.audio_support,
+          audio_type: normalizeAudioType(specs.audio_type) || prev.audio_type,
           motion_detection: specs.motion_detection === 'Yes' ? true : prev.motion_detection,
           human_detection: specs.human_detection === 'Yes' ? true : prev.human_detection,
           ai_features: specs.ai_features?.length ? specs.ai_features : prev.ai_features,
@@ -674,14 +795,15 @@ export default function ShopAdminProductForm() {
           color: specs.color?.toLowerCase() || prev.color,
           weatherproof_rating: specs.weatherproof_rating?.toUpperCase() || prev.weatherproof_rating,
           // Connectivity & Power
-          power_type: specs.power_type || prev.power_type,
-          connector_type: specs.connector_type?.toUpperCase() || prev.connector_type,
-          onboard_storage: specs.onboard_storage === 'Yes' ? true : prev.onboard_storage,
-          sd_card_support: specs.sd_card_support || prev.sd_card_support,
+          power_type: normalizePowerType(specs.power_type) || prev.power_type,
+          connector_type: normalizeConnectorType(specs.connector_type) || prev.connector_type,
+          onboard_storage: specs.onboard_storage === 'Yes' || specs.sd_card_support ? true : prev.onboard_storage,
+          sd_card_support: normalizeSDCard(specs.sd_card_support) || prev.sd_card_support,
           // Compatibility
-          compatible_with: specs.compatible_with?.length ? specs.compatible_with : prev.compatible_with,
+          compatible_with: normalizeCompatibleWith(specs.compatible_with),
+          supported_dvr_nvr_resolution: normalizeMegapixel(specs.megapixel) || prev.supported_dvr_nvr_resolution,
           // Warranty
-          warranty_period: specs.warranty_period || prev.warranty_period,
+          warranty_period: normalizeWarranty(specs.warranty_period) || prev.warranty_period,
         }));
         
         // Always update DVR specs
