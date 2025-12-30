@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.extract-product-info]
 verify_jwt = false
+
+[functions.extract-purchase-info]
+verify_jwt = false

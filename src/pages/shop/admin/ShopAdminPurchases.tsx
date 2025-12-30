@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, Eye, FileText, Download } from 'lucide-react';
+import { Plus, Search, FileText, Upload, Sparkles, Loader2, UserPlus } from 'lucide-react';
 import { ShopAdminLayout } from './ShopAdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -58,6 +59,7 @@ interface Purchase {
 interface Vendor {
   id: string;
   name: string;
+  gst_number: string | null;
 }
 
 interface Product {
@@ -67,8 +69,39 @@ interface Product {
   purchase_price: number | null;
 }
 
+interface ExtractedVendor {
+  vendor_name: string | null;
+  vendor_gst_number: string | null;
+  vendor_address: string | null;
+  vendor_phone: string | null;
+  vendor_email: string | null;
+  vendor_contact_person: string | null;
+}
+
+interface ExtractedItem {
+  product_name: string;
+  product_sku: string | null;
+  hsn_code: string | null;
+  quantity: number;
+  unit_cost: number;
+  gst_rate: number | null;
+  total_cost: number | null;
+}
+
+interface ExtractedData extends ExtractedVendor {
+  invoice_number: string | null;
+  invoice_date: string | null;
+  purchase_date: string | null;
+  items: ExtractedItem[];
+  subtotal: number | null;
+  gst_amount: number | null;
+  total_amount: number | null;
+  payment_status: string | null;
+}
+
 export default function ShopAdminPurchases() {
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -76,6 +109,12 @@ export default function ShopAdminPurchases() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [extracting, setExtracting] = useState(false);
+  const [extractedData, setExtractedData] = useState<ExtractedData | null>(null);
+  const [matchedVendor, setMatchedVendor] = useState<Vendor | null>(null);
+  const [showVendorDialog, setShowVendorDialog] = useState(false);
+  const [newVendorData, setNewVendorData] = useState<ExtractedVendor | null>(null);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   
   const [formData, setFormData] = useState({
     vendor_id: '',
@@ -123,7 +162,7 @@ export default function ShopAdminPurchases() {
   const fetchVendors = async () => {
     const { data } = await supabase
       .from('shop_vendors')
-      .select('id, name')
+      .select('id, name, gst_number')
       .eq('is_active', true)
       .order('name');
     if (data) setVendors(data);
@@ -144,6 +183,203 @@ export default function ShopAdminPurchases() {
       ...prev,
       product_id: productId,
       unit_cost: product?.purchase_price?.toString() || prev.unit_cost,
+    }));
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setExtracting(true);
+    toast({ title: 'Processing document...', description: 'AI is extracting purchase information' });
+
+    try {
+      let fileContent: string;
+      let fileType: string;
+
+      if (file.type.startsWith('image/')) {
+        // Convert image to base64
+        fileContent = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        fileType = 'image';
+      } else if (file.type === 'application/pdf') {
+        // For PDF, we'll send base64 and let AI handle it via vision
+        fileContent = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        fileType = 'image'; // Treat as image for vision processing
+      } else {
+        // Text-based files
+        fileContent = await file.text();
+        fileType = 'text';
+      }
+
+      const { data, error } = await supabase.functions.invoke('extract-purchase-info', {
+        body: { fileContent, fileType, mimeType: file.type },
+      });
+
+      if (error) {
+        throw new Error(error.message || 'Failed to extract data');
+      }
+
+      if (data?.success && data?.data) {
+        const extracted = data.data as ExtractedData;
+        setExtractedData(extracted);
+        
+        // Try to match vendor by GST number
+        if (extracted.vendor_gst_number) {
+          const foundVendor = vendors.find(
+            v => v.gst_number?.replace(/\s/g, '').toLowerCase() === 
+                 extracted.vendor_gst_number?.replace(/\s/g, '').toLowerCase()
+          );
+          
+          if (foundVendor) {
+            setMatchedVendor(foundVendor);
+            setFormData(prev => ({ ...prev, vendor_id: foundVendor.id }));
+            toast({ title: 'Vendor matched!', description: `Found vendor: ${foundVendor.name}` });
+          } else {
+            // Offer to create new vendor
+            setNewVendorData({
+              vendor_name: extracted.vendor_name,
+              vendor_gst_number: extracted.vendor_gst_number,
+              vendor_address: extracted.vendor_address,
+              vendor_phone: extracted.vendor_phone,
+              vendor_email: extracted.vendor_email,
+              vendor_contact_person: extracted.vendor_contact_person,
+            });
+            setShowVendorDialog(true);
+          }
+        } else if (extracted.vendor_name) {
+          // Try to match by name
+          const foundVendor = vendors.find(
+            v => v.name.toLowerCase().includes(extracted.vendor_name!.toLowerCase()) ||
+                 extracted.vendor_name!.toLowerCase().includes(v.name.toLowerCase())
+          );
+          
+          if (foundVendor) {
+            setMatchedVendor(foundVendor);
+            setFormData(prev => ({ ...prev, vendor_id: foundVendor.id }));
+          } else {
+            setNewVendorData({
+              vendor_name: extracted.vendor_name,
+              vendor_gst_number: extracted.vendor_gst_number,
+              vendor_address: extracted.vendor_address,
+              vendor_phone: extracted.vendor_phone,
+              vendor_email: extracted.vendor_email,
+              vendor_contact_person: extracted.vendor_contact_person,
+            });
+            setShowVendorDialog(true);
+          }
+        }
+
+        // Fill first item data
+        if (extracted.items && extracted.items.length > 0) {
+          const firstItem = extracted.items[0];
+          
+          // Try to match product by SKU or name
+          let matchedProduct = products.find(
+            p => firstItem.product_sku && p.sku?.toLowerCase() === firstItem.product_sku.toLowerCase()
+          );
+          if (!matchedProduct) {
+            matchedProduct = products.find(
+              p => p.name.toLowerCase().includes(firstItem.product_name.toLowerCase()) ||
+                   firstItem.product_name.toLowerCase().includes(p.name.toLowerCase())
+            );
+          }
+
+          setFormData(prev => ({
+            ...prev,
+            product_id: matchedProduct?.id || '',
+            quantity: firstItem.quantity?.toString() || '',
+            unit_cost: firstItem.unit_cost?.toString() || '',
+            gst_rate: firstItem.gst_rate?.toString() || '18',
+            invoice_number: extracted.invoice_number || '',
+            purchase_date: extracted.purchase_date || extracted.invoice_date || prev.purchase_date,
+            payment_status: extracted.payment_status || 'pending',
+          }));
+        }
+
+        toast({ title: 'Data extracted successfully!', description: 'Review and fill missing fields' });
+        setDialogOpen(true);
+      } else {
+        throw new Error(data?.error || 'Failed to extract data');
+      }
+    } catch (error) {
+      console.error('Extraction error:', error);
+      toast({ 
+        title: 'Extraction failed', 
+        description: error instanceof Error ? error.message : 'Could not extract data from document',
+        variant: 'destructive' 
+      });
+    } finally {
+      setExtracting(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleCreateVendor = async () => {
+    if (!newVendorData?.vendor_name) {
+      toast({ title: 'Vendor name is required', variant: 'destructive' });
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('shop_vendors')
+      .insert({
+        name: newVendorData.vendor_name,
+        gst_number: newVendorData.vendor_gst_number,
+        address: newVendorData.vendor_address,
+        phone: newVendorData.vendor_phone,
+        email: newVendorData.vendor_email,
+        contact_person: newVendorData.vendor_contact_person,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      toast({ title: 'Failed to create vendor', description: error.message, variant: 'destructive' });
+    } else if (data) {
+      toast({ title: 'Vendor created successfully' });
+      setVendors(prev => [...prev, { id: data.id, name: data.name, gst_number: data.gst_number }]);
+      setFormData(prev => ({ ...prev, vendor_id: data.id }));
+      setMatchedVendor({ id: data.id, name: data.name, gst_number: data.gst_number });
+    }
+    setShowVendorDialog(false);
+    setNewVendorData(null);
+  };
+
+  const handleSelectItem = (index: number) => {
+    if (!extractedData?.items || index >= extractedData.items.length) return;
+    
+    const item = extractedData.items[index];
+    setSelectedItemIndex(index);
+    
+    // Try to match product
+    let matchedProduct = products.find(
+      p => item.product_sku && p.sku?.toLowerCase() === item.product_sku.toLowerCase()
+    );
+    if (!matchedProduct) {
+      matchedProduct = products.find(
+        p => p.name.toLowerCase().includes(item.product_name.toLowerCase()) ||
+             item.product_name.toLowerCase().includes(p.name.toLowerCase())
+      );
+    }
+
+    setFormData(prev => ({
+      ...prev,
+      product_id: matchedProduct?.id || '',
+      quantity: item.quantity?.toString() || '',
+      unit_cost: item.unit_cost?.toString() || '',
+      gst_rate: item.gst_rate?.toString() || '18',
     }));
   };
 
@@ -221,6 +457,11 @@ export default function ShopAdminPurchases() {
 
     toast({ title: 'Purchase created successfully' });
     setDialogOpen(false);
+    resetForm();
+    fetchPurchases();
+  };
+
+  const resetForm = () => {
     setFormData({
       vendor_id: '',
       product_id: '',
@@ -233,7 +474,9 @@ export default function ShopAdminPurchases() {
       payment_status: 'pending',
       notes: '',
     });
-    fetchPurchases();
+    setExtractedData(null);
+    setMatchedVendor(null);
+    setSelectedItemIndex(0);
   };
 
   const getPaymentBadge = (status: string) => {
@@ -270,10 +513,36 @@ export default function ShopAdminPurchases() {
             <h1 className="text-2xl font-bold">Purchase Management</h1>
             <p className="text-muted-foreground">Track vendor purchases and incoming stock</p>
           </div>
-          <Button onClick={() => setDialogOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            New Purchase
-          </Button>
+          <div className="flex gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*,.pdf"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            <Button 
+              variant="outline" 
+              onClick={() => fileInputRef.current?.click()}
+              disabled={extracting}
+            >
+              {extracting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Extracting...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  AI Import Invoice
+                </>
+              )}
+            </Button>
+            <Button onClick={() => { resetForm(); setDialogOpen(true); }}>
+              <Plus className="mr-2 h-4 w-4" />
+              New Purchase
+            </Button>
+          </div>
         </div>
 
         {/* Stats */}
@@ -395,11 +664,38 @@ export default function ShopAdminPurchases() {
         </Card>
 
         {/* New Purchase Dialog */}
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-2xl">
+        <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) resetForm(); setDialogOpen(open); }}>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Create New Purchase</DialogTitle>
+              <DialogTitle>
+                {extractedData ? 'AI Extracted Purchase Data' : 'Create New Purchase'}
+              </DialogTitle>
+              {extractedData && (
+                <DialogDescription>
+                  Review and confirm the extracted data. Select a line item to fill the form.
+                </DialogDescription>
+              )}
             </DialogHeader>
+            
+            {/* Extracted Items List */}
+            {extractedData?.items && extractedData.items.length > 1 && (
+              <div className="mb-4">
+                <Label className="mb-2 block">Extracted Line Items ({extractedData.items.length})</Label>
+                <div className="flex flex-wrap gap-2">
+                  {extractedData.items.map((item, index) => (
+                    <Button
+                      key={index}
+                      variant={selectedItemIndex === index ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => handleSelectItem(index)}
+                    >
+                      {index + 1}. {item.product_name.substring(0, 20)}...
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Vendor *</Label>
@@ -409,10 +705,17 @@ export default function ShopAdminPurchases() {
                   </SelectTrigger>
                   <SelectContent>
                     {vendors.map(v => (
-                      <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
+                      <SelectItem key={v.id} value={v.id}>
+                        {v.name} {v.gst_number && `(${v.gst_number})`}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                {matchedVendor && (
+                  <p className="text-xs text-green-600 mt-1">
+                    ✓ Matched: {matchedVendor.name}
+                  </p>
+                )}
               </div>
               <div>
                 <Label>Product *</Label>
@@ -426,6 +729,11 @@ export default function ShopAdminPurchases() {
                     ))}
                   </SelectContent>
                 </Select>
+                {extractedData?.items?.[selectedItemIndex] && !formData.product_id && (
+                  <p className="text-xs text-yellow-600 mt-1">
+                    Extracted: {extractedData.items[selectedItemIndex].product_name}
+                  </p>
+                )}
               </div>
               <div>
                 <Label>Quantity *</Label>
@@ -524,8 +832,75 @@ export default function ShopAdminPurchases() {
               )}
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+              <Button variant="outline" onClick={() => { resetForm(); setDialogOpen(false); }}>Cancel</Button>
               <Button onClick={handleSubmit}>Create Purchase</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* New Vendor Dialog */}
+        <Dialog open={showVendorDialog} onOpenChange={setShowVendorDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Create New Vendor</DialogTitle>
+              <DialogDescription>
+                No existing vendor found with GST: {newVendorData?.vendor_gst_number || 'N/A'}. 
+                Would you like to create a new vendor?
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label>Vendor Name *</Label>
+                <Input
+                  value={newVendorData?.vendor_name || ''}
+                  onChange={(e) => setNewVendorData(prev => prev ? { ...prev, vendor_name: e.target.value } : null)}
+                />
+              </div>
+              <div>
+                <Label>GST Number</Label>
+                <Input
+                  value={newVendorData?.vendor_gst_number || ''}
+                  onChange={(e) => setNewVendorData(prev => prev ? { ...prev, vendor_gst_number: e.target.value } : null)}
+                />
+              </div>
+              <div>
+                <Label>Contact Person</Label>
+                <Input
+                  value={newVendorData?.vendor_contact_person || ''}
+                  onChange={(e) => setNewVendorData(prev => prev ? { ...prev, vendor_contact_person: e.target.value } : null)}
+                />
+              </div>
+              <div>
+                <Label>Phone</Label>
+                <Input
+                  value={newVendorData?.vendor_phone || ''}
+                  onChange={(e) => setNewVendorData(prev => prev ? { ...prev, vendor_phone: e.target.value } : null)}
+                />
+              </div>
+              <div>
+                <Label>Email</Label>
+                <Input
+                  value={newVendorData?.vendor_email || ''}
+                  onChange={(e) => setNewVendorData(prev => prev ? { ...prev, vendor_email: e.target.value } : null)}
+                />
+              </div>
+              <div>
+                <Label>Address</Label>
+                <Textarea
+                  value={newVendorData?.vendor_address || ''}
+                  onChange={(e) => setNewVendorData(prev => prev ? { ...prev, vendor_address: e.target.value } : null)}
+                  rows={2}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => { setShowVendorDialog(false); setNewVendorData(null); }}>
+                Skip
+              </Button>
+              <Button onClick={handleCreateVendor}>
+                <UserPlus className="mr-2 h-4 w-4" />
+                Create Vendor
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
