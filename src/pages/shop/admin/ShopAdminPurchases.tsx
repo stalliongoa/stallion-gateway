@@ -507,13 +507,13 @@ export default function ShopAdminPurchases() {
 
   return (
     <ShopAdminLayout>
-      <div className="p-6 space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Purchase Management</h1>
-            <p className="text-muted-foreground">Track vendor purchases and incoming stock</p>
+            <h1 className="text-xl md:text-2xl font-bold">Purchase Management</h1>
+            <p className="text-sm text-muted-foreground">Track vendor purchases and incoming stock</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <input
               ref={fileInputRef}
               type="file"
@@ -523,36 +523,40 @@ export default function ShopAdminPurchases() {
             />
             <Button 
               variant="outline" 
+              size="sm"
+              className="flex-1 sm:flex-none"
               onClick={() => fileInputRef.current?.click()}
               disabled={extracting}
             >
               {extracting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Extracting...
+                  <span className="hidden sm:inline">Extracting...</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="mr-2 h-4 w-4" />
-                  AI Import Invoice
+                  <span className="hidden sm:inline">AI Import Invoice</span>
+                  <span className="sm:hidden">AI Import</span>
                 </>
               )}
             </Button>
-            <Button onClick={() => { resetForm(); setDialogOpen(true); }}>
+            <Button size="sm" className="flex-1 sm:flex-none" onClick={() => { resetForm(); setDialogOpen(true); }}>
               <Plus className="mr-2 h-4 w-4" />
-              New Purchase
+              <span className="hidden sm:inline">New Purchase</span>
+              <span className="sm:hidden">New</span>
             </Button>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Total Purchases</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{purchases.length}</div>
+              <div className="text-xl md:text-2xl font-bold">{purchases.length}</div>
             </CardContent>
           </Card>
           <Card>
@@ -560,7 +564,7 @@ export default function ShopAdminPurchases() {
               <CardTitle className="text-sm font-medium">Total Value</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">₹{totalPurchaseValue.toLocaleString('en-IN')}</div>
+              <div className="text-xl md:text-2xl font-bold">₹{totalPurchaseValue.toLocaleString('en-IN')}</div>
             </CardContent>
           </Card>
           <Card>
@@ -568,14 +572,14 @@ export default function ShopAdminPurchases() {
               <CardTitle className="text-sm font-medium">Pending Payments</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-600">₹{pendingPayments.toLocaleString('en-IN')}</div>
+              <div className="text-xl md:text-2xl font-bold text-yellow-600">₹{pendingPayments.toLocaleString('en-IN')}</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-4">
-          <div className="flex-1 min-w-[200px]">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex-1">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -587,7 +591,7 @@ export default function ShopAdminPurchases() {
             </div>
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Payment Status" />
             </SelectTrigger>
             <SelectContent>
@@ -597,106 +601,9 @@ export default function ShopAdminPurchases() {
               <SelectItem value="paid">Paid</SelectItem>
             </SelectContent>
           </Select>
-        </div>
+            </div>
 
-        {/* Purchases Table */}
-        <Card>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Purchase #</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Vendor</TableHead>
-                  <TableHead>Product</TableHead>
-                  <TableHead className="text-center">Qty</TableHead>
-                  <TableHead className="text-right">Unit Cost</TableHead>
-                  <TableHead className="text-right">Total</TableHead>
-                  <TableHead>Payment</TableHead>
-                  <TableHead>Invoice</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                    </TableCell>
-                  </TableRow>
-                ) : filteredPurchases.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
-                      No purchases found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredPurchases.map((purchase) => (
-                    <TableRow key={purchase.id}>
-                      <TableCell className="font-medium">{purchase.purchase_number}</TableCell>
-                      <TableCell>
-                        {purchase.purchase_date 
-                          ? format(new Date(purchase.purchase_date), 'MMM dd, yyyy')
-                          : format(new Date(purchase.created_at), 'MMM dd, yyyy')}
-                      </TableCell>
-                      <TableCell>{purchase.vendor?.name || '-'}</TableCell>
-                      <TableCell>
-                        <div>{purchase.product?.name}</div>
-                        <div className="text-xs text-muted-foreground">{purchase.product?.sku}</div>
-                      </TableCell>
-                      <TableCell className="text-center">{purchase.quantity}</TableCell>
-                      <TableCell className="text-right">₹{purchase.unit_cost.toLocaleString('en-IN')}</TableCell>
-                      <TableCell className="text-right font-medium">₹{purchase.total_cost.toLocaleString('en-IN')}</TableCell>
-                      <TableCell>{getPaymentBadge(purchase.payment_status)}</TableCell>
-                      <TableCell>
-                        {purchase.invoice_number || '-'}
-                        {purchase.invoice_url && (
-                          <a href={purchase.invoice_url} target="_blank" rel="noopener noreferrer" className="ml-2">
-                            <FileText className="h-4 w-4 inline text-primary" />
-                          </a>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-
-        {/* New Purchase Dialog */}
-        <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) resetForm(); setDialogOpen(open); }}>
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
-                {extractedData ? 'AI Extracted Purchase Data' : 'Create New Purchase'}
-              </DialogTitle>
-              {extractedData && (
-                <DialogDescription>
-                  Review and confirm the extracted data. Select a line item to fill the form.
-                </DialogDescription>
-              )}
-            </DialogHeader>
-            
-            {/* Extracted Items List */}
-            {extractedData?.items && extractedData.items.length > 1 && (
-              <div className="mb-4">
-                <Label className="mb-2 block">Extracted Line Items ({extractedData.items.length})</Label>
-                <div className="flex flex-wrap gap-2">
-                  {extractedData.items.map((item, index) => (
-                    <Button
-                      key={index}
-                      variant={selectedItemIndex === index ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => handleSelectItem(index)}
-                    >
-                      {index + 1}. {item.product_name.substring(0, 20)}...
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label>Vendor *</Label>
                 <Select value={formData.vendor_id} onValueChange={(v) => setFormData(prev => ({ ...prev, vendor_id: v }))}>
@@ -797,7 +704,7 @@ export default function ShopAdminPurchases() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="col-span-2">
+              <div className="sm:col-span-2">
                 <Label>Notes</Label>
                 <Textarea
                   value={formData.notes}
@@ -807,23 +714,23 @@ export default function ShopAdminPurchases() {
               </div>
               
               {formData.quantity && formData.unit_cost && (
-                <div className="col-span-2 p-4 bg-muted rounded-lg">
+                <div className="sm:col-span-2 p-4 bg-muted rounded-lg">
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div>
-                      <div className="text-muted-foreground">Subtotal</div>
-                      <div className="font-medium">
+                      <div className="text-muted-foreground text-xs sm:text-sm">Subtotal</div>
+                      <div className="font-medium text-sm sm:text-base">
                         ₹{(parseFloat(formData.quantity) * parseFloat(formData.unit_cost)).toLocaleString('en-IN')}
                       </div>
                     </div>
                     <div>
-                      <div className="text-muted-foreground">GST ({formData.gst_rate}%)</div>
-                      <div className="font-medium">
+                      <div className="text-muted-foreground text-xs sm:text-sm">GST ({formData.gst_rate}%)</div>
+                      <div className="font-medium text-sm sm:text-base">
                         ₹{(parseFloat(formData.quantity) * parseFloat(formData.unit_cost) * (parseFloat(formData.gst_rate) / 100)).toLocaleString('en-IN')}
                       </div>
                     </div>
                     <div>
-                      <div className="text-muted-foreground">Total</div>
-                      <div className="font-bold">
+                      <div className="text-muted-foreground text-xs sm:text-sm">Total</div>
+                      <div className="font-bold text-sm sm:text-base">
                         ₹{(parseFloat(formData.quantity) * parseFloat(formData.unit_cost) * (1 + parseFloat(formData.gst_rate) / 100)).toLocaleString('en-IN')}
                       </div>
                     </div>
@@ -831,9 +738,9 @@ export default function ShopAdminPurchases() {
                 </div>
               )}
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => { resetForm(); setDialogOpen(false); }}>Cancel</Button>
-              <Button onClick={handleSubmit}>Create Purchase</Button>
+            <DialogFooter className="flex-col sm:flex-row gap-2">
+              <Button variant="outline" className="w-full sm:w-auto" onClick={() => { resetForm(); setDialogOpen(false); }}>Cancel</Button>
+              <Button className="w-full sm:w-auto" onClick={handleSubmit}>Create Purchase</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

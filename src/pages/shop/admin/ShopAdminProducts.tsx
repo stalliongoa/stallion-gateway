@@ -153,19 +153,21 @@ export default function ShopAdminProducts() {
 
   return (
     <ShopAdminLayout>
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold">Products</h1>
-            <p className="text-muted-foreground">Manage your product catalog</p>
+            <h1 className="text-xl md:text-2xl font-bold">Products</h1>
+            <p className="text-sm text-muted-foreground">Manage your product catalog</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {selectedProducts.size > 0 && (
               <AlertDialog open={bulkDeleteOpen} onOpenChange={setBulkDeleteOpen}>
                 <AlertDialogTrigger asChild>
-                  <Button variant="destructive">
+                  <Button variant="destructive" size="sm">
                     <Trash2 className="mr-2 h-4 w-4" />
-                    Delete Selected ({selectedProducts.size})
+                    <span className="hidden sm:inline">Delete Selected</span>
+                    <span className="sm:hidden">Delete</span>
+                    ({selectedProducts.size})
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -188,17 +190,18 @@ export default function ShopAdminProducts() {
               </AlertDialog>
             )}
             <Link to="/shop/admin/products/new">
-              <Button className="bg-shop-orange hover:bg-shop-orange-dark">
+              <Button size="sm" className="bg-shop-orange hover:bg-shop-orange-dark">
                 <Plus className="mr-2 h-4 w-4" />
-                Add Product
+                <span className="hidden sm:inline">Add Product</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             </Link>
           </div>
         </div>
 
         {/* Search */}
-        <div className="mb-6 flex items-center gap-4">
-          <div className="relative max-w-sm flex-1">
+        <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="relative w-full sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search products..."
@@ -215,8 +218,8 @@ export default function ShopAdminProducts() {
         </div>
 
         {/* Products Table */}
-        <div className="bg-white rounded-lg border">
-          <Table>
+        <div className="bg-white rounded-lg border overflow-x-auto">
+          <Table className="min-w-[900px]">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-12">

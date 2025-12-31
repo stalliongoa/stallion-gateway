@@ -144,15 +144,15 @@ export default function ShopAdminOrders() {
 
   return (
     <ShopAdminLayout>
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold">Orders</h1>
-          <p className="text-muted-foreground">Manage customer orders</p>
+          <h1 className="text-xl md:text-2xl font-bold">Orders</h1>
+          <p className="text-sm text-muted-foreground">Manage customer orders</p>
         </div>
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="relative flex-1 max-w-sm">
+          <div className="relative flex-1 sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search by order number..."
@@ -162,7 +162,7 @@ export default function ShopAdminOrders() {
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
@@ -177,8 +177,8 @@ export default function ShopAdminOrders() {
         </div>
 
         {/* Orders Table */}
-        <div className="bg-white rounded-lg border">
-          <Table>
+        <div className="bg-white rounded-lg border overflow-x-auto">
+          <Table className="min-w-[700px]">
             <TableHeader>
               <TableRow>
                 <TableHead>Order #</TableHead>
