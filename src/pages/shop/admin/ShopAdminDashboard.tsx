@@ -165,25 +165,25 @@ export default function ShopAdminDashboard() {
 
   return (
     <ShopAdminLayout>
-      <div className="p-6">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome to Shoppie Admin</p>
+      <div className="p-4 md:p-6">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-xl md:text-2xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">Welcome to Shoppie Admin</p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
           {statCards.map((stat, index) => (
             <Card key={index}>
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{stat.title}</p>
-                    <p className="text-2xl font-bold mt-1">{stat.value}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{stat.subtitle}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs md:text-sm text-muted-foreground truncate">{stat.title}</p>
+                    <p className="text-lg md:text-2xl font-bold mt-1 truncate">{stat.value}</p>
+                    <p className="text-xs text-muted-foreground mt-1 truncate">{stat.subtitle}</p>
                   </div>
-                  <div className={cn(stat.bg, 'p-3 rounded-full')}>
-                    <stat.icon className={cn('h-6 w-6', stat.color)} />
+                  <div className={cn(stat.bg, 'p-2 md:p-3 rounded-full flex-shrink-0 ml-2')}>
+                    <stat.icon className={cn('h-4 w-4 md:h-6 md:w-6', stat.color)} />
                   </div>
                 </div>
               </CardContent>
