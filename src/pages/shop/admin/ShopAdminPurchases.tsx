@@ -601,7 +601,97 @@ export default function ShopAdminPurchases() {
               <SelectItem value="paid">Paid</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+
+        {/* Purchases Table */}
+        <Card>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Purchase #</TableHead>
+                    <TableHead className="hidden sm:table-cell">Vendor</TableHead>
+                    <TableHead className="hidden md:table-cell">Product</TableHead>
+                    <TableHead className="text-right">Qty</TableHead>
+                    <TableHead className="text-right hidden sm:table-cell">Unit Cost</TableHead>
+                    <TableHead className="text-right">Total</TableHead>
+                    <TableHead className="hidden md:table-cell">Invoice</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="hidden lg:table-cell">Date</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={9} className="text-center py-8">Loading...</TableCell>
+                    </TableRow>
+                  ) : filteredPurchases.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={9} className="text-center py-8">No purchases found</TableCell>
+                    </TableRow>
+                  ) : (
+                    filteredPurchases.map((purchase) => (
+                      <TableRow key={purchase.id}>
+                        <TableCell className="font-medium">{purchase.purchase_number}</TableCell>
+                        <TableCell className="hidden sm:table-cell">{purchase.vendor?.name || '-'}</TableCell>
+                        <TableCell className="hidden md:table-cell">{purchase.product?.name || '-'}</TableCell>
+                        <TableCell className="text-right">{purchase.quantity}</TableCell>
+                        <TableCell className="text-right hidden sm:table-cell">₹{purchase.unit_cost?.toLocaleString('en-IN')}</TableCell>
+                        <TableCell className="text-right">₹{purchase.total_cost?.toLocaleString('en-IN')}</TableCell>
+                        <TableCell className="hidden md:table-cell">
+                          {purchase.invoice_number ? (
+                            purchase.invoice_url ? (
+                              <a href={purchase.invoice_url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline flex items-center">
+                                <FileText className="h-4 w-4 mr-1" />
+                                {purchase.invoice_number}
+                              </a>
+                            ) : (
+                              purchase.invoice_number
+                            )
+                          ) : '-'}
+                        </TableCell>
+                        <TableCell>{getPaymentBadge(purchase.payment_status)}</TableCell>
+                        <TableCell className="hidden lg:table-cell">
+                          {purchase.purchase_date ? format(new Date(purchase.purchase_date), 'dd/MM/yyyy') : '-'}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Purchase Dialog */}
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>New Purchase Entry</DialogTitle>
+              <DialogDescription>
+                {extractedData ? 'Review extracted data and fill missing fields' : 'Enter purchase details'}
+              </DialogDescription>
+            </DialogHeader>
+            
+            {/* Extracted Items Selector */}
+            {extractedData?.items && extractedData.items.length > 1 && (
+              <div className="mb-4">
+                <Label>Select Item from Invoice ({extractedData.items.length} items found)</Label>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {extractedData.items.map((item, index) => (
+                    <Button
+                      key={index}
+                      variant={selectedItemIndex === index ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handleSelectItem(index)}
+                    >
+                      {item.product_name.substring(0, 20)}...
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
