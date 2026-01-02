@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Package, AlertTriangle, TrendingDown, ArrowUpDown, Search, Filter, Eye, Edit, History } from 'lucide-react';
+import { Package, AlertTriangle, TrendingDown, ArrowUpDown, Search, Filter, Eye, Edit, History, Barcode } from 'lucide-react';
+import { BarcodeScanner } from '@/components/admin/BarcodeScanner';
 import { ShopAdminLayout } from './ShopAdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -68,6 +69,8 @@ export default function ShopAdminInventory() {
   const [adjustmentQty, setAdjustmentQty] = useState('');
   const [adjustmentReason, setAdjustmentReason] = useState('');
   const [adjustmentNotes, setAdjustmentNotes] = useState('');
+  const [serialNumbers, setSerialNumbers] = useState<string[]>([]);
+  const [enableSerialTracking, setEnableSerialTracking] = useState(false);
   
   const [stats, setStats] = useState({
     totalProducts: 0,
@@ -147,6 +150,8 @@ export default function ShopAdminInventory() {
     setAdjustmentQty('');
     setAdjustmentReason('');
     setAdjustmentNotes('');
+    setSerialNumbers([]);
+    setEnableSerialTracking(false);
     setAdjustmentDialog(true);
   };
 
@@ -181,6 +186,11 @@ export default function ShopAdminInventory() {
       return;
     }
 
+    // Build notes with serial numbers if tracked
+    const notesWithSerials = enableSerialTracking && serialNumbers.length > 0
+      ? `${adjustmentNotes}\n\nSerial Numbers:\n${serialNumbers.join('\n')}`
+      : adjustmentNotes;
+
     // Log stock movement
     const { error: logError } = await supabase
       .from('stock_movements')
@@ -192,20 +202,20 @@ export default function ShopAdminInventory() {
         quantity_after: newStock,
         reference_type: 'adjustment',
         reason: adjustmentReason,
-        notes: adjustmentNotes,
+        notes: notesWithSerials,
       });
 
     if (logError) {
       console.error('Error logging movement:', logError);
     }
 
-    // Log adjustment
+    // Log adjustment with serial numbers
     await supabase.from('stock_adjustments').insert({
       product_id: selectedProduct.id,
       adjustment_type: adjustmentType,
       quantity: qty,
       reason: adjustmentReason,
-      notes: adjustmentNotes,
+      notes: notesWithSerials,
     });
 
     toast({ title: 'Stock adjusted successfully' });
@@ -471,10 +481,48 @@ export default function ShopAdminInventory() {
                   type="number"
                   min="1"
                   value={adjustmentQty}
-                  onChange={(e) => setAdjustmentQty(e.target.value)}
+                  onChange={(e) => {
+                    setAdjustmentQty(e.target.value);
+                    // Reset serial numbers if quantity changes
+                    if (enableSerialTracking) {
+                      setSerialNumbers([]);
+                    }
+                  }}
                   placeholder="Enter quantity"
                 />
               </div>
+              
+              {/* Serial Number Tracking Toggle - Only for adding stock */}
+              {adjustmentType === 'add' && parseInt(adjustmentQty) > 0 && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="enableSerialTracking"
+                      checked={enableSerialTracking}
+                      onChange={(e) => {
+                        setEnableSerialTracking(e.target.checked);
+                        if (!e.target.checked) {
+                          setSerialNumbers([]);
+                        }
+                      }}
+                      className="h-4 w-4 rounded border-input"
+                    />
+                    <Label htmlFor="enableSerialTracking" className="cursor-pointer flex items-center gap-2">
+                      <Barcode className="h-4 w-4" />
+                      Enable Serial Number Tracking
+                    </Label>
+                  </div>
+                  
+                  {enableSerialTracking && (
+                    <BarcodeScanner
+                      quantity={parseInt(adjustmentQty) || 0}
+                      serialNumbers={serialNumbers}
+                      onSerialNumbersChange={setSerialNumbers}
+                    />
+                  )}
+                </div>
+              )}
               
               <div>
                 <Label>Reason *</Label>
