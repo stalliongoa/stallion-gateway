@@ -26,6 +26,10 @@ import QuotationList from "./pages/QuotationList";
 import QuotationDetail from "./pages/QuotationDetail";
 import EngineerDashboard from "./pages/EngineerDashboard";
 
+// CCTV Kit pages
+import CCTVKits from "./pages/cctv/CCTVKits";
+import CCTVKitDetail from "./pages/cctv/CCTVKitDetail";
+
 // Shop pages
 import ShopHome from "./pages/shop/ShopHome";
 import ProductList from "./pages/shop/ProductList";
@@ -56,6 +60,7 @@ import ShopAdminStockMovements from "./pages/shop/admin/ShopAdminStockMovements"
 import ShopAdminLowStockAlerts from "./pages/shop/admin/ShopAdminLowStockAlerts";
 import ShopAdminPurchases from "./pages/shop/admin/ShopAdminPurchases";
 import ShopAdminInventoryReports from "./pages/shop/admin/ShopAdminInventoryReports";
+import ShopAdminCCTVKits from "./pages/shop/admin/ShopAdminCCTVKits";
 
 const queryClient = new QueryClient();
 
@@ -88,6 +93,10 @@ const App = () => (
           <Route path="/quotation-list" element={<QuotationList />} />
           <Route path="/quotation/:id" element={<QuotationDetail />} />
           
+          {/* CCTV Kit Routes (Customer-facing) */}
+          <Route path="/cctv/cctv-kits" element={<CCTVKits />} />
+          <Route path="/cctv/cctv-kits/:slug" element={<CCTVKitDetail />} />
+          
           {/* Shop Routes */}
           <Route path="/shop" element={<ShopHome />} />
           <Route path="/shop/products" element={<ProductList />} />
@@ -118,6 +127,7 @@ const App = () => (
           <Route path="/shop/admin/inventory/alerts" element={<ShopAdminLayout><ShopAdminLowStockAlerts /></ShopAdminLayout>} />
           <Route path="/shop/admin/purchases" element={<ShopAdminLayout><ShopAdminPurchases /></ShopAdminLayout>} />
           <Route path="/shop/admin/inventory/reports" element={<ShopAdminLayout><ShopAdminInventoryReports /></ShopAdminLayout>} />
+          <Route path="/shop/admin/cctv-kit" element={<ShopAdminLayout><ShopAdminCCTVKits /></ShopAdminLayout>} />
           <Route path="/shop/admin/management" element={<ShopAdminLayout><ShopAdminManagement /></ShopAdminLayout>} />
           <Route path="/shop/admin/settings" element={<ShopAdminLayout><ShopAdminSettings /></ShopAdminLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

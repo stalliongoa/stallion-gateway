@@ -56,6 +56,197 @@ export type Database = {
         }
         Relationships: []
       }
+      cctv_kit_items: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          is_free_item: boolean | null
+          kit_id: string
+          product_id: string | null
+          product_name: string
+          product_type: string
+          purchase_price: number
+          quantity: number
+          selling_price: number
+          unit_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_free_item?: boolean | null
+          kit_id: string
+          product_id?: string | null
+          product_name: string
+          product_type: string
+          purchase_price?: number
+          quantity?: number
+          selling_price?: number
+          unit_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_free_item?: boolean | null
+          kit_id?: string
+          product_id?: string | null
+          product_name?: string
+          product_type?: string
+          purchase_price?: number
+          quantity?: number
+          selling_price?: number
+          unit_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cctv_kit_items_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "cctv_kits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cctv_kit_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "shop_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cctv_kit_pricing_history: {
+        Row: {
+          changed_at: string
+          changed_by: string | null
+          id: string
+          kit_id: string
+          notes: string | null
+          profit_amount: number
+          profit_percentage: number
+          selling_price: number
+          total_purchase_cost: number
+        }
+        Insert: {
+          changed_at?: string
+          changed_by?: string | null
+          id?: string
+          kit_id: string
+          notes?: string | null
+          profit_amount: number
+          profit_percentage: number
+          selling_price: number
+          total_purchase_cost: number
+        }
+        Update: {
+          changed_at?: string
+          changed_by?: string | null
+          id?: string
+          kit_id?: string
+          notes?: string | null
+          profit_amount?: number
+          profit_percentage?: number
+          selling_price?: number
+          total_purchase_cost?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cctv_kit_pricing_history_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "cctv_kits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cctv_kits: {
+        Row: {
+          brand_id: string | null
+          camera_resolution: string
+          channel_capacity: number
+          created_at: string
+          created_by: string | null
+          free_wifi_camera_product_id: string | null
+          has_free_wifi_camera: boolean | null
+          id: string
+          image_url: string | null
+          kit_type: string
+          long_description: string | null
+          name: string
+          profit_amount: number
+          profit_percentage: number
+          selling_price: number
+          short_highlights: string[] | null
+          slug: string
+          status: string
+          total_purchase_cost: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          brand_id?: string | null
+          camera_resolution: string
+          channel_capacity: number
+          created_at?: string
+          created_by?: string | null
+          free_wifi_camera_product_id?: string | null
+          has_free_wifi_camera?: boolean | null
+          id?: string
+          image_url?: string | null
+          kit_type?: string
+          long_description?: string | null
+          name: string
+          profit_amount?: number
+          profit_percentage?: number
+          selling_price?: number
+          short_highlights?: string[] | null
+          slug: string
+          status?: string
+          total_purchase_cost?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          brand_id?: string | null
+          camera_resolution?: string
+          channel_capacity?: number
+          created_at?: string
+          created_by?: string | null
+          free_wifi_camera_product_id?: string | null
+          has_free_wifi_camera?: boolean | null
+          id?: string
+          image_url?: string | null
+          kit_type?: string
+          long_description?: string | null
+          name?: string
+          profit_amount?: number
+          profit_percentage?: number
+          selling_price?: number
+          short_highlights?: string[] | null
+          slug?: string
+          status?: string
+          total_purchase_cost?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cctv_kits_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "shop_brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cctv_kits_free_wifi_camera_product_id_fkey"
+            columns: ["free_wifi_camera_product_id"]
+            isOneToOne: false
+            referencedRelation: "shop_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cctv_quotation_items: {
         Row: {
           category_type: string
