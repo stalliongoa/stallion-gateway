@@ -9,7 +9,7 @@ import {
   AlertTriangle,
   ArrowRight
 } from 'lucide-react';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -164,8 +164,7 @@ export default function ShopAdminDashboard() {
   ];
 
   return (
-    <ShopAdminLayout>
-      <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6">
         <div className="mb-6 md:mb-8">
           <h1 className="text-xl md:text-2xl font-bold text-foreground">Dashboard</h1>
           <p className="text-sm text-muted-foreground">Welcome to Shoppie Admin</p>
@@ -293,8 +292,7 @@ export default function ShopAdminDashboard() {
             </div>
           </CardContent>
         </Card>
-      </div>
-    </ShopAdminLayout>
+    </div>
   );
 }
 

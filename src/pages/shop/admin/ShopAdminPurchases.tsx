@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, FileText, Upload, Sparkles, Loader2, UserPlus } from 'lucide-react';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -506,8 +506,7 @@ export default function ShopAdminPurchases() {
     .reduce((sum, p) => sum + (p.total_cost || 0), 0);
 
   return (
-    <ShopAdminLayout>
-      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl md:text-2xl font-bold">Purchase Management</h1>
@@ -902,6 +901,5 @@ export default function ShopAdminPurchases() {
           </DialogContent>
         </Dialog>
       </div>
-    </ShopAdminLayout>
   );
 }

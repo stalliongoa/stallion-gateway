@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Search, Edit, Trash2, Eye, EyeOff } from 'lucide-react';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -152,8 +152,7 @@ export default function ShopAdminProducts() {
   const isSomeSelected = filteredProducts.some(p => selectedProducts.has(p.id));
 
   return (
-    <ShopAdminLayout>
-      <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="text-xl md:text-2xl font-bold">Products</h1>
@@ -355,7 +354,6 @@ export default function ShopAdminProducts() {
             </TableBody>
           </Table>
         </div>
-      </div>
-    </ShopAdminLayout>
+    </div>
   );
 }

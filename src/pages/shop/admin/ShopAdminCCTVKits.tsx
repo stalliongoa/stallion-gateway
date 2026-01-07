@@ -288,7 +288,7 @@ export default function ShopAdminCCTVKits() {
   // Wizard View
   if (view === 'wizard') {
     return (
-      <div className="space-y-4 md:space-y-6">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -386,7 +386,7 @@ export default function ShopAdminCCTVKits() {
   
   // List View
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

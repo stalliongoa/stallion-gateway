@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Search, Eye, Edit } from 'lucide-react';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -101,8 +101,7 @@ export default function ShopAdminCustomers() {
   });
 
   return (
-    <ShopAdminLayout>
-      <div className="p-6">
+    <div className="p-4 md:p-6">
         <div className="mb-6">
           <h1 className="text-2xl font-bold">Customers</h1>
           <p className="text-muted-foreground">Manage registered customers</p>
@@ -252,6 +251,5 @@ export default function ShopAdminCustomers() {
           </DialogContent>
         </Dialog>
       </div>
-    </ShopAdminLayout>
   );
 }
