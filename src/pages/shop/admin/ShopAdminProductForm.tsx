@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Upload, X, AlertCircle, Sparkles, Loader2, Link as LinkIcon } from 'lucide-react';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -1284,17 +1284,14 @@ export default function ShopAdminProductForm() {
 
   if (isLoading) {
     return (
-      <ShopAdminLayout>
-        <div className="p-6 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-shop-orange"></div>
-        </div>
-      </ShopAdminLayout>
+      <div className="p-4 md:p-6 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-shop-orange"></div>
+      </div>
     );
   }
 
   return (
-    <ShopAdminLayout>
-      <div className="p-6">
+    <div className="p-4 md:p-6">
         <div className="flex items-center gap-4 mb-6">
           <Button variant="ghost" size="icon" onClick={() => navigate('/shop/admin/products')}>
             <ArrowLeft className="h-5 w-5" />
@@ -2056,8 +2053,7 @@ export default function ShopAdminProductForm() {
               </Button>
             </div>
           </div>
-        </form>
-      </div>
-    </ShopAdminLayout>
+      </form>
+    </div>
   );
 }

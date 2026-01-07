@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Plus, Edit, Trash2 } from 'lucide-react';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -152,8 +152,7 @@ export default function ShopAdminBrands() {
   };
 
   return (
-    <ShopAdminLayout>
-      <div className="p-6">
+    <div className="p-4 md:p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold">Brands</h1>
@@ -319,6 +318,5 @@ export default function ShopAdminBrands() {
           </Table>
         </div>
       </div>
-    </ShopAdminLayout>
   );
 }

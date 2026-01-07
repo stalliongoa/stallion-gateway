@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Package, AlertTriangle, TrendingDown, ArrowUpDown, Search, Filter, Eye, Edit, History, Barcode } from 'lucide-react';
 import { BarcodeScanner } from '@/components/admin/BarcodeScanner';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -255,8 +255,7 @@ export default function ShopAdminInventory() {
   };
 
   return (
-    <ShopAdminLayout>
-      <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Inventory Management</h1>
@@ -563,6 +562,5 @@ export default function ShopAdminInventory() {
           </DialogContent>
         </Dialog>
       </div>
-    </ShopAdminLayout>
   );
 }

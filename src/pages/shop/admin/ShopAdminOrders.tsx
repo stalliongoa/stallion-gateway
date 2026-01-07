@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Search, Eye } from 'lucide-react';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -143,8 +143,7 @@ export default function ShopAdminOrders() {
   });
 
   return (
-    <ShopAdminLayout>
-      <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6">
         <div className="mb-6">
           <h1 className="text-xl md:text-2xl font-bold">Orders</h1>
           <p className="text-sm text-muted-foreground">Manage customer orders</p>
@@ -346,8 +345,7 @@ export default function ShopAdminOrders() {
               </div>
             )}
           </DialogContent>
-        </Dialog>
-      </div>
-    </ShopAdminLayout>
+      </Dialog>
+    </div>
   );
 }

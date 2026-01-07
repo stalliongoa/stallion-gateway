@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, AlertTriangle, Check, Package } from 'lucide-react';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -147,8 +147,7 @@ export default function ShopAdminLowStockAlerts() {
   const unacknowledgedCount = alerts.filter(a => !a.is_acknowledged).length;
 
   return (
-    <ShopAdminLayout>
-      <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate('/shop/admin/inventory')}>
             <ArrowLeft className="h-5 w-5" />
@@ -295,6 +294,5 @@ export default function ShopAdminLowStockAlerts() {
           </CardContent>
         </Card>
       </div>
-    </ShopAdminLayout>
   );
 }

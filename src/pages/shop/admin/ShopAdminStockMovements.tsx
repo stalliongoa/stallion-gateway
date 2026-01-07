@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Download, Search, Filter } from 'lucide-react';
-import { ShopAdminLayout } from './ShopAdminLayout';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -144,8 +144,7 @@ export default function ShopAdminStockMovements() {
   };
 
   return (
-    <ShopAdminLayout>
-      <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-5 w-5" />
@@ -255,6 +254,5 @@ export default function ShopAdminStockMovements() {
           </CardContent>
         </Card>
       </div>
-    </ShopAdminLayout>
   );
 }
