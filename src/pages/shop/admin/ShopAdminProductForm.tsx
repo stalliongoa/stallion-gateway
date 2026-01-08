@@ -625,23 +625,30 @@ export default function ShopAdminProductForm() {
           }
         }
         
+        // Helper to convert AI response to boolean (handles both string "Yes"/"No" and actual booleans)
+        const toBoolean = (val: any): boolean => {
+          if (typeof val === 'boolean') return val;
+          if (typeof val === 'string') return val.toLowerCase() === 'yes' || val.toLowerCase() === 'true';
+          return Boolean(val);
+        };
+        
         // Always update WiFi Camera specs
         setWifiCameraSpecs(prev => ({
           ...prev,
           resolution: specs.resolution || prev.resolution,
           megapixel: specs.megapixel || prev.megapixel,
-          night_vision: specs.night_vision === 'Yes' ? true : prev.night_vision,
+          night_vision: specs.night_vision !== undefined ? toBoolean(specs.night_vision) : prev.night_vision,
           night_vision_type: specs.night_vision_type || prev.night_vision_type,
           ir_range: specs.ir_range || prev.ir_range,
           wifi_band: specs.wifi_band || prev.wifi_band,
           power_type: specs.power_type || prev.power_type,
-          two_way_audio: specs.two_way_audio === 'Yes' ? true : prev.two_way_audio,
-          motion_detection: specs.motion_detection === 'Yes' ? true : prev.motion_detection,
+          two_way_audio: specs.two_way_audio !== undefined ? toBoolean(specs.two_way_audio) : prev.two_way_audio,
+          motion_detection: specs.motion_detection !== undefined ? toBoolean(specs.motion_detection) : prev.motion_detection,
           weatherproof_rating: specs.weatherproof_rating || prev.weatherproof_rating,
           lens_type: specs.lens_type || prev.lens_type,
           field_of_view: specs.field_of_view || prev.field_of_view,
-          pan_support: specs.pan_support === 'Yes' ? true : prev.pan_support,
-          tilt_support: specs.tilt_support === 'Yes' ? true : prev.tilt_support,
+          pan_support: specs.pan_support !== undefined ? toBoolean(specs.pan_support) : prev.pan_support,
+          tilt_support: specs.tilt_support !== undefined ? toBoolean(specs.tilt_support) : prev.tilt_support,
         }));
         
         // Helper functions to normalize AI values to dropdown values
@@ -675,11 +682,41 @@ export default function ShopAdminProductForm() {
         const normalizeMegapixel = (val: string | undefined): string => {
           if (!val) return '';
           const v = val.replace(/\s/g, '').toUpperCase();
+          // Handle decimal megapixels (2.4MP -> 2MP)
+          const numMatch = v.match(/(\d+\.?\d*)/);
+          if (numMatch) {
+            const num = parseFloat(numMatch[1]);
+            if (num >= 7) return '8MP';
+            if (num >= 4.5) return '5MP';
+            if (num >= 3.5) return '4MP';
+            if (num >= 1.5) return '2MP';
+          }
           if (v.includes('2')) return '2MP';
           if (v.includes('4')) return '4MP';
           if (v.includes('5')) return '5MP';
           if (v.includes('8')) return '8MP';
           return v;
+        };
+        
+        const normalizeResolution = (res: string | undefined, megapixel: string | undefined): string => {
+          if (res) {
+            const v = res.toLowerCase();
+            if (v.includes('1080') || v.includes('fhd')) return '1080p';
+            if (v.includes('2k')) return '2K';
+            if (v.includes('4k') || v.includes('uhd')) return '4K';
+            if (v.includes('5mp') || v.includes('5 mp')) return '5MP';
+            if (v.includes('720')) return '720p';
+            return res;
+          }
+          // Derive from megapixel if resolution not specified
+          if (megapixel) {
+            const mp = normalizeMegapixel(megapixel);
+            if (mp === '2MP') return '1080p';
+            if (mp === '4MP') return '2K';
+            if (mp === '5MP') return '5MP';
+            if (mp === '8MP') return '4K';
+          }
+          return '';
         };
         
         const normalizeLensSize = (val: string | undefined): string => {
@@ -773,22 +810,22 @@ export default function ShopAdminProductForm() {
           camera_type: normalizeCameraType(specs.camera_type) || prev.camera_type,
           indoor_outdoor: normalizeIndoorOutdoor(specs.indoor_outdoor) || prev.indoor_outdoor,
           // Video & Image
-          resolution: specs.resolution || prev.resolution,
+          resolution: normalizeResolution(specs.resolution, specs.megapixel) || prev.resolution,
           megapixel: normalizeMegapixel(specs.megapixel) || prev.megapixel,
           lens_type: specs.lens_type?.toLowerCase() || prev.lens_type,
           lens_size: normalizeLensSize(specs.lens_size) || prev.lens_size,
           frame_rate: normalizeFrameRate(specs.frame_rate) || prev.frame_rate,
-          // Night Vision & IR
-          ir_support: specs.ir_support === 'Yes' || specs.ir_range ? true : prev.ir_support,
+          // Night Vision & IR - use toBoolean for proper conversion
+          ir_support: specs.ir_support !== undefined ? toBoolean(specs.ir_support) : (specs.ir_range ? true : prev.ir_support),
           ir_range: normalizeIRRange(specs.ir_range) || prev.ir_range,
-          night_vision: specs.night_vision === 'Yes' || specs.ir_range ? true : prev.night_vision,
-          bw_night_vision: specs.bw_night_vision === 'Yes' || (specs.night_vision_type?.toLowerCase().includes('ir')) ? true : prev.bw_night_vision,
-          color_night_vision: specs.color_night_vision === 'Yes' || (specs.night_vision_type?.toLowerCase().includes('color')) ? true : prev.color_night_vision,
+          night_vision: specs.night_vision !== undefined ? toBoolean(specs.night_vision) : (specs.ir_range ? true : prev.night_vision),
+          bw_night_vision: specs.bw_night_vision !== undefined ? toBoolean(specs.bw_night_vision) : (specs.night_vision_type?.toLowerCase().includes('ir') ? true : prev.bw_night_vision),
+          color_night_vision: specs.color_night_vision !== undefined ? toBoolean(specs.color_night_vision) : (specs.night_vision_type?.toLowerCase().includes('color') || specs.night_vision_type?.toLowerCase().includes('full') ? true : prev.color_night_vision),
           // Audio & Smart Features
-          audio_support: specs.audio_support === 'Yes' || specs.audio_type ? true : prev.audio_support,
+          audio_support: specs.audio_support !== undefined ? toBoolean(specs.audio_support) : (specs.audio_type ? true : prev.audio_support),
           audio_type: normalizeAudioType(specs.audio_type) || prev.audio_type,
-          motion_detection: specs.motion_detection === 'Yes' ? true : prev.motion_detection,
-          human_detection: specs.human_detection === 'Yes' ? true : prev.human_detection,
+          motion_detection: specs.motion_detection !== undefined ? toBoolean(specs.motion_detection) : prev.motion_detection,
+          human_detection: specs.human_detection !== undefined ? toBoolean(specs.human_detection) : prev.human_detection,
           ai_features: specs.ai_features?.length ? specs.ai_features : prev.ai_features,
           // Hardware & Body
           body_material: specs.body_material?.toLowerCase() || prev.body_material,
@@ -797,7 +834,7 @@ export default function ShopAdminProductForm() {
           // Connectivity & Power
           power_type: normalizePowerType(specs.power_type) || prev.power_type,
           connector_type: normalizeConnectorType(specs.connector_type) || prev.connector_type,
-          onboard_storage: specs.onboard_storage === 'Yes' || specs.sd_card_support ? true : prev.onboard_storage,
+          onboard_storage: specs.onboard_storage !== undefined ? toBoolean(specs.onboard_storage) : (specs.sd_card_support ? true : prev.onboard_storage),
           sd_card_support: normalizeSDCard(specs.sd_card_support) || prev.sd_card_support,
           // Compatibility
           compatible_with: normalizeCompatibleWith(specs.compatible_with),
@@ -805,6 +842,11 @@ export default function ShopAdminProductForm() {
           // Warranty
           warranty_period: normalizeWarranty(specs.warranty_period) || prev.warranty_period,
         }));
+        
+        // Also update datasheet URL if found
+        if (info.datasheet_url) {
+          setFormData(prev => ({ ...prev, datasheet_url: info.datasheet_url }));
+        }
         
         // Always update DVR specs
         setDvrSpecs((prev: Record<string, any>) => ({
@@ -818,7 +860,7 @@ export default function ShopAdminProductForm() {
           ...prev,
           channel_capacity: specs.channels?.toString() || prev.channel_capacity,
           max_hdd_capacity: specs.hdd_capacity || prev.max_hdd_capacity,
-          poe_ports: specs.poe_support === 'Yes' ? (prev.poe_ports || '8') : prev.poe_ports,
+          poe_ports: specs.poe_support !== undefined && toBoolean(specs.poe_support) ? (prev.poe_ports || '8') : prev.poe_ports,
         }));
       }
 

@@ -33,8 +33,9 @@ serve(async (req) => {
     // Fetch the product page content
     const pageResponse = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
       },
     });
 
@@ -48,12 +49,12 @@ serve(async (req) => {
 
     const htmlContent = await pageResponse.text();
     
-    // Limit content to avoid token limits
-    const truncatedContent = htmlContent.substring(0, 50000);
+    // Extract more relevant content - increase limit for better extraction
+    const truncatedContent = htmlContent.substring(0, 80000);
 
     console.log('Extracting product info with AI...');
 
-    // Use Lovable AI to extract product information
+    // Use Lovable AI to extract product information with enhanced prompt
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -65,65 +66,83 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a CCTV/Security product information extractor. Extract product details from the HTML content provided. Return ONLY a valid JSON object with the following fields (use null for missing values):
+            content: `You are an expert CCTV/Security product information extractor. Your task is to THOROUGHLY extract ALL product details from the HTML content provided.
+
+IMPORTANT EXTRACTION RULES:
+1. Look for specification tables with key-value pairs
+2. Extract data from product description sections
+3. Look for technical specifications in lists or bullet points
+4. Parse model numbers from product titles and headings
+5. Find datasheet/manual URLs
+6. Extract image URLs from img tags
+
+Return ONLY a valid JSON object with these fields (use null for missing values, true/false for boolean questions):
+
 {
-  "name": "product name",
-  "brand": "brand name",
-  "model_number": "model number/name",
-  "short_description": "brief product description (max 200 chars)",
+  "name": "full product name from title",
+  "brand": "brand name (CP Plus, Hikvision, Dahua, etc.)",
+  "model_number": "exact model number (e.g., CP-GPC-LT24L3)",
+  "short_description": "brief product description max 200 chars",
   "description": "detailed product description",
-  "dimensions_cm": "dimensions in format LxWxH",
-  "weight_kg": "weight as a number",
-  "warranty_months": "warranty period in months as number",
-  "mrp": "maximum retail price as number",
+  "dimensions_cm": "dimensions in format LxWxH (convert from mm if needed)",
+  "weight_kg": "weight as number (convert from grams if needed)",
+  "warranty_months": "warranty in months as number",
+  "mrp": "price as number without currency symbols",
+  "datasheet_url": "URL to PDF datasheet if found",
+  
   "specifications": {
-    "cctv_system_type": "IP or Analog or HD-CVI or HD-TVI (determine from product specs)",
-    "camera_type": "Dome or Bullet or PTZ or Box or Fisheye or Turret",
-    "indoor_outdoor": "Indoor or Outdoor or Both",
-    "resolution": "1080p or 2K or 4K or 5MP or 8MP",
-    "megapixel": "2 MP or 3 MP or 4 MP or 5 MP or 8 MP",
-    "lens_type": "Fixed or Varifocal or Motorized",
-    "lens_size": "2.8mm or 3.6mm or 6mm or 2.8-12mm or other",
-    "frame_rate": "25 fps or 30 fps or 15 fps",
-    "night_vision": "Yes or No",
-    "night_vision_type": "IR or Full Color or Dual Light",
-    "ir_support": "Yes or No",
-    "ir_range": "20m or 30m or 40m or 50m",
-    "bw_night_vision": "Yes or No",
-    "color_night_vision": "Yes or No",
-    "audio_support": "Yes or No",
-    "audio_type": "Built-in Mic or Built-in Mic & Speaker or External",
-    "motion_detection": "Yes or No",
-    "human_detection": "Yes or No",
-    "ai_features": ["Face Detection", "Line Crossing", "Intrusion Detection"],
-    "body_material": "Plastic or Metal or Aluminum",
+    "cctv_system_type": "Analog or IP or WiFi (determine from product - Guard+/Analog cameras are 'Analog', Network/IP cameras are 'IP')",
+    "camera_type": "Dome or Bullet or PTZ or Box or Fisheye or Turret (from BodyType field)",
+    "indoor_outdoor": "Indoor or Outdoor or Both (from IP rating - IP65+ means Outdoor capable)",
+    "resolution": "1080p or 2K or 4K or 5MP (based on megapixel: 2MP=1080p, 4MP=2K, 5MP=5MP, 8MP=4K)",
+    "megapixel": "2 MP or 4 MP or 5 MP or 8 MP (extract from Image Sensor or product name - 2.4MP rounds to 2 MP)",
+    "lens_type": "Fixed or Varifocal or Motorized (from Lens Type or Focus Control)",
+    "lens_size": "2.8mm or 3.6mm or 6mm or actual value",
+    "frame_rate": "25 fps or 30 fps (from Video Streaming or Max Frame Rate)",
+    "night_vision": true if camera has IR LED or warm white LED or any night capability,
+    "night_vision_type": "IR or Full Color or Dual Light (Full Color if has white LED)",
+    "ir_support": true if has Infrared LED or IR capability,
+    "ir_range": "20m or 30m or 40m or 50m (from Illumination Distance or IR Range)",
+    "bw_night_vision": true if has IR night vision capability,
+    "color_night_vision": true if has Full Color or Warm White night vision (Day/Night: Color means true),
+    "audio_support": true if has microphone or audio input,
+    "audio_type": "Built-in Mic or Built-in Mic & Speaker or External or None",
+    "motion_detection": true if has motion detection feature,
+    "human_detection": true if has human detection or AI detection,
+    "ai_features": ["Face Detection", "Line Crossing", "Intrusion Detection"] - only include if mentioned,
+    "body_material": "Plastic or Metal or Aluminum (from Casing or Body Material)",
     "color": "White or Black or Grey",
-    "weatherproof_rating": "IP65 or IP66 or IP67 or None",
-    "power_type": "12V DC or PoE or Dual (PoE/12V DC)",
-    "connector_type": "BNC or RJ45",
-    "onboard_storage": "Yes or No",
+    "weatherproof_rating": "IP65 or IP66 or IP67 (from Weatherproof Standard or IP Rating)",
+    "power_type": "12V DC or PoE or Dual (from Power Source - DC12V means 12V DC)",
+    "connector_type": "BNC or RJ45 (Analog=BNC, IP=RJ45)",
+    "onboard_storage": true if has SD card slot,
     "sd_card_support": "Up to 128 GB or Up to 256 GB or Up to 512 GB or None",
-    "wifi_band": "2.4 GHz or Dual Band (2.4 + 5 GHz)",
-    "two_way_audio": "Yes or No",
-    "pan_support": "Yes or No",
-    "tilt_support": "Yes or No",
-    "field_of_view": "90° or 110° or 130°",
-    "channels": "number of channels for DVR/NVR",
-    "hdd_capacity": "1TB or 2TB or 4TB",
-    "poe_support": "Yes or No",
-    "compatible_with": ["Hikvision", "Dahua", "CP Plus"],
+    "poe_support": true if PoE is mentioned,
+    "compatible_with": ["DVR"] for Analog cameras, ["NVR"] for IP cameras, ["Both"] for dual,
     "warranty_period": "1 Year or 2 Years or 3 Years or 5 Years"
   },
-  "images": ["array of image URLs found"]
+  
+  "images": ["array of full image URLs found on page"]
 }
 
-IMPORTANT: Determine cctv_system_type from the product - if it mentions IP/Network camera use "IP", if analog use "Analog", if HD-CVI/TVI use appropriate type.
-For camera_type, analyze the product name and description to determine if it's Dome, Bullet, PTZ, etc.
-Extract as much information as possible. For specifications, only include fields that are found in the content.`
+CRITICAL MAPPING RULES:
+- Guard+ or Analog series = cctv_system_type: "Analog"
+- Network or IP series = cctv_system_type: "IP"
+- 2.4MP should map to "2 MP" megapixel
+- BodyType: Bullet = camera_type: "Bullet"
+- IP66 weatherproof = indoor_outdoor: "Outdoor" or "Both"
+- DC12V power = power_type: "12V DC"
+- Casing: Plastic = body_material: "Plastic"
+- If Illumination Distance mentions meters, extract as ir_range
+- Warm White LED or Day/Night: Color = color_night_vision: true
+- For Analog cameras, connector_type should be "BNC"
+- Extract datasheet URL if PDF link is found
+
+EXTRACT EVERY PIECE OF INFORMATION AVAILABLE. Do not leave fields empty if data exists.`
           },
           {
             role: "user",
-            content: `Extract product information from this HTML content:\n\n${truncatedContent}`
+            content: `Extract ALL product information from this HTML content. Pay special attention to specification tables:\n\n${truncatedContent}`
           }
         ],
         tools: [
@@ -131,7 +150,7 @@ Extract as much information as possible. For specifications, only include fields
             type: "function",
             function: {
               name: "extract_product_info",
-              description: "Extract product information from HTML content",
+              description: "Extract complete product information from HTML content",
               parameters: {
                 type: "object",
                 properties: {
@@ -144,43 +163,37 @@ Extract as much information as possible. For specifications, only include fields
                   weight_kg: { type: "number", description: "Weight in kg" },
                   warranty_months: { type: "number", description: "Warranty in months" },
                   mrp: { type: "number", description: "MRP price" },
+                  datasheet_url: { type: "string", description: "Datasheet PDF URL" },
                   specifications: {
                     type: "object",
                     properties: {
-                      cctv_system_type: { type: "string" },
-                      camera_type: { type: "string" },
-                      indoor_outdoor: { type: "string" },
+                      cctv_system_type: { type: "string", enum: ["Analog", "IP", "WiFi"] },
+                      camera_type: { type: "string", enum: ["Dome", "Bullet", "PTZ", "Box", "Fisheye", "Turret"] },
+                      indoor_outdoor: { type: "string", enum: ["Indoor", "Outdoor", "Both"] },
                       resolution: { type: "string" },
                       megapixel: { type: "string" },
-                      lens_type: { type: "string" },
+                      lens_type: { type: "string", enum: ["Fixed", "Varifocal", "Motorized"] },
                       lens_size: { type: "string" },
                       frame_rate: { type: "string" },
-                      night_vision: { type: "string" },
+                      night_vision: { type: "boolean" },
                       night_vision_type: { type: "string" },
-                      ir_support: { type: "string" },
+                      ir_support: { type: "boolean" },
                       ir_range: { type: "string" },
-                      bw_night_vision: { type: "string" },
-                      color_night_vision: { type: "string" },
-                      audio_support: { type: "string" },
+                      bw_night_vision: { type: "boolean" },
+                      color_night_vision: { type: "boolean" },
+                      audio_support: { type: "boolean" },
                       audio_type: { type: "string" },
-                      motion_detection: { type: "string" },
-                      human_detection: { type: "string" },
+                      motion_detection: { type: "boolean" },
+                      human_detection: { type: "boolean" },
                       ai_features: { type: "array", items: { type: "string" } },
-                      body_material: { type: "string" },
+                      body_material: { type: "string", enum: ["Plastic", "Metal", "Aluminum"] },
                       color: { type: "string" },
                       weatherproof_rating: { type: "string" },
                       power_type: { type: "string" },
-                      connector_type: { type: "string" },
-                      onboard_storage: { type: "string" },
+                      connector_type: { type: "string", enum: ["BNC", "RJ45", "WiFi"] },
+                      onboard_storage: { type: "boolean" },
                       sd_card_support: { type: "string" },
-                      wifi_band: { type: "string" },
-                      two_way_audio: { type: "string" },
-                      pan_support: { type: "string" },
-                      tilt_support: { type: "string" },
-                      field_of_view: { type: "string" },
-                      channels: { type: "number" },
-                      hdd_capacity: { type: "string" },
-                      poe_support: { type: "string" },
+                      poe_support: { type: "boolean" },
                       compatible_with: { type: "array", items: { type: "string" } },
                       warranty_period: { type: "string" }
                     }
@@ -233,7 +246,7 @@ Extract as much information as possible. For specifications, only include fields
     }
 
     const productInfo = JSON.parse(toolCall.function.arguments);
-    console.log('Product info extracted:', productInfo.name);
+    console.log('Product info extracted:', JSON.stringify(productInfo, null, 2));
 
     return new Response(
       JSON.stringify({ success: true, data: productInfo }),
