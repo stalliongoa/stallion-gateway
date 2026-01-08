@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -9,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Wand2 } from 'lucide-react';
 
 export interface CCTVSpecs {
   // System Classification
@@ -101,6 +103,62 @@ export const defaultCCTVSpecs: CCTVSpecs = {
   allow_in_quotation_builder: true,
 };
 
+// Quick fill defaults based on system type
+const getQuickFillDefaults = (systemType: string): Partial<CCTVSpecs> => {
+  const baseDefaults: Partial<CCTVSpecs> = {
+    lens_type: 'fixed',
+    lens_size: '3.6mm',
+    frame_rate: '25fps',
+    ir_support: true,
+    ir_range: '30m',
+    night_vision: true,
+    bw_night_vision: true,
+    body_material: 'plastic',
+    color: 'white',
+    weatherproof_rating: 'IP66',
+    indoor_outdoor: 'both',
+    warranty_period: '1_year',
+    warranty_type: 'manufacturer',
+    show_in_store: true,
+    allow_in_quotation_builder: true,
+  };
+
+  switch (systemType) {
+    case 'analog':
+      return {
+        ...baseDefaults,
+        connector_type: 'bnc',
+        power_type: '12v_adapter',
+        compatible_with: ['DVR'],
+        onboard_storage: false,
+      };
+    case 'ip':
+      return {
+        ...baseDefaults,
+        connector_type: 'rj45',
+        power_type: 'poe',
+        compatible_with: ['NVR'],
+        onboard_storage: true,
+        sd_card_support: '256gb',
+        motion_detection: true,
+      };
+    case 'wifi':
+      return {
+        ...baseDefaults,
+        connector_type: 'wifi_only',
+        power_type: '12v_adapter',
+        compatible_with: ['NVR'],
+        onboard_storage: true,
+        sd_card_support: '128gb',
+        motion_detection: true,
+        audio_support: true,
+        audio_type: 'mic_speaker',
+      };
+    default:
+      return baseDefaults;
+  }
+};
+
 interface CCTVCameraFieldsProps {
   specs: CCTVSpecs;
   onChange: (specs: CCTVSpecs) => void;
@@ -125,12 +183,45 @@ export default function CCTVCameraFields({ specs, onChange }: CCTVCameraFieldsPr
     updateSpec(key, newArray);
   };
 
+  const handleQuickFillDefaults = () => {
+    if (!specs.cctv_system_type) {
+      return; // Need system type selected first
+    }
+    const defaults = getQuickFillDefaults(specs.cctv_system_type);
+    // Only fill empty fields, preserve already filled values
+    const updatedSpecs = { ...specs };
+    Object.entries(defaults).forEach(([key, value]) => {
+      const specKey = key as keyof CCTVSpecs;
+      const currentValue = specs[specKey];
+      // Only fill if current value is empty/false/empty array
+      if (
+        currentValue === '' ||
+        currentValue === false ||
+        (Array.isArray(currentValue) && currentValue.length === 0)
+      ) {
+        (updatedSpecs as any)[specKey] = value;
+      }
+    });
+    onChange(updatedSpecs);
+  };
+
   return (
     <div className="space-y-6">
       {/* Section 2: CCTV System Classification */}
       <Card className="border-orange-200 bg-orange-50/30">
-        <CardHeader className="pb-3">
+        <CardHeader className="pb-3 flex flex-row items-center justify-between">
           <CardTitle className="text-lg text-orange-800">CCTV System Classification</CardTitle>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleQuickFillDefaults}
+            disabled={!specs.cctv_system_type}
+            className="gap-2"
+          >
+            <Wand2 className="h-4 w-4" />
+            Quick Fill Defaults
+          </Button>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
