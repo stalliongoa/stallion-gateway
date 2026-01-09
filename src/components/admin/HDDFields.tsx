@@ -4,11 +4,33 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Wand2 } from "lucide-react";
 
 interface HDDFieldsProps {
   specs: Record<string, any>;
   onSpecChange: (key: string, value: any) => void;
 }
+
+// Quick fill defaults for HDD
+const getHDDQuickFillDefaults = (hddType: string): Record<string, any> => {
+  const baseDefaults: Record<string, any> = {
+    rpm: '5400',
+    cache_memory: '256MB',
+    compatible_with: ['DVR', 'NVR', 'Both'],
+    interface_type: 'sata3',
+    power_consumption: '5W',
+    operation_24x7: true,
+    workload_rating: 'heavy_duty',
+    warranty_period: '3_years',
+    allow_in_quotation: true,
+  };
+
+  if (hddType === 'enterprise') {
+    return { ...baseDefaults, rpm: '7200', workload_rating: 'heavy_duty' };
+  }
+  return baseDefaults;
+};
 
 export const validateHDDSpecs = (specs: Record<string, any>): string[] => {
   const errors: string[] = [];
@@ -38,11 +60,40 @@ export const HDDFields = ({ specs, onSpecChange }: HDDFieldsProps) => {
     }
   };
 
+  const handleQuickFillDefaults = () => {
+    const defaults = getHDDQuickFillDefaults(specs.hdd_type || 'surveillance');
+    // Only fill empty fields, preserve already filled values
+    Object.entries(defaults).forEach(([key, value]) => {
+      const currentValue = specs[key];
+      if (
+        currentValue === '' ||
+        currentValue === undefined ||
+        currentValue === null ||
+        currentValue === false ||
+        (Array.isArray(currentValue) && currentValue.length === 0)
+      ) {
+        onSpecChange(key, value);
+      }
+    });
+  };
+
   return (
     <div className="space-y-8">
       {/* Section 2: Storage Specifications */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Storage Specifications</h3>
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-lg font-semibold">Storage Specifications</h3>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleQuickFillDefaults}
+            className="gap-2"
+          >
+            <Wand2 className="h-4 w-4" />
+            Quick Fill Defaults
+          </Button>
+        </div>
         <Separator />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">

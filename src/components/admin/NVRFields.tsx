@@ -5,11 +5,49 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Wand2 } from "lucide-react";
 
 interface NVRFieldsProps {
   specs: Record<string, any>;
   onSpecChange: (key: string, value: any) => void;
 }
+
+// Quick fill defaults for NVR
+const getNVRQuickFillDefaults = (channelCapacity: string): Record<string, any> => {
+  const baseDefaults: Record<string, any> = {
+    supported_camera_resolution: ['2 MP', '4 MP', '5 MP', '8 MP'],
+    incoming_bandwidth: '80Mbps',
+    max_hdd_capacity: '8TB',
+    raid_support: false,
+    poe_standard: '802.3af',
+    lan_ports: '1x_gigabit',
+    video_output_ports: ['HDMI', 'VGA'],
+    audio_input: true,
+    audio_output: true,
+    ai_features: ['Motion Detection', 'Human Detection'],
+    onvif_support: true,
+    mobile_app: 'DMSS / Hik-Connect',
+    body_material: 'metal',
+    cooling_fan: true,
+    warranty_period: '1_year',
+    allow_in_quotation: true,
+  };
+
+  // Set PoE ports and SATA based on channel capacity
+  switch (channelCapacity) {
+    case '4':
+      return { ...baseDefaults, poe_ports: '4', sata_ports: '1' };
+    case '8':
+      return { ...baseDefaults, poe_ports: '8', sata_ports: '1' };
+    case '16':
+      return { ...baseDefaults, poe_ports: '16', sata_ports: '2', incoming_bandwidth: '160Mbps' };
+    case '32':
+      return { ...baseDefaults, poe_ports: 'none', sata_ports: '4', incoming_bandwidth: '320Mbps' };
+    default:
+      return baseDefaults;
+  }
+};
 
 export const validateNVRSpecs = (specs: Record<string, any>): string[] => {
   const errors: string[] = [];
@@ -40,13 +78,42 @@ export const NVRFields = ({ specs, onSpecChange }: NVRFieldsProps) => {
     }
   };
 
+  const handleQuickFillDefaults = () => {
+    const defaults = getNVRQuickFillDefaults(specs.channel_capacity || '8');
+    // Only fill empty fields, preserve already filled values
+    Object.entries(defaults).forEach(([key, value]) => {
+      const currentValue = specs[key];
+      if (
+        currentValue === '' ||
+        currentValue === undefined ||
+        currentValue === null ||
+        currentValue === false ||
+        (Array.isArray(currentValue) && currentValue.length === 0)
+      ) {
+        onSpecChange(key, value);
+      }
+    });
+  };
+
   return (
     <div className="space-y-8">
       {/* Section 2: System Classification */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <h3 className="text-lg font-semibold">System Classification</h3>
-          <Badge variant="secondary">Auto-set</Badge>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold">System Classification</h3>
+            <Badge variant="secondary">Auto-set</Badge>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleQuickFillDefaults}
+            className="gap-2"
+          >
+            <Wand2 className="h-4 w-4" />
+            Quick Fill Defaults
+          </Button>
         </div>
         <Separator />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

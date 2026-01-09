@@ -50,7 +50,7 @@ serve(async (req) => {
     const htmlContent = await pageResponse.text();
     
     // Extract more relevant content - increase limit for better extraction
-    const truncatedContent = htmlContent.substring(0, 80000);
+    const truncatedContent = htmlContent.substring(0, 100000);
 
     console.log('Extracting product info with AI...');
 
@@ -66,15 +66,53 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are an expert CCTV/Security product information extractor. Your task is to THOROUGHLY extract ALL product details from the HTML content provided.
+            content: `You are an expert CCTV/Security product information extractor. Your task is to THOROUGHLY extract ALL product details from the HTML content provided. You must extract EVERY specification available - physical dimensions, weight, audio features, night vision details, smart features, warranty, etc.
 
 IMPORTANT EXTRACTION RULES:
-1. Look for specification tables with key-value pairs
-2. Extract data from product description sections
-3. Look for technical specifications in lists or bullet points
+1. Look for ALL specification tables with key-value pairs - extract EVERYTHING
+2. Extract data from product description sections thoroughly
+3. Look for technical specifications in lists, bullet points, tables
 4. Parse model numbers from product titles and headings
-5. Find datasheet/manual URLs
-6. Extract image URLs from img tags
+5. Find datasheet/manual URLs (look for PDF links)
+6. Extract image URLs from img tags (especially product images)
+7. ALWAYS extract physical details: dimensions (convert mm to cm), weight (convert grams to kg)
+8. ALWAYS extract audio features: microphone, speaker, two-way audio
+9. ALWAYS extract night vision details: IR range, color night vision, dual light
+10. ALWAYS extract smart/AI features: motion detection, human detection, line crossing
+11. ALWAYS extract warranty information
+
+PHYSICAL DIMENSION EXTRACTION:
+- Look for "Dimensions", "Size", "Product Size", "Body Size" fields
+- Convert millimeters to centimeters (divide by 10)
+- Format as "L x W x H" in cm (e.g., "12 x 8 x 6")
+- Look for values like "120mm x 80mm x 60mm" and convert to "12 x 8 x 6"
+
+WEIGHT EXTRACTION:
+- Look for "Weight", "Net Weight", "Product Weight" fields
+- Convert grams to kilograms (divide by 1000)
+- Return as decimal number (e.g., 0.35 for 350g)
+- Look for values like "350g" or "0.35kg"
+
+AUDIO FEATURES:
+- Look for "Audio", "Microphone", "Speaker", "Two-Way Audio" fields
+- Check for "Built-in Mic", "Built-in Speaker", "Audio I/O"
+- Determine audio_type: "Built-in Mic", "Built-in Mic & Speaker", "External", "None"
+
+NIGHT VISION FEATURES:
+- Look for "IR LED", "IR Range", "Illumination Distance", "Night Vision" fields
+- Check "Day/Night" field - if "Color", then color_night_vision is true
+- Look for "Warm White LED", "Full Color Night Vision"
+- Extract exact IR range in meters (e.g., "30m")
+- Check for "Dual Light" or "Smart IR"
+
+SMART/AI FEATURES:
+- Look for "Smart Event", "AI Features", "Intelligent Analysis" fields
+- Common features: Motion Detection, Human Detection, Face Detection, Line Crossing, Intrusion Detection
+- Check for "SMD" (Smart Motion Detection), "IVS", "VCA"
+
+WARRANTY:
+- Look for "Warranty", "Guarantee" fields
+- Common values: "1 Year", "2 Years", "3 Years"
 
 Return ONLY a valid JSON object with these fields (use null for missing values, true/false for boolean questions):
 
@@ -84,42 +122,43 @@ Return ONLY a valid JSON object with these fields (use null for missing values, 
   "model_number": "exact model number (e.g., CP-GPC-LT24L3)",
   "short_description": "brief product description max 200 chars",
   "description": "detailed product description",
-  "dimensions_cm": "dimensions in format LxWxH (convert from mm if needed)",
-  "weight_kg": "weight as number (convert from grams if needed)",
-  "warranty_months": "warranty in months as number",
-  "mrp": "price as number without currency symbols",
+  "dimensions_cm": "dimensions in format L x W x H cm (e.g., '12 x 8 x 6')",
+  "weight_kg": weight as number in kg (e.g., 0.35 for 350g),
+  "warranty_months": warranty in months as number (12 for 1 year, 24 for 2 years),
+  "mrp": price as number without currency symbols,
   "datasheet_url": "URL to PDF datasheet if found",
   
   "specifications": {
-    "cctv_system_type": "Analog or IP or WiFi (determine from product - Guard+/Analog cameras are 'Analog', Network/IP cameras are 'IP')",
-    "camera_type": "Dome or Bullet or PTZ or Box or Fisheye or Turret (from BodyType field)",
-    "indoor_outdoor": "Indoor or Outdoor or Both (from IP rating - IP65+ means Outdoor capable)",
-    "resolution": "1080p or 2K or 4K or 5MP (based on megapixel: 2MP=1080p, 4MP=2K, 5MP=5MP, 8MP=4K)",
-    "megapixel": "2 MP or 4 MP or 5 MP or 8 MP (extract from Image Sensor or product name - 2.4MP rounds to 2 MP)",
-    "lens_type": "Fixed or Varifocal or Motorized (from Lens Type or Focus Control)",
-    "lens_size": "2.8mm or 3.6mm or 6mm or actual value",
-    "frame_rate": "25 fps or 30 fps (from Video Streaming or Max Frame Rate)",
-    "night_vision": true if camera has IR LED or warm white LED or any night capability,
-    "night_vision_type": "IR or Full Color or Dual Light (Full Color if has white LED)",
-    "ir_support": true if has Infrared LED or IR capability,
-    "ir_range": "20m or 30m or 40m or 50m (from Illumination Distance or IR Range)",
-    "bw_night_vision": true if has IR night vision capability,
-    "color_night_vision": true if has Full Color or Warm White night vision (Day/Night: Color means true),
-    "audio_support": true if has microphone or audio input,
+    "cctv_system_type": "Analog or IP or WiFi",
+    "camera_type": "Dome or Bullet or PTZ or Box or Fisheye or Turret",
+    "indoor_outdoor": "Indoor or Outdoor or Both",
+    "resolution": "1080p or 2K or 4K or 5MP",
+    "megapixel": "2 MP or 4 MP or 5 MP or 8 MP",
+    "lens_type": "Fixed or Varifocal or Motorized",
+    "lens_size": "2.8mm or 3.6mm or 6mm",
+    "frame_rate": "25 fps or 30 fps",
+    "night_vision": true/false,
+    "night_vision_type": "IR or Full Color or Dual Light",
+    "ir_support": true/false,
+    "ir_range": "20m or 30m or 40m or 50m",
+    "bw_night_vision": true/false (true if has IR night vision),
+    "color_night_vision": true/false (true if Day/Night: Color or has warm white LED),
+    "audio_support": true/false,
     "audio_type": "Built-in Mic or Built-in Mic & Speaker or External or None",
-    "motion_detection": true if has motion detection feature,
-    "human_detection": true if has human detection or AI detection,
-    "ai_features": ["Face Detection", "Line Crossing", "Intrusion Detection"] - only include if mentioned,
-    "body_material": "Plastic or Metal or Aluminum (from Casing or Body Material)",
+    "two_way_audio": true/false,
+    "motion_detection": true/false,
+    "human_detection": true/false,
+    "ai_features": ["Motion Detection", "Human Detection", "Line Crossing", etc.],
+    "body_material": "Plastic or Metal or Aluminum",
     "color": "White or Black or Grey",
-    "weatherproof_rating": "IP65 or IP66 or IP67 (from Weatherproof Standard or IP Rating)",
-    "power_type": "12V DC or PoE or Dual (from Power Source - DC12V means 12V DC)",
-    "connector_type": "BNC or RJ45 (Analog=BNC, IP=RJ45)",
-    "onboard_storage": true if has SD card slot,
+    "weatherproof_rating": "IP65 or IP66 or IP67",
+    "power_type": "12V DC or PoE or Dual",
+    "connector_type": "BNC or RJ45",
+    "onboard_storage": true/false,
     "sd_card_support": "Up to 128 GB or Up to 256 GB or Up to 512 GB or None",
-    "poe_support": true if PoE is mentioned,
-    "compatible_with": ["DVR"] for Analog cameras, ["NVR"] for IP cameras, ["Both"] for dual,
-    "warranty_period": "1 Year or 2 Years or 3 Years or 5 Years"
+    "poe_support": true/false,
+    "compatible_with": ["DVR"] for Analog, ["NVR"] for IP,
+    "warranty_period": "1 Year or 2 Years or 3 Years"
   },
   
   "images": ["array of full image URLs found on page"]
@@ -133,16 +172,29 @@ CRITICAL MAPPING RULES:
 - IP66 weatherproof = indoor_outdoor: "Outdoor" or "Both"
 - DC12V power = power_type: "12V DC"
 - Casing: Plastic = body_material: "Plastic"
-- If Illumination Distance mentions meters, extract as ir_range
+- If Illumination Distance or IR Range mentions meters, extract as ir_range
 - Warm White LED or Day/Night: Color = color_night_vision: true
 - For Analog cameras, connector_type should be "BNC"
 - Extract datasheet URL if PDF link is found
+- Built-in Audio or Mic = audio_support: true
+- If Day/Night shows "Color" = color_night_vision: true
+- Convert ALL dimensions from mm to cm
+- Convert ALL weights from grams to kg
 
 EXTRACT EVERY PIECE OF INFORMATION AVAILABLE. Do not leave fields empty if data exists.`
           },
           {
             role: "user",
-            content: `Extract ALL product information from this HTML content. Pay special attention to specification tables:\n\n${truncatedContent}`
+            content: `Extract ALL product information from this HTML content. Pay special attention to:
+1. Specification tables - extract ALL key-value pairs
+2. Physical details: dimensions (convert mm to cm), weight (convert grams to kg)
+3. Audio features: microphone, speaker, two-way audio
+4. Night vision: IR range, color night vision, dual light
+5. Smart features: motion detection, human detection, AI features
+6. Warranty period
+
+HTML Content:
+${truncatedContent}`
           }
         ],
         tools: [
@@ -150,7 +202,7 @@ EXTRACT EVERY PIECE OF INFORMATION AVAILABLE. Do not leave fields empty if data 
             type: "function",
             function: {
               name: "extract_product_info",
-              description: "Extract complete product information from HTML content",
+              description: "Extract complete product information from HTML content including physical dimensions, weight, audio, night vision, smart features, and warranty",
               parameters: {
                 type: "object",
                 properties: {
@@ -159,7 +211,7 @@ EXTRACT EVERY PIECE OF INFORMATION AVAILABLE. Do not leave fields empty if data 
                   model_number: { type: "string", description: "Model number" },
                   short_description: { type: "string", description: "Short description" },
                   description: { type: "string", description: "Full description" },
-                  dimensions_cm: { type: "string", description: "Dimensions" },
+                  dimensions_cm: { type: "string", description: "Dimensions in cm format (L x W x H)" },
                   weight_kg: { type: "number", description: "Weight in kg" },
                   warranty_months: { type: "number", description: "Warranty in months" },
                   mrp: { type: "number", description: "MRP price" },
@@ -183,6 +235,7 @@ EXTRACT EVERY PIECE OF INFORMATION AVAILABLE. Do not leave fields empty if data 
                       color_night_vision: { type: "boolean" },
                       audio_support: { type: "boolean" },
                       audio_type: { type: "string" },
+                      two_way_audio: { type: "boolean" },
                       motion_detection: { type: "boolean" },
                       human_detection: { type: "boolean" },
                       ai_features: { type: "array", items: { type: "string" } },
