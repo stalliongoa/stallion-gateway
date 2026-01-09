@@ -2,6 +2,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Wand2 } from "lucide-react";
 
 interface SMPSFieldsProps {
   specifications: Record<string, any>;
@@ -25,8 +27,51 @@ export const validateSMPSSpecs = (specifications: Record<string, any>): string |
 };
 
 const SMPSFields = ({ specifications, onSpecificationChange }: SMPSFieldsProps) => {
+  const handleQuickFillDefaults = () => {
+    const channels = specifications.channels || '';
+    
+    // Set output voltage to 12V (standard for CCTV)
+    if (!specifications.output_voltage) onSpecificationChange('output_voltage', '12V');
+    
+    // Set amperage based on channels
+    if (!specifications.amperage) {
+      if (channels === '4') {
+        onSpecificationChange('amperage', '5A');
+      } else if (channels === '8') {
+        onSpecificationChange('amperage', '10A');
+      } else if (channels === '16') {
+        onSpecificationChange('amperage', '20A');
+      } else {
+        onSpecificationChange('amperage', '10A');
+      }
+    }
+    
+    // Default to metal body for better durability
+    if (specifications.metal_body === undefined || specifications.metal_body === null) {
+      onSpecificationChange('metal_body', true);
+    }
+    
+    // Enable for quotation builder
+    if (!specifications.allow_in_quotation) {
+      onSpecificationChange('allow_in_quotation', true);
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* Quick Fill Defaults Button */}
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleQuickFillDefaults}
+          className="gap-2"
+        >
+          <Wand2 className="h-4 w-4" />
+          Quick Fill Defaults
+        </Button>
+      </div>
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-foreground border-b pb-2">SMPS (Power Supply) Specifications</h3>
         
