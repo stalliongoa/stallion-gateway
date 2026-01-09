@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import { Wand2 } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -41,8 +43,52 @@ export function PoESwitchFields({
     onChange({ ...specs, [key]: value });
   };
 
+  const handleQuickFillDefaults = () => {
+    const totalPorts = specs.total_ports || '';
+    const updates: Record<string, any> = { ...specs };
+    
+    // Set PoE ports based on total ports
+    if (!specs.poe_ports && totalPorts) {
+      updates.poe_ports = totalPorts;
+    }
+    
+    // Default to IEEE 802.3at (PoE+) which is most common for CCTV
+    if (!specs.poe_standard) updates.poe_standard = 'IEEE 802.3at';
+    
+    // Default to unmanaged for simpler CCTV setups
+    if (!specs.is_managed) updates.is_managed = 'no';
+    
+    // Set total PoE power based on ports
+    if (!specs.total_poe_power) {
+      const ports = parseInt(updates.poe_ports || '4');
+      // Approximate 30W per port for PoE+
+      updates.total_poe_power = (ports * 30).toString();
+    }
+    
+    // Default warranty
+    if (!specs.warranty_period) updates.warranty_period = '2 Years';
+    
+    // Enable for quotation builder
+    if (specs.allow_in_quotation === undefined) updates.allow_in_quotation = true;
+    
+    onChange(updates);
+  };
+
   return (
     <div className="space-y-6">
+      {/* Quick Fill Defaults Button */}
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleQuickFillDefaults}
+          className="gap-2"
+        >
+          <Wand2 className="h-4 w-4" />
+          Quick Fill Defaults
+        </Button>
+      </div>
       {/* Section 1: Basic Info */}
       <Card>
         <CardHeader>

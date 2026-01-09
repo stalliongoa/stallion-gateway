@@ -4,6 +4,8 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Wand2 } from "lucide-react";
 
 interface UPSFieldsProps {
   specs: Record<string, any>;
@@ -37,8 +39,55 @@ export const UPSFields = ({ specs, onSpecChange }: UPSFieldsProps) => {
     }
   };
 
+  const handleQuickFillDefaults = () => {
+    const capacityVa = specs.capacity_va || '';
+    
+    // Set defaults based on capacity
+    if (!specs.ups_type) onSpecChange('ups_type', 'line_interactive');
+    if (!specs.battery_type) onSpecChange('battery_type', 'sealed_lead_acid');
+    if (!specs.battery_count) onSpecChange('battery_count', '1');
+    if (!specs.input_voltage_range) onSpecChange('input_voltage_range', '140V–300V');
+    if (!specs.output_voltage) onSpecChange('output_voltage', '230V AC');
+    if (!specs.socket_type) onSpecChange('socket_type', 'indian_3pin');
+    if (!specs.warranty_period) onSpecChange('warranty_period', '1_year');
+    if (specs.allow_in_quotation === undefined) onSpecChange('allow_in_quotation', true);
+    
+    // Set recommended for CCTV equipment
+    if (!specs.recommended_for || specs.recommended_for.length === 0) {
+      onSpecChange('recommended_for', ['CCTV System', 'DVR/NVR']);
+    }
+    
+    // Set capacity-based defaults
+    if (capacityVa === '600' || capacityVa === '800') {
+      if (!specs.backup_time) onSpecChange('backup_time', '15min');
+      if (!specs.output_power_watts) onSpecChange('output_power_watts', capacityVa === '600' ? '360' : '480');
+      if (!specs.max_load_watts) onSpecChange('max_load_watts', capacityVa === '600' ? '360' : '480');
+    } else if (capacityVa === '1000') {
+      if (!specs.backup_time) onSpecChange('backup_time', '30min');
+      if (!specs.output_power_watts) onSpecChange('output_power_watts', '600');
+      if (!specs.max_load_watts) onSpecChange('max_load_watts', '600');
+    } else if (capacityVa === '2000' || capacityVa === '3000') {
+      if (!specs.backup_time) onSpecChange('backup_time', '1hour');
+      if (!specs.output_power_watts) onSpecChange('output_power_watts', capacityVa === '2000' ? '1200' : '1800');
+      if (!specs.max_load_watts) onSpecChange('max_load_watts', capacityVa === '2000' ? '1200' : '1800');
+    }
+  };
+
   return (
     <div className="space-y-8">
+      {/* Quick Fill Defaults Button */}
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleQuickFillDefaults}
+          className="gap-2"
+        >
+          <Wand2 className="h-4 w-4" />
+          Quick Fill Defaults
+        </Button>
+      </div>
       {/* Section 2: Power Specifications */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Power Specifications</h3>
