@@ -5,11 +5,51 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Wand2 } from "lucide-react";
 
 interface DVRFieldsProps {
   specs: Record<string, any>;
   onSpecChange: (key: string, value: any) => void;
 }
+
+// Quick fill defaults for DVR
+const getDVRQuickFillDefaults = (channelCapacity: string): Record<string, any> => {
+  const baseDefaults: Record<string, any> = {
+    supported_camera_resolution: ['2 MP', '4 MP', '5 MP'],
+    recording_resolution: '1080p',
+    max_hdd_capacity: '8TB',
+    supported_hdd_type: 'surveillance',
+    power_input: '12V DC',
+    video_input_type: ['BNC', 'AHD', 'CVI', 'TVI'],
+    video_output_ports: ['HDMI', 'VGA'],
+    audio_input: true,
+    audio_output: true,
+    audio_channels: '1',
+    lan_port: '10/100',
+    remote_viewing: true,
+    mobile_app: 'iCMOB / gCMOB',
+    ai_features: ['Motion Detection'],
+    body_material: 'metal',
+    cooling_fan: true,
+    warranty_period: '1_year',
+    allow_in_quotation: true,
+  };
+
+  // Set power supply type based on channel capacity
+  switch (channelCapacity) {
+    case '4':
+      return { ...baseDefaults, power_supply_type: '4ch_smps', sata_ports: '1' };
+    case '8':
+      return { ...baseDefaults, power_supply_type: '8ch_smps', sata_ports: '1' };
+    case '16':
+      return { ...baseDefaults, power_supply_type: '16ch_smps', sata_ports: '2' };
+    case '32':
+      return { ...baseDefaults, power_supply_type: '16ch_smps', sata_ports: '2' };
+    default:
+      return baseDefaults;
+  }
+};
 
 export const validateDVRSpecs = (specs: Record<string, any>): string[] => {
   const errors: string[] = [];
@@ -41,13 +81,42 @@ export const DVRFields = ({ specs, onSpecChange }: DVRFieldsProps) => {
     }
   };
 
+  const handleQuickFillDefaults = () => {
+    const defaults = getDVRQuickFillDefaults(specs.channel_capacity || '8');
+    // Only fill empty fields, preserve already filled values
+    Object.entries(defaults).forEach(([key, value]) => {
+      const currentValue = specs[key];
+      if (
+        currentValue === '' ||
+        currentValue === undefined ||
+        currentValue === null ||
+        currentValue === false ||
+        (Array.isArray(currentValue) && currentValue.length === 0)
+      ) {
+        onSpecChange(key, value);
+      }
+    });
+  };
+
   return (
     <div className="space-y-8">
       {/* Section 2: System Classification */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <h3 className="text-lg font-semibold">System Classification</h3>
-          <Badge variant="secondary">Auto-set</Badge>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold">System Classification</h3>
+            <Badge variant="secondary">Auto-set</Badge>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleQuickFillDefaults}
+            className="gap-2"
+          >
+            <Wand2 className="h-4 w-4" />
+            Quick Fill Defaults
+          </Button>
         </div>
         <Separator />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
