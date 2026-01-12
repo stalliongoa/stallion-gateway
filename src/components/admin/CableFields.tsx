@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import { Wand2 } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -10,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { toast } from '@/hooks/use-toast';
 
 interface CableFieldsProps {
   specs: Record<string, any>;
@@ -103,8 +106,76 @@ export function CableFields({
     }
   };
 
+  const handleQuickFillDefaults = () => {
+    const category = specs.cable_category;
+    if (!category) {
+      toast({
+        title: "Select Cable Category First",
+        description: "Please select a cable category to apply defaults.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const updates: Record<string, any> = { ...specs };
+    let filled = false;
+
+    if (category === 'CCTV Coaxial') {
+      if (!specs.cable_type) { updates.cable_type = 'RG59'; filled = true; }
+      if (!specs.conductor_material) { updates.conductor_material = 'Copper'; filled = true; }
+      if (!specs.shielding) { updates.shielding = 'Single Shielded (FTP)'; filled = true; }
+      if (!specs.compatible_with?.length) { updates.compatible_with = ['CCTV Camera', 'DVR']; filled = true; }
+      if (!specs.warranty_period) { updates.warranty_period = '1 Year'; filled = true; }
+    } else if (category === 'LAN') {
+      if (!specs.cable_type) { updates.cable_type = 'Cat6'; filled = true; }
+      if (!specs.conductor_material) { updates.conductor_material = 'Copper'; filled = true; }
+      if (!specs.shielding) { updates.shielding = 'Unshielded (UTP)'; filled = true; }
+      if (!specs.compatible_with?.length) { updates.compatible_with = ['NVR', 'Network Devices', 'Router', 'Switch']; filled = true; }
+      if (!specs.warranty_period) { updates.warranty_period = '1 Year'; filled = true; }
+    } else if (category === 'HDMI') {
+      if (!specs.cable_type) { updates.cable_type = 'HDMI'; filled = true; }
+      if (!specs.compatible_with?.length) { updates.compatible_with = ['DVR', 'NVR', 'Monitor']; filled = true; }
+      if (!specs.warranty_period) { updates.warranty_period = '1 Year'; filled = true; }
+    } else if (category === 'Power Cable') {
+      if (!specs.cable_type) { updates.cable_type = 'Power'; filled = true; }
+      if (!specs.conductor_material) { updates.conductor_material = 'Copper'; filled = true; }
+      if (!specs.compatible_with?.length) { updates.compatible_with = ['CCTV Camera', 'DVR', 'NVR']; filled = true; }
+      if (!specs.warranty_period) { updates.warranty_period = '6 Months'; filled = true; }
+    }
+
+    // Common defaults
+    if (specs.allow_in_quotation === undefined) { updates.allow_in_quotation = true; filled = true; }
+    if (specs.is_active === undefined) { updates.is_active = true; filled = true; }
+
+    if (filled) {
+      onChange(updates);
+      toast({
+        title: "Defaults Applied",
+        description: `${category} cable defaults have been applied.`,
+      });
+    } else {
+      toast({
+        title: "No Changes",
+        description: "All fields already have values.",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* Quick Fill Defaults Button */}
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleQuickFillDefaults}
+          disabled={!specs.cable_category}
+          className="gap-2"
+        >
+          <Wand2 className="h-4 w-4" />
+          Quick Fill Defaults
+        </Button>
+      </div>
       {/* Section 1: Basic Information */}
       <Card>
         <CardHeader>

@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import { Wand2 } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -9,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { toast } from '@/hooks/use-toast';
 
 interface BNCConnectorFieldsProps {
   specs: Record<string, any>;
@@ -41,8 +44,46 @@ export function BNCConnectorFields({
     onChange({ ...specs, [key]: value });
   };
 
+  const handleQuickFillDefaults = () => {
+    const updates: Record<string, any> = { ...specs };
+    let filled = false;
+
+    // Common BNC connector defaults
+    if (!specs.connector_type) { updates.connector_type = 'Crimp'; filled = true; }
+    if (!specs.material) { updates.material = 'Brass'; filled = true; }
+    if (!specs.compatible_cable) { updates.compatible_cable = 'RG59'; filled = true; }
+    if (!specs.pack_size) { updates.pack_size = '10 Pcs'; filled = true; }
+    if (specs.allow_in_quotation === undefined) { updates.allow_in_quotation = true; filled = true; }
+
+    if (filled) {
+      onChange(updates);
+      toast({
+        title: "Defaults Applied",
+        description: "BNC connector defaults have been applied.",
+      });
+    } else {
+      toast({
+        title: "No Changes",
+        description: "All fields already have values.",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* Quick Fill Defaults Button */}
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleQuickFillDefaults}
+          className="gap-2"
+        >
+          <Wand2 className="h-4 w-4" />
+          Quick Fill Defaults
+        </Button>
+      </div>
+
       {/* Section 1: Connector Specifications */}
       <Card>
         <CardHeader>
