@@ -2,6 +2,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Wand2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface RJ45ConnectorFieldsProps {
   specifications: Record<string, any>;
@@ -22,8 +25,43 @@ export const validateRJ45ConnectorSpecs = (specifications: Record<string, any>):
 };
 
 const RJ45ConnectorFields = ({ specifications, onSpecificationChange }: RJ45ConnectorFieldsProps) => {
+  const handleQuickFillDefaults = () => {
+    let filled = false;
+
+    // Common RJ45 connector defaults
+    if (!specifications.cable_category) { onSpecificationChange("cable_category", "Cat6"); filled = true; }
+    if (!specifications.connector_type) { onSpecificationChange("connector_type", "Pass Through"); filled = true; }
+    if (!specifications.pack_size) { onSpecificationChange("pack_size", 100); filled = true; }
+    if (specifications.allow_in_quotation === undefined) { onSpecificationChange("allow_in_quotation", true); filled = true; }
+
+    if (filled) {
+      toast({
+        title: "Defaults Applied",
+        description: "RJ45 connector defaults have been applied.",
+      });
+    } else {
+      toast({
+        title: "No Changes",
+        description: "All fields already have values.",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* Quick Fill Defaults Button */}
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleQuickFillDefaults}
+          className="gap-2"
+        >
+          <Wand2 className="h-4 w-4" />
+          Quick Fill Defaults
+        </Button>
+      </div>
+
       {/* Section: Connector Specifications */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-foreground border-b pb-2">Connector Specifications</h3>
