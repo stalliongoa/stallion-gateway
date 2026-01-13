@@ -1583,16 +1583,16 @@ export default function ShopAdminProductForm() {
                         <Input id="mrp" type="number" step="0.01" value={formData.mrp} onChange={(e) => setFormData({ ...formData, mrp: e.target.value })} placeholder="0.00" />
                       </div>
                       <div>
-                        <Label htmlFor="selling_price">Selling Price (With Tax) ₹ *</Label>
+                        <Label htmlFor="selling_price">Selling Price (Without Tax) ₹ *</Label>
                         <Input id="selling_price" type="number" step="0.01" value={formData.selling_price} onChange={(e) => setFormData({ ...formData, selling_price: e.target.value })} placeholder="0.00" />
                       </div>
                       <div>
                         <Label>Selling Tax Amount (₹)</Label>
-                        <Input type="text" readOnly className="bg-muted" value={`₹ ${((parseFloat(formData.selling_price) || 0) - (parseFloat(formData.selling_price) || 0) / (1 + (parseFloat(formData.tax_rate) || 0) / 100)).toFixed(2)}`} />
+                        <Input type="text" readOnly className="bg-muted" value={`₹ ${((parseFloat(formData.selling_price) || 0) * (parseFloat(formData.tax_rate) || 0) / 100).toFixed(2)}`} />
                       </div>
                       <div>
-                        <Label>Selling Price (Without Tax) ₹</Label>
-                        <Input type="text" readOnly className="bg-muted" value={`₹ ${((parseFloat(formData.selling_price) || 0) / (1 + (parseFloat(formData.tax_rate) || 0) / 100)).toFixed(2)}`} />
+                        <Label>Total Selling (With Tax) ₹</Label>
+                        <Input type="text" readOnly className="bg-muted font-semibold text-primary" value={`₹ ${((parseFloat(formData.selling_price) || 0) * (1 + (parseFloat(formData.tax_rate) || 0) / 100)).toFixed(2)}`} />
                       </div>
                     </div>
                   </div>
@@ -1608,7 +1608,8 @@ export default function ShopAdminProductForm() {
                           const sellingPrice = parseFloat(formData.selling_price) || 0;
                           const taxRate = parseFloat(formData.tax_rate) || 0;
                           const totalPurchaseWithTax = purchasePrice * (1 + taxRate / 100);
-                          const profit = sellingPrice - totalPurchaseWithTax;
+                          const totalSellingWithTax = sellingPrice * (1 + taxRate / 100);
+                          const profit = totalSellingWithTax - totalPurchaseWithTax;
                           return <Input type="text" readOnly className={`bg-muted font-semibold ${profit > 0 ? 'text-green-600' : profit < 0 ? 'text-red-600' : ''}`} value={`₹ ${profit.toFixed(2)}`} />;
                         })()}
                       </div>
@@ -1619,7 +1620,8 @@ export default function ShopAdminProductForm() {
                           const sellingPrice = parseFloat(formData.selling_price) || 0;
                           const taxRate = parseFloat(formData.tax_rate) || 0;
                           const totalPurchaseWithTax = purchasePrice * (1 + taxRate / 100);
-                          const profit = sellingPrice - totalPurchaseWithTax;
+                          const totalSellingWithTax = sellingPrice * (1 + taxRate / 100);
+                          const profit = totalSellingWithTax - totalPurchaseWithTax;
                           const margin = totalPurchaseWithTax > 0 ? (profit / totalPurchaseWithTax) * 100 : 0;
                           return <Input type="text" readOnly className={`bg-muted font-semibold ${profit > 0 ? 'text-green-600' : profit < 0 ? 'text-red-600' : ''}`} value={`${margin.toFixed(2)}%`} />;
                         })()}
@@ -1632,11 +1634,12 @@ export default function ShopAdminProductForm() {
                             const sellingPrice = parseFloat(formData.selling_price) || 0;
                             const taxRate = parseFloat(formData.tax_rate) || 0;
                             const totalPurchaseWithTax = purchasePrice * (1 + taxRate / 100);
-                            const profit = sellingPrice - totalPurchaseWithTax;
+                            const totalSellingWithTax = sellingPrice * (1 + taxRate / 100);
+                            const profit = totalSellingWithTax - totalPurchaseWithTax;
                             return (
                               <>
                                 <div className="flex justify-between"><span className="text-muted-foreground">Purchase (with tax):</span><span className="font-medium">₹ {totalPurchaseWithTax.toFixed(2)}</span></div>
-                                <div className="flex justify-between"><span className="text-muted-foreground">Selling (with tax):</span><span className="font-medium">₹ {sellingPrice.toFixed(2)}</span></div>
+                                <div className="flex justify-between"><span className="text-muted-foreground">Selling (with tax):</span><span className="font-medium">₹ {totalSellingWithTax.toFixed(2)}</span></div>
                                 <div className="flex justify-between border-t pt-1 mt-1"><span className="text-muted-foreground font-medium">Net Profit:</span><span className={`font-semibold ${profit > 0 ? 'text-green-600' : profit < 0 ? 'text-red-600' : ''}`}>₹ {profit.toFixed(2)}</span></div>
                               </>
                             );
