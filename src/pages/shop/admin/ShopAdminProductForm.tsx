@@ -1535,65 +1535,117 @@ export default function ShopAdminProductForm() {
                 <CardHeader>
                   <CardTitle>Pricing</CardTitle>
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div>
-                    <Label htmlFor="mrp">MRP (₹)</Label>
-                    <Input
-                      id="mrp"
-                      type="number"
-                      step="0.01"
-                      value={formData.mrp}
-                      onChange={(e) => setFormData({ ...formData, mrp: e.target.value })}
-                    />
+                <CardContent className="space-y-6">
+                  {/* Purchase Section */}
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-semibold text-muted-foreground border-b pb-2">Purchase Details</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div>
+                        <Label htmlFor="purchase_price">Purchase Price (Without Tax) ₹ *</Label>
+                        <Input id="purchase_price" type="number" step="0.01" value={formData.purchase_price} onChange={(e) => setFormData({ ...formData, purchase_price: e.target.value })} placeholder="0.00" />
+                      </div>
+                      <div>
+                        <Label htmlFor="tax_rate">Tax Rate (%)</Label>
+                        <Select value={formData.tax_rate} onValueChange={(v) => setFormData({ ...formData, tax_rate: v })}>
+                          <SelectTrigger><SelectValue placeholder="Select tax rate" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="0">0%</SelectItem>
+                            <SelectItem value="5">5%</SelectItem>
+                            <SelectItem value="12">12%</SelectItem>
+                            <SelectItem value="18">18%</SelectItem>
+                            <SelectItem value="28">28%</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Tax Amount (₹)</Label>
+                        <Input type="text" readOnly className="bg-muted" value={`₹ ${((parseFloat(formData.purchase_price) || 0) * (parseFloat(formData.tax_rate) || 0) / 100).toFixed(2)}`} />
+                      </div>
+                      <div>
+                        <Label>Total Purchase (With Tax) ₹</Label>
+                        <Input type="text" readOnly className="bg-muted font-semibold" value={`₹ ${((parseFloat(formData.purchase_price) || 0) * (1 + (parseFloat(formData.tax_rate) || 0) / 100)).toFixed(2)}`} />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div>
+                        <Label htmlFor="hsn_code">HSN Code (Optional)</Label>
+                        <Input id="hsn_code" value={formData.hsn_code} onChange={(e) => setFormData({ ...formData, hsn_code: e.target.value })} placeholder="e.g., 85258090" />
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="selling_price">Selling Price (₹)</Label>
-                    <Input
-                      id="selling_price"
-                      type="number"
-                      step="0.01"
-                      value={formData.selling_price}
-                      onChange={(e) => setFormData({ ...formData, selling_price: e.target.value })}
-                    />
+                  
+                  {/* Selling Section */}
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-semibold text-muted-foreground border-b pb-2">Selling Details</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div>
+                        <Label htmlFor="mrp">MRP (₹)</Label>
+                        <Input id="mrp" type="number" step="0.01" value={formData.mrp} onChange={(e) => setFormData({ ...formData, mrp: e.target.value })} placeholder="0.00" />
+                      </div>
+                      <div>
+                        <Label htmlFor="selling_price">Selling Price (With Tax) ₹ *</Label>
+                        <Input id="selling_price" type="number" step="0.01" value={formData.selling_price} onChange={(e) => setFormData({ ...formData, selling_price: e.target.value })} placeholder="0.00" />
+                      </div>
+                      <div>
+                        <Label>Selling Tax Amount (₹)</Label>
+                        <Input type="text" readOnly className="bg-muted" value={`₹ ${((parseFloat(formData.selling_price) || 0) - (parseFloat(formData.selling_price) || 0) / (1 + (parseFloat(formData.tax_rate) || 0) / 100)).toFixed(2)}`} />
+                      </div>
+                      <div>
+                        <Label>Selling Price (Without Tax) ₹</Label>
+                        <Input type="text" readOnly className="bg-muted" value={`₹ ${((parseFloat(formData.selling_price) || 0) / (1 + (parseFloat(formData.tax_rate) || 0) / 100)).toFixed(2)}`} />
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="purchase_price">Purchase Price (₹)</Label>
-                    <Input
-                      id="purchase_price"
-                      type="number"
-                      step="0.01"
-                      value={formData.purchase_price}
-                      onChange={(e) => setFormData({ ...formData, purchase_price: e.target.value })}
-                    />
+                  
+                  {/* Profit Section */}
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-semibold text-muted-foreground border-b pb-2">Profit Analysis</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div>
+                        <Label>Profit Amount (₹)</Label>
+                        {(() => {
+                          const purchasePrice = parseFloat(formData.purchase_price) || 0;
+                          const sellingPrice = parseFloat(formData.selling_price) || 0;
+                          const taxRate = parseFloat(formData.tax_rate) || 0;
+                          const totalPurchaseWithTax = purchasePrice * (1 + taxRate / 100);
+                          const profit = sellingPrice - totalPurchaseWithTax;
+                          return <Input type="text" readOnly className={`bg-muted font-semibold ${profit > 0 ? 'text-green-600' : profit < 0 ? 'text-red-600' : ''}`} value={`₹ ${profit.toFixed(2)}`} />;
+                        })()}
+                      </div>
+                      <div>
+                        <Label>Profit Margin (%)</Label>
+                        {(() => {
+                          const purchasePrice = parseFloat(formData.purchase_price) || 0;
+                          const sellingPrice = parseFloat(formData.selling_price) || 0;
+                          const taxRate = parseFloat(formData.tax_rate) || 0;
+                          const totalPurchaseWithTax = purchasePrice * (1 + taxRate / 100);
+                          const profit = sellingPrice - totalPurchaseWithTax;
+                          const margin = totalPurchaseWithTax > 0 ? (profit / totalPurchaseWithTax) * 100 : 0;
+                          return <Input type="text" readOnly className={`bg-muted font-semibold ${profit > 0 ? 'text-green-600' : profit < 0 ? 'text-red-600' : ''}`} value={`${margin.toFixed(2)}%`} />;
+                        })()}
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label>Summary</Label>
+                        <div className="bg-muted rounded-md p-3 text-sm space-y-1">
+                          {(() => {
+                            const purchasePrice = parseFloat(formData.purchase_price) || 0;
+                            const sellingPrice = parseFloat(formData.selling_price) || 0;
+                            const taxRate = parseFloat(formData.tax_rate) || 0;
+                            const totalPurchaseWithTax = purchasePrice * (1 + taxRate / 100);
+                            const profit = sellingPrice - totalPurchaseWithTax;
+                            return (
+                              <>
+                                <div className="flex justify-between"><span className="text-muted-foreground">Purchase (with tax):</span><span className="font-medium">₹ {totalPurchaseWithTax.toFixed(2)}</span></div>
+                                <div className="flex justify-between"><span className="text-muted-foreground">Selling (with tax):</span><span className="font-medium">₹ {sellingPrice.toFixed(2)}</span></div>
+                                <div className="flex justify-between border-t pt-1 mt-1"><span className="text-muted-foreground font-medium">Net Profit:</span><span className={`font-semibold ${profit > 0 ? 'text-green-600' : profit < 0 ? 'text-red-600' : ''}`}>₹ {profit.toFixed(2)}</span></div>
+                              </>
+                            );
+                          })()}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="cost_price">Cost Price (₹)</Label>
-                    <Input
-                      id="cost_price"
-                      type="number"
-                      step="0.01"
-                      value={formData.cost_price}
-                      onChange={(e) => setFormData({ ...formData, cost_price: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="tax_rate">Tax Rate (%)</Label>
-                    <Input
-                      id="tax_rate"
-                      type="number"
-                      step="0.01"
-                      value={formData.tax_rate}
-                      onChange={(e) => setFormData({ ...formData, tax_rate: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="hsn_code">HSN Code</Label>
-                    <Input
-                      id="hsn_code"
-                      value={formData.hsn_code}
-                      onChange={(e) => setFormData({ ...formData, hsn_code: e.target.value })}
-                    />
-                  </div>
+                  <input type="hidden" value={formData.cost_price} />
                 </CardContent>
               </Card>
 
