@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
-import heroBanner from "@/assets/hero-banner-clean.jpg";
+import heroBanner from "@/assets/hero-banner-hd.jpg";
 import mascotBanner from "@/assets/mascot-banner.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -94,33 +94,32 @@ const Index = () => {
             <img 
               src={heroBanner} 
               alt="Stallion IT Solutions - Empowering Your Business with Cutting-Edge IT Solutions"
-              className="w-full h-auto object-contain"
+              className="w-full h-auto object-cover min-h-[200px] sm:min-h-[300px] md:min-h-[400px]"
               loading="eager"
-              fetchPriority="high"
             />
             
             {/* CTA Buttons - Positioned over the image */}
-            <div className="absolute bottom-[8%] left-[5%] md:left-[6%] flex flex-col sm:flex-row gap-1.5 sm:gap-2">
+            <div className="absolute bottom-[6%] sm:bottom-[8%] left-[4%] sm:left-[5%] md:left-[6%] flex flex-col xs:flex-row gap-1 xs:gap-1.5 sm:gap-2">
               <Button 
                 size="sm" 
-                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[8px] xs:text-[10px] sm:text-xs md:text-sm px-1.5 xs:px-2 sm:px-3 md:px-4 py-1 xs:py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
                 asChild
               >
                 <Link to="/contact">
                   Book Your Free IT Audit
-                  <ArrowRight className="ml-1 h-3 w-3 sm:h-4 sm:w-4" />
+                  <ArrowRight className="ml-1 h-2.5 w-2.5 xs:h-3 xs:w-3 sm:h-4 sm:w-4" />
                 </Link>
               </Button>
               <Button 
                 size="sm" 
-                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[8px] xs:text-[10px] sm:text-xs md:text-sm px-1.5 xs:px-2 sm:px-3 md:px-4 py-1 xs:py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
                 asChild
               >
                 <Link to="/amc-plans">View AMC Plans</Link>
               </Button>
               <Button 
                 size="sm" 
-                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[8px] xs:text-[10px] sm:text-xs md:text-sm px-1.5 xs:px-2 sm:px-3 md:px-4 py-1 xs:py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
                 asChild
               >
                 <Link to="/stallion-cctv">Stallion CCTV</Link>
@@ -165,18 +164,18 @@ const Index = () => {
 
         {/* Mascot Section */}
         <section 
-          className="relative py-20 sm:py-28 bg-contain bg-right bg-no-repeat"
+          className="relative py-12 sm:py-16 md:py-20 lg:py-28 bg-cover sm:bg-contain bg-center sm:bg-right bg-no-repeat"
           style={{ 
             backgroundImage: `url(${mascotBanner})`,
             backgroundColor: '#0a1628'
           }}
         >
           <div className="container mx-auto px-4 max-w-7xl">
-            <div className="max-w-xl">
-              <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+            <div className="max-w-sm sm:max-w-md md:max-w-xl">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">
                 Powered by Innovation
               </h2>
-              <p className="text-white/90 text-lg">
+              <p className="text-white/90 text-sm sm:text-base md:text-lg">
                 Like a stallion in full stride, we deliver powerful IT solutions with speed, precision, and reliability.
               </p>
             </div>
