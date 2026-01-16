@@ -7,7 +7,8 @@ import Certifications from "@/components/Certifications";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import heroBanner from "@/assets/hero-banner-new.jpg";
+import stallionLogo from "@/assets/stallion-gold-logo.png";
+import heroVideo from "@/assets/hero-video.mp4";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Network, 
@@ -16,10 +17,7 @@ import {
   Shield, 
   CheckCircle2, 
   ArrowRight,
-  CalendarCheck,
-  FileText,
-  Video,
-  Phone,
+  Phone
 } from "lucide-react";
 
 const Index = () => {
@@ -88,59 +86,40 @@ const Index = () => {
       <Navigation />
       
       <main className="flex-1 overflow-x-hidden">
-        {/* Hero Section with Banner Image - Buttons in image are clickable */}
+        {/* Hero Section with Video */}
         <section className="relative w-full">
-          {/* Hero Banner Image Container with clickable hotspots */}
-          <div className="relative w-full">
-            <img 
-              src={heroBanner} 
-              alt="Stallion IT Solutions - Empowering Your Business with Cutting-Edge IT Solutions"
-              loading="lazy"
-              className="w-full h-auto object-cover object-center"
-              style={{ aspectRatio: '16/9' }}
+          {/* Hero Video - Full Width */}
+          <div className="w-full">
+            <video 
+              src={heroVideo} 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              className="w-full h-auto object-contain"
             />
-            
-            {/* Clickable hotspots positioned over the buttons in the image */}
-            {/* These invisible links overlay exactly where the buttons appear in the image */}
-            <div className="absolute inset-0">
-              {/* Book Your Free IT Audit - positioned over first button in image */}
-              <Link 
-                to="/contact"
-                className="absolute cursor-pointer hover:bg-white/10 transition-colors rounded"
-                style={{
-                  left: '5%',
-                  bottom: '18%',
-                  width: '18%',
-                  height: '8%',
-                }}
-                aria-label="Book Your Free IT Audit"
-              />
-              
-              {/* View AMC Plans - positioned over second button in image */}
-              <Link 
-                to="/amc-plans"
-                className="absolute cursor-pointer hover:bg-white/10 transition-colors rounded"
-                style={{
-                  left: '24%',
-                  bottom: '18%',
-                  width: '12%',
-                  height: '8%',
-                }}
-                aria-label="View AMC Plans"
-              />
-              
-              {/* Stallion CCTV - positioned over third button in image */}
-              <Link 
-                to="/stallion-cctv"
-                className="absolute cursor-pointer hover:bg-white/10 transition-colors rounded"
-                style={{
-                  left: '5%',
-                  bottom: '8%',
-                  width: '10%',
-                  height: '8%',
-                }}
-                aria-label="Stallion CCTV"
-              />
+          </div>
+          
+          {/* Buttons - Below video on mobile, overlay on desktop */}
+          <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 py-4 sm:pb-8 bg-primary md:bg-transparent">
+            <div className="container mx-auto px-4 max-w-7xl">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
+                <Button size="lg" className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold border-2 border-stallion-gold w-full sm:w-auto">
+                  <Link to="/contact" className="flex items-center">
+                    Book Free IT Audit
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
+                  <Link to="/amc-plans">View AMC Plans</Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
+                  <a href="tel:+917875811148">
+                    <Phone className="h-5 w-5 mr-2" />
+                    Call Us
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
