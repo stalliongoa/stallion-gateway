@@ -99,27 +99,27 @@ const Index = () => {
             />
             
             {/* CTA Buttons - Positioned over the image */}
-            <div className="absolute bottom-[8%] left-[5%] md:left-[6%] flex flex-col sm:flex-row gap-2 sm:gap-3">
+            <div className="absolute bottom-[8%] left-[5%] md:left-[6%] flex flex-col sm:flex-row gap-1.5 sm:gap-2">
               <Button 
-                size="lg" 
-                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-bold text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 h-auto rounded-md shadow-lg" 
+                size="sm" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
                 asChild
               >
                 <Link to="/contact">
                   Book Your Free IT Audit
-                  <ArrowRight className="ml-1 sm:ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  <ArrowRight className="ml-1 h-3 w-3 sm:h-4 sm:w-4" />
                 </Link>
               </Button>
               <Button 
-                size="lg" 
-                className="bg-transparent border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy font-bold text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 h-auto rounded-md" 
+                size="sm" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
                 asChild
               >
                 <Link to="/amc-plans">View AMC Plans</Link>
               </Button>
               <Button 
-                size="lg" 
-                className="bg-transparent border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy font-bold text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 h-auto rounded-md" 
+                size="sm" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[10px] sm:text-xs md:text-sm px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
                 asChild
               >
                 <Link to="/stallion-cctv">Stallion CCTV</Link>
