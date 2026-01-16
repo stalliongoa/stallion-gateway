@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
 import stallionLogo from "@/assets/stallion-logo.png";
+import HorseMascot from "@/components/HorseMascot";
 
 const Footer = () => {
   return (
@@ -80,11 +81,15 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-border/20 mt-8 pt-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Stallion IT Solutions & Services. All rights reserved.
-          </p>
+        {/* Bottom Bar with Mascot */}
+        <div className="border-t border-border/20 mt-8 pt-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground text-center sm:text-left">
+              © {new Date().getFullYear()} Stallion IT Solutions & Services. All rights reserved.
+            </p>
+            {/* Footer Mascot - calm, guardian mode */}
+            <HorseMascot variant="footer" className="opacity-50 hover:opacity-70 transition-opacity" />
+          </div>
         </div>
       </div>
     </footer>

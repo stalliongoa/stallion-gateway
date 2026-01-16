@@ -103,11 +103,66 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        // Horse mascot animations
+        "pulse-glow": {
+          "0%, 100%": { opacity: "0.3", transform: "scale(1)" },
+          "50%": { opacity: "0.6", transform: "scale(1.1)" },
+        },
+        "horse-head": {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "25%": { transform: "translateY(-1px) rotate(0.5deg)" },
+          "75%": { transform: "translateY(1px) rotate(-0.5deg)" },
+        },
+        "eye-glow": {
+          "0%, 100%": { opacity: "0.8", filter: "brightness(1)" },
+          "50%": { opacity: "1", filter: "brightness(1.5)" },
+        },
+        "eye-glow-slow": {
+          "0%, 100%": { opacity: "0.6", filter: "brightness(1)" },
+          "50%": { opacity: "0.9", filter: "brightness(1.3)" },
+        },
+        "circuit": {
+          "0%": { strokeDashoffset: "100", opacity: "0.3" },
+          "50%": { opacity: "0.8" },
+          "100%": { strokeDashoffset: "0", opacity: "0.3" },
+        },
+        "circuit-slow": {
+          "0%": { strokeDashoffset: "80", opacity: "0.2" },
+          "50%": { opacity: "0.6" },
+          "100%": { strokeDashoffset: "0", opacity: "0.2" },
+        },
+        "mane": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "50%": { transform: "translateX(2px)" },
+        },
+        "horse-body": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-1px)" },
+        },
+        "horse-rest": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.01)" },
+        },
+        "tail": {
+          "0%, 100%": { transform: "rotate(0deg)" },
+          "25%": { transform: "rotate(3deg)" },
+          "75%": { transform: "rotate(-3deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         slide: "slide 30s linear infinite",
+        "pulse-glow": "pulse-glow 6s ease-in-out infinite",
+        "horse-head": "horse-head 4s ease-in-out infinite",
+        "eye-glow": "eye-glow 3s ease-in-out infinite",
+        "eye-glow-slow": "eye-glow-slow 5s ease-in-out infinite",
+        "circuit": "circuit 4s linear infinite",
+        "circuit-slow": "circuit-slow 6s linear infinite",
+        "mane": "mane 3s ease-in-out infinite",
+        "horse-body": "horse-body 5s ease-in-out infinite",
+        "horse-rest": "horse-rest 8s ease-in-out infinite",
+        "tail": "tail 6s ease-in-out infinite",
       },
     },
   },

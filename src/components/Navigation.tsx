@@ -4,6 +4,7 @@ import { Menu, X, Phone, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
 import SearchDialog from "@/components/SearchDialog";
+import HorseMascot from "@/components/HorseMascot";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +62,7 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons & Mascot */}
           <div className="hidden lg:flex items-center space-x-4 flex-shrink-0">
             <Button
               variant="ghost"
@@ -74,6 +75,8 @@ const Navigation = () => {
             <Button variant="secondary" size="sm" asChild>
               <Link to="/contact">Book Free Audit</Link>
             </Button>
+            {/* Horse Mascot with subtle animation */}
+            <HorseMascot variant="header" className="ml-2" />
           </div>
 
           {/* Mobile Menu Button */}
