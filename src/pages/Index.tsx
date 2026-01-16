@@ -165,8 +165,11 @@ const Index = () => {
 
         {/* Mascot Section */}
         <section 
-          className="relative py-16 sm:py-24 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${mascotBanner})` }}
+          className="relative py-20 sm:py-28 bg-contain bg-right bg-no-repeat"
+          style={{ 
+            backgroundImage: `url(${mascotBanner})`,
+            backgroundColor: '#0a1628'
+          }}
         >
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="max-w-xl">
