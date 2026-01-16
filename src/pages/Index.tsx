@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
-import heroVideo from "@/assets/hero-video.mp4";
+import heroBanner from "@/assets/hero-banner-new.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Network, 
@@ -86,17 +86,16 @@ const Index = () => {
       <Navigation />
       
       <main className="flex-1 overflow-x-hidden">
-        {/* Hero Section with Video */}
+        {/* Hero Section with Image */}
         <section className="relative w-full">
-          {/* Hero Video - Full Width */}
+          {/* Hero Image - Full Width */}
           <div className="w-full">
-            <video 
-              src={heroVideo} 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
+            <img 
+              src={heroBanner} 
+              alt="Stallion IT Solutions - Empowering Your Business with Cutting-Edge IT Solutions"
               className="w-full h-auto object-contain"
+              loading="eager"
+              fetchPriority="high"
             />
           </div>
           
