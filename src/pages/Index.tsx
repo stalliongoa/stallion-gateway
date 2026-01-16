@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
 import heroBanner from "@/assets/hero-banner-clean.jpg";
-import horseBodyMascot from "@/assets/horse-body-mascot.png";
+import mascotBanner from "@/assets/mascot-banner.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Network, 
@@ -164,22 +164,18 @@ const Index = () => {
         </section>
 
         {/* Mascot Section */}
-        <section className="py-12 sm:py-16 bg-primary">
+        <section 
+          className="relative py-16 sm:py-24 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${mascotBanner})` }}
+        >
           <div className="container mx-auto px-4 max-w-7xl">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-              <img 
-                src={horseBodyMascot} 
-                alt="Stallion IT Solutions Mascot" 
-                className="h-48 md:h-64 w-auto object-contain"
-              />
-              <div className="text-center md:text-left">
-                <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
-                  Powered by Innovation
-                </h2>
-                <p className="text-primary-foreground/80 max-w-md">
-                  Like a stallion in full stride, we deliver powerful IT solutions with speed, precision, and reliability.
-                </p>
-              </div>
+            <div className="max-w-xl">
+              <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+                Powered by Innovation
+              </h2>
+              <p className="text-white/90 text-lg">
+                Like a stallion in full stride, we deliver powerful IT solutions with speed, precision, and reliability.
+              </p>
             </div>
           </div>
         </section>
