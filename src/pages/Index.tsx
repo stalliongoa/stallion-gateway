@@ -88,10 +88,10 @@ const Index = () => {
       <Navigation />
       
       <main className="flex-1 overflow-x-hidden">
-        {/* Hero Section with Banner Image */}
+        {/* Hero Section with Banner Image - Buttons in image are clickable */}
         <section className="relative w-full">
-          {/* Hero Banner Image - Full Width with lazy loading */}
-          <div className="w-full">
+          {/* Hero Banner Image Container with clickable hotspots */}
+          <div className="relative w-full">
             <img 
               src={heroBanner} 
               alt="Stallion IT Solutions - Empowering Your Business with Cutting-Edge IT Solutions"
@@ -99,50 +99,48 @@ const Index = () => {
               className="w-full h-auto object-cover object-center"
               style={{ aspectRatio: '16/9' }}
             />
-          </div>
-          
-          {/* CTA Buttons - Below banner on mobile, overlay on desktop */}
-          <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 py-4 sm:py-6 md:pb-8 bg-primary md:bg-gradient-to-t md:from-black/70 md:via-black/40 md:to-transparent">
-            <div className="container mx-auto px-4 max-w-7xl">
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
-                {/* Book Your Free IT Audit */}
-                <Button 
-                  size="lg" 
-                  className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold border-2 border-stallion-gold w-full sm:w-auto"
-                  asChild
-                >
-                  <Link to="/contact" className="flex items-center justify-center">
-                    <CalendarCheck className="h-5 w-5 mr-2" />
-                    Book Your Free IT Audit
-                  </Link>
-                </Button>
-                
-                {/* View AMC Plans */}
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto md:text-white md:border-white md:hover:bg-white md:hover:text-stallion-navy" 
-                  asChild
-                >
-                  <Link to="/amc-plans" className="flex items-center justify-center">
-                    <FileText className="h-5 w-5 mr-2" />
-                    View AMC Plans
-                  </Link>
-                </Button>
-                
-                {/* Stallion CCTV */}
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto md:text-white md:border-white md:hover:bg-white md:hover:text-stallion-navy" 
-                  asChild
-                >
-                  <Link to="/stallion-cctv" className="flex items-center justify-center">
-                    <Video className="h-5 w-5 mr-2" />
-                    Stallion CCTV
-                  </Link>
-                </Button>
-              </div>
+            
+            {/* Clickable hotspots positioned over the buttons in the image */}
+            {/* These invisible links overlay exactly where the buttons appear in the image */}
+            <div className="absolute inset-0">
+              {/* Book Your Free IT Audit - positioned over first button in image */}
+              <Link 
+                to="/contact"
+                className="absolute cursor-pointer hover:bg-white/10 transition-colors rounded"
+                style={{
+                  left: '5%',
+                  bottom: '18%',
+                  width: '18%',
+                  height: '8%',
+                }}
+                aria-label="Book Your Free IT Audit"
+              />
+              
+              {/* View AMC Plans - positioned over second button in image */}
+              <Link 
+                to="/amc-plans"
+                className="absolute cursor-pointer hover:bg-white/10 transition-colors rounded"
+                style={{
+                  left: '24%',
+                  bottom: '18%',
+                  width: '12%',
+                  height: '8%',
+                }}
+                aria-label="View AMC Plans"
+              />
+              
+              {/* Stallion CCTV - positioned over third button in image */}
+              <Link 
+                to="/stallion-cctv"
+                className="absolute cursor-pointer hover:bg-white/10 transition-colors rounded"
+                style={{
+                  left: '5%',
+                  bottom: '8%',
+                  width: '10%',
+                  height: '8%',
+                }}
+                aria-label="Stallion CCTV"
+              />
             </div>
           </div>
         </section>
