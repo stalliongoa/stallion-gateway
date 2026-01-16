@@ -144,4 +144,27 @@ All colors MUST be HSL.
   .text-shadow {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
+  
+  /* Mascot idle animation */
+  @keyframes mascot-idle {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-2px) scale(1.02);
+    }
+  }
+  
+  @keyframes mascot-glow {
+    0%, 100% {
+      filter: drop-shadow(0 0 4px hsl(var(--stallion-gold) / 0.4));
+    }
+    50% {
+      filter: drop-shadow(0 0 8px hsl(var(--stallion-gold) / 0.7));
+    }
+  }
+  
+  .mascot-idle {
+    animation: mascot-idle 3s ease-in-out infinite, mascot-glow 2s ease-in-out infinite;
+  }
 }
