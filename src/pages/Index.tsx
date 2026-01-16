@@ -19,7 +19,7 @@ import {
   CalendarCheck,
   FileText,
   Video,
-  Phone
+  Phone,
 } from "lucide-react";
 
 const Index = () => {
