@@ -26,7 +26,7 @@ import {
   Store
 } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import cctvHeroBg from "@/assets/cctv-hero-bg.png";
+import stallionCctvHero from "@/assets/stallion-cctv-hero-8k.jpg";
 import ipCCTVImage from "@/assets/ip-cctv.jpg";
 import analogCamerasImage from "@/assets/analog-cameras.webp";
 import wifiCamerasImage from "@/assets/wifi-cameras.jpg";
@@ -229,33 +229,34 @@ const StallionCCTV = () => {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-primary/70 via-primary/60 to-primary/50 text-primary-foreground overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${cctvHeroBg})` }}></div>
-        <div className="container mx-auto px-4 relative z-10" ref={heroAnimation.ref}>
-          <div className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${heroAnimation.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="flex justify-center mb-6">
-              <Camera className="h-20 w-20 animate-pulse" />
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              STALLION CCTV
-            </h1>
-            <p className="text-xl md:text-2xl mb-4 text-primary-foreground/90">
-              Advanced Surveillance Solutions for Complete Security
-            </p>
-            <p className="text-lg md:text-xl mb-8 text-primary-foreground/80 max-w-3xl mx-auto">
-              Leading CCTV installation and security systems provider in Goa. Trusted by 1000+ clients across corporate, retail, residential & industrial sectors.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" asChild>
-                <a href="#contact">Get Free Quote</a>
-              </Button>
-              <Button size="lg" variant="secondary" asChild>
-                <a href="tel:+917875811148">
-                  <Phone className="h-5 w-5 mr-2" />
-                  Call Now
-                </a>
-              </Button>
-            </div>
+      <section className="relative overflow-hidden" ref={heroAnimation.ref}>
+        <div className="relative w-full">
+          <img 
+            src={stallionCctvHero} 
+            alt="Stallion CCTV Solutions - Advanced Surveillance" 
+            className="w-full h-auto object-cover min-h-[400px] xs:min-h-[450px] sm:min-h-[500px] md:min-h-[600px] lg:min-h-[700px]"
+            fetchPriority="high"
+            decoding="async"
+          />
+          {/* CTA Buttons Overlay */}
+          <div className={`absolute bottom-8 xs:bottom-10 sm:bottom-14 md:bottom-20 left-4 xs:left-6 sm:left-10 md:left-16 lg:left-24 flex flex-col xs:flex-row gap-3 xs:gap-4 transition-all duration-1000 ${heroAnimation.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <Button 
+              size="lg" 
+              className="bg-stallion-gold hover:bg-stallion-gold/90 text-primary font-bold text-sm xs:text-base sm:text-lg px-4 xs:px-6 sm:px-8 py-3 xs:py-4 sm:py-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+              asChild
+            >
+              <a href="#contact">Get Free Quote</a>
+            </Button>
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 text-white font-bold text-sm xs:text-base sm:text-lg px-4 xs:px-6 sm:px-8 py-3 xs:py-4 sm:py-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+              asChild
+            >
+              <a href="tel:+917875811148" className="flex items-center gap-2">
+                <Phone className="h-4 w-4 xs:h-5 xs:w-5" />
+                Call Now
+              </a>
+            </Button>
           </div>
         </div>
       </section>
