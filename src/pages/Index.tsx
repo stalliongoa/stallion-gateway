@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
-import heroBanner from "@/assets/hero-banner-new.jpg";
+import heroBanner from "@/assets/hero-banner-clean.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Network, 
@@ -89,7 +89,7 @@ const Index = () => {
         {/* Hero Section with Image */}
         <section className="relative w-full">
           {/* Hero Image - Full Width */}
-          <div className="w-full">
+          <div className="relative w-full">
             <img 
               src={heroBanner} 
               alt="Stallion IT Solutions - Empowering Your Business with Cutting-Edge IT Solutions"
@@ -97,25 +97,33 @@ const Index = () => {
               loading="eager"
               fetchPriority="high"
             />
-          </div>
-          
-          {/* CTA Buttons */}
-          <div className="bg-primary py-6">
-            <div className="container mx-auto px-4 max-w-7xl">
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                <Button size="lg" className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold w-full sm:w-auto" asChild>
-                  <Link to="/contact">
-                    Book Your Free IT Audit
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
-                  <Link to="/amc-plans">View AMC Plans</Link>
-                </Button>
-                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
-                  <Link to="/stallion-cctv">Stallion CCTV</Link>
-                </Button>
-              </div>
+            
+            {/* CTA Buttons - Positioned over the image */}
+            <div className="absolute bottom-[8%] left-[5%] md:left-[6%] flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <Button 
+                size="lg" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-bold text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 h-auto rounded-md shadow-lg" 
+                asChild
+              >
+                <Link to="/contact">
+                  Book Your Free IT Audit
+                  <ArrowRight className="ml-1 sm:ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                </Link>
+              </Button>
+              <Button 
+                size="lg" 
+                className="bg-transparent border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy font-bold text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 h-auto rounded-md" 
+                asChild
+              >
+                <Link to="/amc-plans">View AMC Plans</Link>
+              </Button>
+              <Button 
+                size="lg" 
+                className="bg-transparent border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy font-bold text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 h-auto rounded-md" 
+                asChild
+              >
+                <Link to="/stallion-cctv">Stallion CCTV</Link>
+              </Button>
             </div>
           </div>
         </section>
