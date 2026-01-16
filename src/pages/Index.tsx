@@ -83,17 +83,8 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden relative">
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
       <Navigation />
-      
-      {/* Floating Mascot - Fixed Position on Right Side */}
-      <div className="hidden lg:block fixed right-4 top-1/2 -translate-y-1/2 z-40 pointer-events-none">
-        <img 
-          src={horseBodyMascot} 
-          alt="Stallion Mascot" 
-          className="h-64 w-auto object-contain mascot-float opacity-80"
-        />
-      </div>
       
       <main className="flex-1 overflow-x-hidden">
         {/* Hero Section with Image */}
@@ -172,7 +163,26 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Why Choose Us */}
+        {/* Mascot Section */}
+        <section className="py-12 sm:py-16 bg-primary">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+              <img 
+                src={horseBodyMascot} 
+                alt="Stallion IT Solutions Mascot" 
+                className="h-48 md:h-64 w-auto object-contain"
+              />
+              <div className="text-center md:text-left">
+                <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
+                  Powered by Innovation
+                </h2>
+                <p className="text-primary-foreground/80 max-w-md">
+                  Like a stallion in full stride, we deliver powerful IT solutions with speed, precision, and reliability.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
         <section className="py-12 sm:py-16 bg-muted/30">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="max-w-5xl mx-auto">

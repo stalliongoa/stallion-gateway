@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Menu, X, Phone, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
-import horseMascot from "@/assets/horse-head-mascot.png";
 import SearchDialog from "@/components/SearchDialog";
 
 const Navigation = () => {
@@ -62,7 +61,7 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* CTA Buttons + Mascot */}
+          {/* CTA Buttons */}
           <div className="hidden lg:flex items-center space-x-4 flex-shrink-0">
             <Button
               variant="ghost"
@@ -75,12 +74,6 @@ const Navigation = () => {
             <Button variant="secondary" size="sm" asChild>
               <Link to="/contact">Book Free Audit</Link>
             </Button>
-            {/* Mascot */}
-            <img 
-              src={horseMascot} 
-              alt="Stallion Mascot" 
-              className="h-14 w-14 object-contain mascot-idle"
-            />
           </div>
 
           {/* Mobile Menu Button */}
