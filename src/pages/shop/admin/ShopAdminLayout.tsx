@@ -25,6 +25,7 @@ import { ShopAuthProvider, useShopAuth } from '@/hooks/use-shop-auth';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import shoppieLogo from '@/assets/shoppie-logo.png';
+import horseMascot from '@/assets/horse-body-mascot.png';
 
 interface ShopAdminLayoutProps {
   children: ReactNode;
@@ -84,6 +85,15 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
           );
         })}
       </nav>
+
+      {/* Mascot */}
+      <div className="px-4 py-2 flex justify-center">
+        <img 
+          src={horseMascot} 
+          alt="Stallion Mascot" 
+          className="h-24 w-auto object-contain mascot-float opacity-90"
+        />
+      </div>
 
       {/* Back to Store */}
       <div className="border-t border-white/10 p-4">

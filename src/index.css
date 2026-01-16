@@ -167,4 +167,27 @@ All colors MUST be HSL.
   .mascot-idle {
     animation: mascot-idle 3s ease-in-out infinite, mascot-glow 2s ease-in-out infinite;
   }
+  
+  /* Mascot floating animation for sidebar */
+  @keyframes mascot-float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+  
+  @keyframes mascot-float-glow {
+    0%, 100% {
+      filter: drop-shadow(0 0 6px hsl(var(--stallion-gold) / 0.3));
+    }
+    50% {
+      filter: drop-shadow(0 0 12px hsl(var(--stallion-gold) / 0.5));
+    }
+  }
+  
+  .mascot-float {
+    animation: mascot-float 4s ease-in-out infinite, mascot-float-glow 3s ease-in-out infinite;
+  }
 }
