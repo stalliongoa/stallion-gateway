@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
 import heroBanner from "@/assets/hero-banner-clean.jpg";
+import horseBodyMascot from "@/assets/horse-body-mascot.png";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Network, 
@@ -82,8 +83,17 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden">
+    <div className="min-h-screen flex flex-col overflow-x-hidden relative">
       <Navigation />
+      
+      {/* Floating Mascot - Fixed Position on Right Side */}
+      <div className="hidden lg:block fixed right-4 top-1/2 -translate-y-1/2 z-40 pointer-events-none">
+        <img 
+          src={horseBodyMascot} 
+          alt="Stallion Mascot" 
+          className="h-64 w-auto object-contain mascot-float opacity-80"
+        />
+      </div>
       
       <main className="flex-1 overflow-x-hidden">
         {/* Hero Section with Image */}
