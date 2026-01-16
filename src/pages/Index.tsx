@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
@@ -94,32 +95,34 @@ const Index = () => {
             <img 
               src={heroBanner} 
               alt="Stallion IT Solutions - Empowering Your Business with Cutting-Edge IT Solutions"
-              className="w-full h-auto object-cover min-h-[200px] sm:min-h-[300px] md:min-h-[400px]"
+              className="w-full h-auto object-cover min-h-[180px] xs:min-h-[220px] sm:min-h-[300px] md:min-h-[400px] lg:min-h-[500px]"
               loading="eager"
+              fetchPriority="high"
+              decoding="async"
             />
             
             {/* CTA Buttons - Positioned over the image */}
-            <div className="absolute bottom-[6%] sm:bottom-[8%] left-[4%] sm:left-[5%] md:left-[6%] flex flex-col xs:flex-row gap-1 xs:gap-1.5 sm:gap-2">
+            <div className="absolute bottom-[4%] xs:bottom-[6%] sm:bottom-[8%] left-[3%] xs:left-[4%] sm:left-[5%] md:left-[6%] flex flex-col xs:flex-row gap-0.5 xs:gap-1 sm:gap-2">
               <Button 
                 size="sm" 
-                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[8px] xs:text-[10px] sm:text-xs md:text-sm px-1.5 xs:px-2 sm:px-3 md:px-4 py-1 xs:py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[7px] xs:text-[9px] sm:text-xs md:text-sm px-1 xs:px-1.5 sm:px-3 md:px-4 py-0.5 xs:py-1 sm:py-2 h-auto rounded-sm xs:rounded-md shadow-lg whitespace-nowrap" 
                 asChild
               >
                 <Link to="/contact">
                   Book Your Free IT Audit
-                  <ArrowRight className="ml-1 h-2.5 w-2.5 xs:h-3 xs:w-3 sm:h-4 sm:w-4" />
+                  <ArrowRight className="ml-0.5 xs:ml-1 h-2 w-2 xs:h-2.5 xs:w-2.5 sm:h-4 sm:w-4" />
                 </Link>
               </Button>
               <Button 
                 size="sm" 
-                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[8px] xs:text-[10px] sm:text-xs md:text-sm px-1.5 xs:px-2 sm:px-3 md:px-4 py-1 xs:py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[7px] xs:text-[9px] sm:text-xs md:text-sm px-1 xs:px-1.5 sm:px-3 md:px-4 py-0.5 xs:py-1 sm:py-2 h-auto rounded-sm xs:rounded-md shadow-lg whitespace-nowrap" 
                 asChild
               >
                 <Link to="/amc-plans">View AMC Plans</Link>
               </Button>
               <Button 
                 size="sm" 
-                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[8px] xs:text-[10px] sm:text-xs md:text-sm px-1.5 xs:px-2 sm:px-3 md:px-4 py-1 xs:py-1.5 sm:py-2 h-auto rounded-md shadow-lg" 
+                className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[7px] xs:text-[9px] sm:text-xs md:text-sm px-1 xs:px-1.5 sm:px-3 md:px-4 py-0.5 xs:py-1 sm:py-2 h-auto rounded-sm xs:rounded-md shadow-lg whitespace-nowrap" 
                 asChild
               >
                 <Link to="/stallion-cctv">Stallion CCTV</Link>
@@ -132,21 +135,21 @@ const Index = () => {
         <StatsCounter />
 
         {/* Services Preview */}
-        <section className="py-12 sm:py-16">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Our Core Services</h2>
-              <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+        <section className="py-8 xs:py-10 sm:py-12 md:py-16">
+          <div className="container mx-auto px-3 xs:px-4 max-w-7xl">
+            <div className="text-center mb-6 xs:mb-8 sm:mb-12">
+              <h2 className="text-2xl xs:text-3xl md:text-4xl font-bold mb-3 xs:mb-4 text-primary">Our Core Services</h2>
+              <p className="text-sm xs:text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto px-2">
                 Comprehensive IT solutions designed specifically for the hospitality and business sectors
               </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 xs:gap-4 sm:gap-6">
               {services.map((service, index) => (
                 <Card key={index} className="shadow-subtle hover:shadow-gold transition-all duration-300 hover:-translate-y-1">
-                  <CardHeader>
-                    <div className="mb-4">{service.icon}</div>
-                    <CardTitle className="text-xl text-primary">{service.title}</CardTitle>
-                    <CardDescription>{service.description}</CardDescription>
+                  <CardHeader className="p-3 xs:p-4 sm:p-6">
+                    <div className="mb-2 xs:mb-3 sm:mb-4">{React.cloneElement(service.icon, { className: "h-6 w-6 xs:h-8 xs:w-8 sm:h-10 sm:w-10 text-secondary" })}</div>
+                    <CardTitle className="text-sm xs:text-base sm:text-lg md:text-xl text-primary leading-tight">{service.title}</CardTitle>
+                    <CardDescription className="text-xs xs:text-sm hidden xs:block">{service.description}</CardDescription>
                   </CardHeader>
                 </Card>
               ))}
@@ -164,18 +167,18 @@ const Index = () => {
 
         {/* Mascot Section */}
         <section 
-          className="relative py-12 sm:py-16 md:py-20 lg:py-28 bg-cover sm:bg-contain bg-center sm:bg-right bg-no-repeat"
+          className="relative py-8 xs:py-10 sm:py-16 md:py-20 lg:py-28 min-h-[150px] xs:min-h-[180px] sm:min-h-[220px] md:min-h-[280px] bg-cover xs:bg-contain bg-center xs:bg-right bg-no-repeat"
           style={{ 
             backgroundImage: `url(${mascotBanner})`,
             backgroundColor: '#0a1628'
           }}
         >
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="max-w-sm sm:max-w-md md:max-w-xl">
-              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">
+          <div className="container mx-auto px-3 xs:px-4 max-w-7xl">
+            <div className="max-w-[280px] xs:max-w-sm sm:max-w-md md:max-w-xl">
+              <h2 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 xs:mb-3 sm:mb-4">
                 Powered by Innovation
               </h2>
-              <p className="text-white/90 text-sm sm:text-base md:text-lg">
+              <p className="text-white/90 text-xs xs:text-sm sm:text-base md:text-lg leading-relaxed">
                 Like a stallion in full stride, we deliver powerful IT solutions with speed, precision, and reliability.
               </p>
             </div>

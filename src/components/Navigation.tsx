@@ -40,11 +40,11 @@ const Navigation = () => {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between gap-4 h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
-            <img src={stallionLogo} alt="Stallion IT Solutions & Services" className="h-14 w-14" />
-            <div className="hidden md:block">
-              <div className="text-lg font-bold">STALLION</div>
-              <div className="text-xs text-secondary">IT Solutions & Services</div>
+          <Link to="/" className="flex items-center space-x-2 xs:space-x-3 flex-shrink-0">
+            <img src={stallionLogo} alt="Stallion IT Solutions & Services" className="h-10 w-10 xs:h-12 xs:w-12 sm:h-14 sm:w-14" loading="eager" />
+            <div className="hidden sm:block">
+              <div className="text-base sm:text-lg font-bold">STALLION</div>
+              <div className="text-[10px] sm:text-xs text-secondary">IT Solutions & Services</div>
             </div>
           </Link>
 
