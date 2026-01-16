@@ -99,6 +99,25 @@ const Index = () => {
             />
           </div>
           
+          {/* CTA Buttons */}
+          <div className="bg-primary py-6">
+            <div className="container mx-auto px-4 max-w-7xl">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                <Button size="lg" className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold w-full sm:w-auto" asChild>
+                  <Link to="/contact">
+                    Book Your Free IT Audit
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
+                  <Link to="/amc-plans">View AMC Plans</Link>
+                </Button>
+                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
+                  <Link to="/stallion-cctv">Stallion CCTV</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Animated Stats Counter */}
