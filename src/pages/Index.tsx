@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import StatsCounter from "@/components/StatsCounter";
@@ -23,6 +23,30 @@ import {
 const Index = () => {
   const [sachinImage, setSachinImage] = useState<string | null>(null);
   const [ravishImage, setRavishImage] = useState<string | null>(null);
+  const [scrollY, setScrollY] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // Parallax scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        if (rect.bottom > 0) {
+          setScrollY(window.scrollY * 0.3);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Trigger fade-in animation on load
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const fetchTestimonialImages = async () => {
@@ -86,17 +110,54 @@ const Index = () => {
       <Navigation />
       
       <main className="flex-1 overflow-x-hidden">
-        {/* Hero Section with Image */}
-        <section className="relative w-full">
-          {/* Hero Image - Full Width */}
-          <div className="w-full">
+        {/* Hero Section with Image and Parallax */}
+        <section ref={heroRef} className="relative w-full overflow-hidden">
+          {/* Hero Image - Full Width with Parallax */}
+          <div className="w-full relative">
             <img 
               src={heroBanner} 
               alt="Stallion IT Solutions - Empowering Your Business with Cutting-Edge IT Solutions"
-              className="w-full h-auto object-contain"
+              className="w-full h-auto object-contain transition-transform duration-100 will-change-transform"
+              style={{ transform: `translateY(${scrollY}px) scale(1.05)` }}
               loading="eager"
               fetchPriority="high"
             />
+            
+            {/* Animated Text Overlay */}
+            <div className="absolute inset-0 flex items-center">
+              <div className="container mx-auto px-4 max-w-7xl">
+                <div className="max-w-2xl">
+                  <h1 
+                    className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4 drop-shadow-lg transition-all duration-700 ease-out ${
+                      isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                    }`}
+                  >
+                    <span className="text-stallion-gold">Empowering</span> Your Business
+                  </h1>
+                  <h2 
+                    className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-4 drop-shadow-lg transition-all duration-700 ease-out delay-150 ${
+                      isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                    }`}
+                  >
+                    with <span className="text-stallion-gold">Cutting-Edge</span>
+                  </h2>
+                  <h2 
+                    className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-6 drop-shadow-lg transition-all duration-700 ease-out delay-300 ${
+                      isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                    }`}
+                  >
+                    IT Solutions
+                  </h2>
+                  <p 
+                    className={`text-sm sm:text-base md:text-lg text-white/90 mb-4 sm:mb-8 drop-shadow-md transition-all duration-700 ease-out delay-500 ${
+                      isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                    }`}
+                  >
+                    Innovative, Reliable, Secure
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
           
           {/* Buttons - Below video on mobile, overlay on desktop */}
