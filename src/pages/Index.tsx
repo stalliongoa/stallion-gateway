@@ -7,8 +7,7 @@ import Certifications from "@/components/Certifications";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import stallionLogo from "@/assets/stallion-gold-logo.png";
-import heroVideo from "@/assets/hero-video.mp4";
+import heroBanner from "@/assets/hero-banner-new.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Network, 
@@ -17,6 +16,9 @@ import {
   Shield, 
   CheckCircle2, 
   ArrowRight,
+  CalendarCheck,
+  FileText,
+  Video,
   Phone
 } from "lucide-react";
 
@@ -86,38 +88,59 @@ const Index = () => {
       <Navigation />
       
       <main className="flex-1 overflow-x-hidden">
-        {/* Hero Section with Video */}
+        {/* Hero Section with Banner Image */}
         <section className="relative w-full">
-          {/* Hero Video - Full Width */}
+          {/* Hero Banner Image - Full Width with lazy loading */}
           <div className="w-full">
-            <video 
-              src={heroVideo} 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              className="w-full h-auto object-contain"
+            <img 
+              src={heroBanner} 
+              alt="Stallion IT Solutions - Empowering Your Business with Cutting-Edge IT Solutions"
+              loading="lazy"
+              className="w-full h-auto object-cover object-center"
+              style={{ aspectRatio: '16/9' }}
             />
           </div>
           
-          {/* Buttons - Below video on mobile, overlay on desktop */}
-          <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 py-4 sm:pb-8 bg-primary md:bg-transparent">
+          {/* CTA Buttons - Below banner on mobile, overlay on desktop */}
+          <div className="relative md:absolute md:bottom-0 md:left-0 md:right-0 z-10 py-4 sm:py-6 md:pb-8 bg-primary md:bg-gradient-to-t md:from-black/70 md:via-black/40 md:to-transparent">
             <div className="container mx-auto px-4 max-w-7xl">
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
-                <Button size="lg" className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold border-2 border-stallion-gold w-full sm:w-auto">
-                  <Link to="/contact" className="flex items-center">
-                    Book Free IT Audit
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                {/* Book Your Free IT Audit */}
+                <Button 
+                  size="lg" 
+                  className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold border-2 border-stallion-gold w-full sm:w-auto"
+                  asChild
+                >
+                  <Link to="/contact" className="flex items-center justify-center">
+                    <CalendarCheck className="h-5 w-5 mr-2" />
+                    Book Your Free IT Audit
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
-                  <Link to="/amc-plans">View AMC Plans</Link>
+                
+                {/* View AMC Plans */}
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto md:text-white md:border-white md:hover:bg-white md:hover:text-stallion-navy" 
+                  asChild
+                >
+                  <Link to="/amc-plans" className="flex items-center justify-center">
+                    <FileText className="h-5 w-5 mr-2" />
+                    View AMC Plans
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto" asChild>
-                  <a href="tel:+917875811148">
-                    <Phone className="h-5 w-5 mr-2" />
-                    Call Us
-                  </a>
+                
+                {/* Stallion CCTV */}
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-2 border-stallion-gold text-stallion-gold hover:bg-stallion-gold hover:text-stallion-navy w-full sm:w-auto md:text-white md:border-white md:hover:bg-white md:hover:text-stallion-navy" 
+                  asChild
+                >
+                  <Link to="/stallion-cctv" className="flex items-center justify-center">
+                    <Video className="h-5 w-5 mr-2" />
+                    Stallion CCTV
+                  </Link>
                 </Button>
               </div>
             </div>
