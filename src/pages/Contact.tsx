@@ -3,7 +3,6 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Phone, Mail, MapPin, FileText, Monitor, Camera, CheckCircle } from "lucide-react";
@@ -107,17 +106,17 @@ const Contact = () => {
 
   const quickActions = [
     {
-      icon: <FileText className="h-5 w-5" />,
+      icon: <FileText className="h-4 w-4" />,
       label: "Book Your Free IT Audit",
       link: "/contact"
     },
     {
-      icon: <Monitor className="h-5 w-5" />,
+      icon: <Monitor className="h-4 w-4" />,
       label: "View AMC Plans",
       link: "/amc-plans"
     },
     {
-      icon: <Camera className="h-5 w-5" />,
+      icon: <Camera className="h-4 w-4" />,
       label: "Stallion CCTV",
       link: "/stallion-cctv"
     }
@@ -131,96 +130,90 @@ const Contact = () => {
         {/* Hero Section with Mascot */}
         <section 
           ref={heroAnimation.ref}
-          className={`relative min-h-[600px] md:min-h-[700px] overflow-hidden transition-all duration-700 ${
+          className={`relative min-h-[580px] md:min-h-[640px] lg:min-h-[680px] overflow-hidden transition-all duration-700 ${
             heroAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
           style={{
-            background: 'linear-gradient(135deg, #0a1628 0%, #1a2744 50%, #0d1f3c 100%)'
+            background: 'linear-gradient(135deg, #0a1628 0%, #142238 40%, #0d1f3c 100%)'
           }}
         >
-          {/* Decorative elements */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-20 left-10 w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
-            <div className="absolute top-40 right-20 w-1 h-1 bg-amber-300 rounded-full animate-pulse delay-100" />
-            <div className="absolute bottom-40 left-1/4 w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse delay-200" />
-            <div className="absolute top-1/3 left-1/3 w-1 h-1 bg-white/50 rounded-full animate-pulse delay-300" />
+          {/* Decorative particles */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-16 left-8 w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse opacity-80" />
+            <div className="absolute top-32 right-16 w-1 h-1 bg-amber-300 rounded-full animate-pulse opacity-60" style={{ animationDelay: '0.5s' }} />
+            <div className="absolute bottom-48 left-1/4 w-1 h-1 bg-amber-500 rounded-full animate-pulse opacity-70" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-1/3 left-[45%] w-0.5 h-0.5 bg-white/60 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
+            <div className="absolute top-24 left-1/3 w-1 h-1 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }} />
+            <div className="absolute bottom-32 right-1/3 w-1.5 h-1.5 bg-amber-400/60 rounded-full animate-pulse" style={{ animationDelay: '1.2s' }} />
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 py-12 md:py-16 relative z-10">
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-14 relative z-10">
+            <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               {/* Left side - Content */}
-              <div className="space-y-8">
+              <div className="lg:col-span-6 xl:col-span-5 space-y-5 md:space-y-6">
                 {/* Hero Text */}
-                <div className="space-y-4">
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
+                <div className="space-y-3">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-bold text-white leading-tight tracking-tight">
                     Get in Touch with{" "}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-500">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400">
                       Stallion IT Solutions
                     </span>{" "}
                     & Services
                   </h1>
-                  <p className="text-white/80 text-base md:text-lg">
+                  <p className="text-white/70 text-sm md:text-base max-w-md">
                     We're here to answer your IT, CCTV, Support, and AMC queries.
                   </p>
                 </div>
 
                 {/* Reach Out Form Card */}
-                <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-2xl">
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Reach Out to Us</h2>
-                  <p className="text-gray-600 text-sm mb-6">
+                <div className="bg-white/[0.97] backdrop-blur-md rounded-xl p-5 md:p-6 shadow-2xl shadow-black/20 max-w-md">
+                  <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-1">Reach Out to Us</h2>
+                  <p className="text-gray-500 text-xs md:text-sm mb-4 leading-relaxed">
                     We're here for your IT support, CCTV queries, AMC plans, and more. Let's take your technology further.
                   </p>
                   
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        placeholder="Name"
-                        className="bg-gray-50 border-gray-200 rounded-lg h-12 text-gray-900 placeholder:text-gray-500"
-                      />
-                    </div>
-                    <div>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        placeholder="Email"
-                        className="bg-gray-50 border-gray-200 rounded-lg h-12 text-gray-900 placeholder:text-gray-500"
-                      />
-                    </div>
-                    <div>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        required
-                        placeholder="Phone"
-                        className="bg-gray-50 border-gray-200 rounded-lg h-12 text-gray-900 placeholder:text-gray-500"
-                      />
-                    </div>
-                    <div>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        placeholder="Message"
-                        rows={3}
-                        className="bg-gray-50 border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-500 resize-none"
-                      />
-                    </div>
+                  <form onSubmit={handleSubmit} className="space-y-3">
+                    <Input
+                      id="hero-name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      placeholder="Name"
+                      className="bg-gray-50/80 border-gray-200 rounded-md h-10 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                    />
+                    <Input
+                      id="hero-email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="Email"
+                      className="bg-gray-50/80 border-gray-200 rounded-md h-10 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                    />
+                    <Input
+                      id="hero-phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      placeholder="Phone"
+                      className="bg-gray-50/80 border-gray-200 rounded-md h-10 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                    />
+                    <Textarea
+                      id="hero-message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder="Message"
+                      rows={2}
+                      className="bg-gray-50/80 border-gray-200 rounded-md text-sm text-gray-900 placeholder:text-gray-400 resize-none focus:border-amber-400 focus:ring-amber-400/20"
+                    />
                     <Button 
                       type="submit" 
-                      className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-semibold rounded-full h-12 text-base shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-amber-500/40"
+                      className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-semibold rounded-full h-10 text-sm shadow-lg shadow-amber-500/20 transition-all duration-300 hover:shadow-amber-500/30 hover:scale-[1.02]"
                     >
                       Send Message
                     </Button>
@@ -229,34 +222,46 @@ const Contact = () => {
               </div>
 
               {/* Right side - Mascot */}
-              <div className="hidden lg:flex justify-end items-start">
+              <div className="hidden lg:flex lg:col-span-6 xl:col-span-7 justify-center lg:justify-end items-start pt-4">
                 <div className="relative">
                   <img 
                     src={horseBodyMascot} 
                     alt="Stallion Mascot" 
-                    className="h-[500px] xl:h-[600px] object-contain drop-shadow-2xl"
+                    className="h-[420px] xl:h-[520px] 2xl:h-[580px] object-contain drop-shadow-2xl"
                     style={{
-                      filter: 'drop-shadow(0 0 40px rgba(251, 191, 36, 0.3))'
+                      filter: 'drop-shadow(0 0 60px rgba(251, 191, 36, 0.25)) drop-shadow(0 20px 40px rgba(0,0,0,0.3))'
                     }}
                   />
                 </div>
+              </div>
+
+              {/* Mobile Mascot */}
+              <div className="lg:hidden flex justify-center -mt-4">
+                <img 
+                  src={horseBodyMascot} 
+                  alt="Stallion Mascot" 
+                  className="h-[200px] sm:h-[240px] object-contain opacity-90"
+                  style={{
+                    filter: 'drop-shadow(0 0 30px rgba(251, 191, 36, 0.2))'
+                  }}
+                />
               </div>
             </div>
           </div>
         </section>
 
         {/* Quick Actions */}
-        <section className="bg-[#0a1628] py-8">
+        <section className="bg-[#0d1a2d] py-5 border-y border-white/5">
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-3 md:gap-4">
               {quickActions.map((action, index) => (
                 <Link
                   key={index}
                   to={action.link}
-                  className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 hover:border-amber-400/50 text-white px-6 py-3 rounded-full transition-all duration-300 hover:bg-white/20 hover:shadow-lg hover:shadow-amber-500/10"
+                  className="group flex items-center gap-2.5 bg-white/[0.07] backdrop-blur-sm border border-white/10 hover:border-amber-400/40 text-white px-5 py-2.5 rounded-full transition-all duration-300 hover:bg-white/[0.12] hover:shadow-lg hover:shadow-amber-500/10"
                 >
-                  <span className="text-amber-400">{action.icon}</span>
-                  <span className="font-medium">{action.label}</span>
+                  <span className="text-amber-400 group-hover:scale-110 transition-transform">{action.icon}</span>
+                  <span className="font-medium text-sm">{action.label}</span>
                 </Link>
               ))}
             </div>
@@ -266,105 +271,106 @@ const Contact = () => {
         {/* Contact Form Section */}
         <section 
           ref={formSectionAnimation.ref}
-          className={`relative py-16 md:py-24 overflow-hidden transition-all duration-700 delay-200 ${
+          className={`relative py-14 md:py-20 overflow-hidden transition-all duration-700 delay-200 ${
             formSectionAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
           style={{
-            background: 'linear-gradient(180deg, #0a1628 0%, #0d1f3c 50%, #0a1628 100%)'
+            background: 'linear-gradient(180deg, #0a1628 0%, #0f1e32 50%, #0a1628 100%)'
           }}
         >
-          {/* Decorative stars */}
+          {/* Decorative elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 left-10 w-1 h-1 bg-white/60 rounded-full animate-pulse" />
-            <div className="absolute top-1/3 right-1/4 w-2 h-2 bg-amber-400/50 rounded-full animate-pulse delay-150" />
-            <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-white/40 rounded-full animate-pulse delay-300" />
+            <div className="absolute top-20 left-8 w-1 h-1 bg-white/50 rounded-full animate-pulse" />
+            <div className="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-amber-400/40 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
+            <div className="absolute bottom-24 left-1/4 w-1 h-1 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }} />
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 relative z-10">
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center max-w-6xl mx-auto">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-20 items-center max-w-6xl mx-auto">
               {/* Form Card */}
-              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-2xl">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">Contact Form</h2>
+              <div className="bg-white/[0.97] backdrop-blur-md rounded-xl p-6 md:p-8 shadow-2xl shadow-black/20">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-5">Contact Form</h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <Input
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      placeholder="Name"
-                      className="bg-gray-50 border-gray-200 rounded-lg h-12 text-gray-900 placeholder:text-gray-500"
-                    />
-                  </div>
-                  <div>
-                    <Input
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      placeholder="Email"
-                      className="bg-gray-50 border-gray-200 rounded-lg h-12 text-gray-900 placeholder:text-gray-500"
-                    />
-                  </div>
-                  <div>
-                    <Input
-                      name="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      required
-                      placeholder="+91.22 Rebosso"
-                      className="bg-gray-50 border-gray-200 rounded-lg h-12 text-gray-900 placeholder:text-gray-500"
-                    />
-                  </div>
-                  <div>
-                    <Textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="Your Message"
-                      rows={4}
-                      className="bg-gray-50 border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-500 resize-none"
-                    />
-                  </div>
+                <form onSubmit={handleSubmit} className="space-y-3.5">
+                  <Input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    placeholder="Name"
+                    className="bg-gray-50/80 border-gray-200 rounded-md h-11 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                  />
+                  <Input
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    placeholder="Email"
+                    className="bg-gray-50/80 border-gray-200 rounded-md h-11 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                  />
+                  <Input
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    placeholder="+91.22 Rebosso"
+                    className="bg-gray-50/80 border-gray-200 rounded-md h-11 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                  />
+                  <Textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Your Message"
+                    rows={4}
+                    className="bg-gray-50/80 border-gray-200 rounded-md text-sm text-gray-900 placeholder:text-gray-400 resize-none focus:border-amber-400 focus:ring-amber-400/20"
+                  />
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-semibold rounded-full h-12 text-base shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-amber-500/40"
+                    className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-semibold rounded-full h-11 text-sm shadow-lg shadow-amber-500/20 transition-all duration-300 hover:shadow-amber-500/30 hover:scale-[1.02]"
                   >
                     Send Message
                   </Button>
                   
                   {isSubmitted && (
-                    <div className="flex items-center gap-2 text-emerald-600 justify-center pt-2">
-                      <CheckCircle className="h-5 w-5" />
-                      <span className="font-medium">Thank you for contacting us!</span>
+                    <div className="flex items-center gap-2 text-emerald-600 justify-center pt-1">
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="font-medium text-sm">Thank you for contacting us!</span>
                     </div>
                   )}
                 </form>
               </div>
 
-              {/* Mascot with icons */}
+              {/* Mascot with floating icons */}
               <div className="hidden lg:flex justify-center items-center relative">
                 <div className="relative">
                   <img 
                     src={horseBodyMascot} 
                     alt="Stallion Mascot" 
-                    className="h-[400px] xl:h-[450px] object-contain"
+                    className="h-[360px] xl:h-[420px] object-contain"
                     style={{
-                      filter: 'drop-shadow(0 0 30px rgba(251, 191, 36, 0.25))'
+                      filter: 'drop-shadow(0 0 40px rgba(251, 191, 36, 0.2))'
                     }}
                   />
                   {/* Floating icons */}
-                  <div className="absolute top-1/4 -left-8 bg-amber-400/20 backdrop-blur-sm p-3 rounded-full animate-bounce" style={{ animationDelay: '0s' }}>
-                    <Phone className="h-6 w-6 text-amber-400" />
+                  <div 
+                    className="absolute top-16 -left-6 bg-amber-400/15 backdrop-blur-sm p-3 rounded-full shadow-lg shadow-amber-500/10"
+                    style={{ animation: 'bounce 3s ease-in-out infinite' }}
+                  >
+                    <Phone className="h-5 w-5 text-amber-400" />
                   </div>
-                  <div className="absolute top-1/2 -right-4 bg-amber-400/20 backdrop-blur-sm p-3 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}>
-                    <Mail className="h-6 w-6 text-amber-400" />
+                  <div 
+                    className="absolute top-1/2 -right-2 bg-amber-400/15 backdrop-blur-sm p-3 rounded-full shadow-lg shadow-amber-500/10"
+                    style={{ animation: 'bounce 3s ease-in-out infinite', animationDelay: '0.5s' }}
+                  >
+                    <Mail className="h-5 w-5 text-amber-400" />
                   </div>
-                  <div className="absolute bottom-1/3 -left-4 bg-amber-400/20 backdrop-blur-sm p-3 rounded-full animate-bounce" style={{ animationDelay: '0.6s' }}>
-                    <MapPin className="h-6 w-6 text-amber-400" />
+                  <div 
+                    className="absolute bottom-24 -left-2 bg-amber-400/15 backdrop-blur-sm p-3 rounded-full shadow-lg shadow-amber-500/10"
+                    style={{ animation: 'bounce 3s ease-in-out infinite', animationDelay: '1s' }}
+                  >
+                    <MapPin className="h-5 w-5 text-amber-400" />
                   </div>
                 </div>
               </div>
@@ -375,72 +381,80 @@ const Contact = () => {
         {/* Contact Information & Map Section */}
         <section 
           ref={contactInfoAnimation.ref}
-          className={`relative py-16 md:py-24 overflow-hidden transition-all duration-700 delay-300 ${
+          className={`relative py-14 md:py-20 overflow-hidden transition-all duration-700 delay-300 ${
             contactInfoAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
           style={{
-            background: 'linear-gradient(180deg, #0a1628 0%, #1a2744 100%)'
+            background: 'linear-gradient(180deg, #0a1628 0%, #111d2e 100%)'
           }}
         >
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start max-w-6xl mx-auto">
+          {/* Decorative particles */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-16 right-12 w-1 h-1 bg-amber-400/50 rounded-full animate-pulse" />
+            <div className="absolute bottom-20 left-16 w-1.5 h-1.5 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-start max-w-6xl mx-auto">
               {/* Contact Information */}
-              <div className="space-y-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
-                  <MapPin className="h-8 w-8 text-amber-400" />
+              <div className="space-y-6">
+                <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-3">
+                  <div className="bg-amber-400/20 p-2 rounded-full">
+                    <MapPin className="h-5 w-5 text-amber-400" />
+                  </div>
                   Contact Information
                 </h2>
                 
-                <div className="space-y-6">
+                <div className="space-y-4 pl-1">
                   <a 
                     href="tel:+917875811148" 
-                    className="flex items-center gap-4 text-white hover:text-amber-400 transition-colors group"
+                    className="flex items-center gap-4 text-white/90 hover:text-amber-400 transition-colors group"
                   >
-                    <div className="bg-amber-400/20 p-3 rounded-full group-hover:bg-amber-400/30 transition-colors">
-                      <Phone className="h-5 w-5 text-amber-400" />
+                    <div className="bg-white/5 group-hover:bg-amber-400/20 p-2.5 rounded-full transition-colors border border-white/10">
+                      <Phone className="h-4 w-4 text-amber-400" />
                     </div>
-                    <span className="text-lg">+91 78758 11148</span>
+                    <span className="text-base">+91 78758 11148</span>
                   </a>
                   
                   <a 
                     href="mailto:info@stallion.co.in" 
-                    className="flex items-center gap-4 text-white hover:text-amber-400 transition-colors group"
+                    className="flex items-center gap-4 text-white/90 hover:text-amber-400 transition-colors group"
                   >
-                    <div className="bg-amber-400/20 p-3 rounded-full group-hover:bg-amber-400/30 transition-colors">
-                      <Mail className="h-5 w-5 text-amber-400" />
+                    <div className="bg-white/5 group-hover:bg-amber-400/20 p-2.5 rounded-full transition-colors border border-white/10">
+                      <Mail className="h-4 w-4 text-amber-400" />
                     </div>
-                    <span className="text-lg">info@stallion.co.in</span>
+                    <span className="text-base">info@stallion.co.in</span>
                   </a>
                 </div>
 
                 {/* Mobile Mascot */}
-                <div className="lg:hidden flex justify-center py-8">
+                <div className="lg:hidden flex justify-center py-6">
                   <img 
                     src={horseBodyMascot} 
                     alt="Stallion Mascot" 
-                    className="h-[250px] object-contain"
+                    className="h-[180px] object-contain"
                     style={{
-                      filter: 'drop-shadow(0 0 20px rgba(251, 191, 36, 0.2))'
+                      filter: 'drop-shadow(0 0 20px rgba(251, 191, 36, 0.15))'
                     }}
                   />
                 </div>
               </div>
 
               {/* Map */}
-              <div className="space-y-4">
-                <div className="bg-white rounded-2xl overflow-hidden shadow-2xl">
-                  <div className="p-3 bg-gray-50 border-b flex items-center justify-between">
-                    <span className="text-sm text-gray-600">View larger map</span>
+              <div>
+                <div className="bg-white rounded-xl overflow-hidden shadow-2xl shadow-black/30">
+                  <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+                    <span className="text-xs text-gray-500">View larger map</span>
                     <a 
                       href="https://maps.google.com/?q=Stallion+IT+Solutions+Socorro+Porvorim+Goa"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-amber-500 hover:text-amber-600 text-sm font-medium"
+                      className="text-amber-500 hover:text-amber-600 text-xs font-medium transition-colors"
                     >
                       Open in Maps →
                     </a>
                   </div>
-                  <div className="aspect-video w-full">
+                  <div className="aspect-[4/3] w-full">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3844.3607829345937!2d73.82964!3d15.540620!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDMyJzI2LjIiTiA3M8KwNDknNDYuNyJF!5e0!3m2!1sen!2sin!4v1234567890"
                       width="100%"
@@ -453,9 +467,9 @@ const Contact = () => {
                       className="w-full h-full"
                     />
                   </div>
-                  <div className="p-4 bg-white">
-                    <p className="font-semibold text-gray-900">Stallion IT Solutions</p>
-                    <p className="text-sm text-gray-600">The Yellow House, Socorro, Porvorim, Goa 403521</p>
+                  <div className="p-4 bg-white border-t border-gray-100">
+                    <p className="font-semibold text-gray-900 text-sm">Stallion IT Solutions</p>
+                    <p className="text-xs text-gray-500 mt-0.5">The Yellow House, Socorro, Porvorim, Goa 403521</p>
                   </div>
                 </div>
               </div>
