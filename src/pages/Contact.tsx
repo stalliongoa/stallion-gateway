@@ -1,17 +1,16 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Phone, Mail, MapPin, FileText, Shield, Camera } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { Link } from "react-router-dom";
-import mascotBanner from "@/assets/mascot-banner.jpg";
+import { Camera, FileText, Shield, Mail, MapPin, Phone } from "lucide-react";
+import contactMockupBg from "@/assets/contactus-mockup.jpg";
+import horseBodyMascot from "@/assets/horse-body-mascot.png";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -22,34 +21,42 @@ const Contact = () => {
     phone: "",
     location: "",
     service: "",
-    message: ""
+    message: "",
   });
 
-  // Animation hooks for different sections
-  const heroAnimation = useScrollAnimation({ threshold: 0.2 });
-  const ctaAnimation = useScrollAnimation({ threshold: 0.1 });
-  const formAnimation = useScrollAnimation({ threshold: 0.1 });
-  const contactInfoAnimation = useScrollAnimation({ threshold: 0.1 });
+  const services = useMemo(
+    () => [
+      "IT Network Design",
+      "CCTV Surveillance",
+      "WiFi Setup",
+      "IT AMC",
+      "Server Setup",
+      "IT Training",
+      "Hardware Sales",
+      "Other",
+    ],
+    []
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Basic validation
     if (!formData.name || !formData.email || !formData.phone) {
       toast({
         title: "Required fields missing",
         description: "Please fill in all required fields",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     try {
       console.log("Submitting audit request:", formData);
-      
+
       // Send email notification via edge function
-      const { data, error } = await supabase.functions.invoke('send-audit-request', {
-        body: formData
+      const { data, error } = await supabase.functions.invoke("send-audit-request", {
+        body: formData,
       });
 
       if (error) {
@@ -58,7 +65,7 @@ const Contact = () => {
       }
 
       console.log("Audit request sent successfully:", data);
-      
+
       toast({
         title: "Message sent successfully!",
         description: "We'll get back to you within 24 hours.",
@@ -72,83 +79,79 @@ const Contact = () => {
         phone: "",
         location: "",
         service: "",
-        message: ""
+        message: "",
       });
     } catch (error) {
       console.error("Failed to submit audit request:", error);
       toast({
         title: "Failed to send message",
         description: "Please try again or contact us directly at info@stallion.co.in",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  const services = [
-    "IT Network Design",
-    "CCTV Surveillance",
-    "WiFi Setup",
-    "IT AMC",
-    "Server Setup",
-    "IT Training",
-    "Hardware Sales",
-    "Other"
-  ];
-
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a1628]">
+    <div className="min-h-screen flex flex-col">
       <Navigation />
-      
-      <main className="flex-1">
-        {/* Hero Section - Two Column */}
-        <section 
-          ref={heroAnimation.ref}
-          className={`py-12 md:py-20 transition-all duration-700 ${
-            heroAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-        >
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-              {/* Left Column - Text & Form */}
-              <div className="space-y-6">
-                <div>
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-                    Get in Touch with<br />
-                    <span className="text-secondary">Stallion IT Solutions</span> & Services
-                  </h1>
-                  <p className="text-white/80 text-lg">
-                    We're here to answer your IT, CCTV, Support, and AMC queries.
-                  </p>
-                </div>
 
-                {/* Reach Out Form Card */}
-                <Card className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border-0">
-                  <CardContent className="p-6">
-                    <h2 className="text-xl font-bold text-primary mb-2">Reach Out to Us</h2>
-                    <p className="text-muted-foreground text-sm mb-6">
-                      We're here for your IT support, CCTV queries, AMC plans, and more. Let's take your technology further.
+      <main className="flex-1 relative bg-primary text-primary-foreground overflow-hidden">
+        {/* Blurred background texture from mockup (reference only) */}
+        <img
+          src={contactMockupBg}
+          alt=""
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover blur-2xl scale-110 opacity-40"
+          loading="lazy"
+          decoding="async"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-primary/60" />
+
+        <div className="relative">
+          {/* HERO: 2 columns */}
+          <section className="pt-10 sm:pt-14 md:pt-16 lg:pt-20">
+            <div className="container mx-auto px-4 sm:px-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-start">
+                {/* Left: heading + description */}
+                <div className="space-y-6">
+                  <header className="space-y-4">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
+                      Get in Touch with
+                      <br />
+                      <span className="text-secondary">Stallion IT Solutions</span> &amp; Services
+                    </h1>
+                    <p className="text-base sm:text-lg text-primary-foreground/90">
+                      We're here to answer your IT, CCTV, Support, and AMC queries.
                     </p>
-                    
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
+                  </header>
+
+                  {/* Reach Out Card (white rounded) */}
+                  <Card className="rounded-2xl border-0 shadow-medium bg-card/95 text-foreground">
+                    <CardContent className="p-5 sm:p-6">
+                      <div className="space-y-1">
+                        <h2 className="text-xl sm:text-2xl font-bold text-primary">Reach Out to Us</h2>
+                        <p className="text-sm text-muted-foreground">
+                          We're here for your IT support, CCTV queries, AMC plans, and more.
+                        </p>
+                      </div>
+
+                      <form onSubmit={handleSubmit} className="mt-5 space-y-3">
                         <Input
                           id="name"
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
                           required
-                          placeholder="Name"
-                          className="bg-gray-50 border-gray-200 rounded-lg"
+                          placeholder="Name *"
                         />
-                      </div>
-                      <div>
                         <Input
                           id="email"
                           name="email"
@@ -156,11 +159,8 @@ const Contact = () => {
                           value={formData.email}
                           onChange={handleChange}
                           required
-                          placeholder="Email"
-                          className="bg-gray-50 border-gray-200 rounded-lg"
+                          placeholder="Email *"
                         />
-                      </div>
-                      <div>
                         <Input
                           id="phone"
                           name="phone"
@@ -168,235 +168,235 @@ const Contact = () => {
                           value={formData.phone}
                           onChange={handleChange}
                           required
-                          placeholder="Phone"
-                          className="bg-gray-50 border-gray-200 rounded-lg"
+                          placeholder="Phone *"
                         />
-                      </div>
-                      <div>
                         <Textarea
                           id="message"
                           name="message"
                           value={formData.message}
                           onChange={handleChange}
                           placeholder="Message"
-                          rows={3}
-                          className="bg-gray-50 border-gray-200 rounded-lg resize-none"
+                          rows={4}
+                          className="resize-none"
                         />
+
+                        {/* Keep the additional fields (no logic changes) */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <Input
+                            id="company"
+                            name="company"
+                            value={formData.company}
+                            onChange={handleChange}
+                            placeholder="Company / Property Name"
+                          />
+                          <Input
+                            id="location"
+                            name="location"
+                            value={formData.location}
+                            onChange={handleChange}
+                            placeholder="Location"
+                          />
+                        </div>
+                        <select
+                          id="service"
+                          name="service"
+                          value={formData.service}
+                          onChange={handleChange}
+                          className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+                        >
+                          <option value="">Service Interest</option>
+                          {services.map((s) => (
+                            <option key={s} value={s}>
+                              {s}
+                            </option>
+                          ))}
+                        </select>
+
+                        <Button type="submit" size="lg" className="w-full rounded-full">
+                          Send Message
+                        </Button>
+                      </form>
+                    </CardContent>
+                  </Card>
+
+                  {/* CTA Row (gold strip with 3 buttons) */}
+                  <div className="pt-2">
+                    <div className="gold-gradient rounded-xl shadow-gold p-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-1">
+                        <Button
+                          asChild
+                          variant="ghost"
+                          className="rounded-lg justify-start sm:justify-center text-secondary-foreground hover:bg-background/10"
+                        >
+                          <Link to="/contact" className="flex items-center gap-2">
+                            <FileText className="h-4 w-4" />
+                            Book Your Free IT Audit
+                          </Link>
+                        </Button>
+                        <Button
+                          asChild
+                          variant="ghost"
+                          className="rounded-lg justify-start sm:justify-center text-secondary-foreground hover:bg-background/10"
+                        >
+                          <Link to="/amc-plans" className="flex items-center gap-2">
+                            <Shield className="h-4 w-4" />
+                            View AMC Plans
+                          </Link>
+                        </Button>
+                        <Button
+                          asChild
+                          variant="ghost"
+                          className="rounded-lg justify-start sm:justify-center text-secondary-foreground hover:bg-background/10"
+                        >
+                          <Link to="/stallion-cctv" className="flex items-center gap-2">
+                            <Camera className="h-4 w-4" />
+                            Stallion CCTV
+                          </Link>
+                        </Button>
                       </div>
-                      <Button 
-                        type="submit" 
-                        className="w-full bg-secondary hover:bg-secondary/90 text-primary font-semibold rounded-full py-6"
-                      >
-                        Send Message
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              </div>
+                    </div>
+                  </div>
+                </div>
 
-              {/* Right Column - Mascot Visual */}
-              <div className="hidden lg:flex items-center justify-center h-full">
-                <div 
-                  className="w-full h-[600px] rounded-2xl bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: `url(${mascotBanner})` }}
-                />
+                {/* Right: mascot visual container */}
+                <div className="hidden lg:block">
+                  <div className="rounded-2xl overflow-hidden shadow-medium bg-card/10 border border-primary-foreground/10">
+                    <div className="h-[640px] relative flex items-center justify-end">
+                      <img
+                        src={horseBodyMascot}
+                        alt="Stallion mascot"
+                        className="h-full w-auto object-contain pr-6"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* CTA Button Row */}
-        <section 
-          ref={ctaAnimation.ref}
-          className={`py-6 transition-all duration-700 delay-100 ${
-            ctaAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-        >
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Button 
-                asChild 
-                variant="outline" 
-                className="w-full sm:w-auto bg-white/95 hover:bg-white text-primary border-0 rounded-full px-8 py-6 font-semibold shadow-lg"
-              >
-                <Link to="/contact" className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  Book Your Free IT Audit
-                </Link>
-              </Button>
-              <Button 
-                asChild 
-                variant="outline" 
-                className="w-full sm:w-auto bg-white/95 hover:bg-white text-primary border-0 rounded-full px-8 py-6 font-semibold shadow-lg"
-              >
-                <Link to="/amc-plans" className="flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
-                  View AMC Plans
-                </Link>
-              </Button>
-              <Button 
-                asChild 
-                variant="outline" 
-                className="w-full sm:w-auto bg-white/95 hover:bg-white text-primary border-0 rounded-full px-8 py-6 font-semibold shadow-lg"
-              >
-                <Link to="/stallion-cctv" className="flex items-center gap-2">
-                  <Camera className="h-5 w-5" />
-                  Stallion CCTV
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </section>
+          {/* CONTACT SECTION: 2 columns */}
+          <section className="py-10 sm:py-14 md:py-20">
+            <div className="container mx-auto px-4 sm:px-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-start">
+                {/* Left: Contact form white rounded */}
+                <Card className="rounded-2xl border-0 shadow-medium bg-card/95 text-foreground">
+                  <CardContent className="p-5 sm:p-6">
+                    <h2 className="text-2xl font-bold text-primary">Contact Form</h2>
 
-        {/* Contact Form Section - Two Column */}
-        <section 
-          ref={formAnimation.ref}
-          className={`py-12 md:py-16 transition-all duration-700 delay-200 ${
-            formAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-        >
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              {/* Left Column - Contact Form */}
-              <Card className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border-0">
-                <CardContent className="p-6 md:p-8">
-                  <h2 className="text-2xl font-bold text-primary mb-6">Contact Form</h2>
-                  
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
+                    <form onSubmit={handleSubmit} className="mt-5 space-y-3">
                       <Input
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        placeholder="Name"
-                        className="bg-gray-50 border-gray-200 rounded-lg"
+                        placeholder="Name *"
                       />
-                    </div>
-                    <div>
                       <Input
                         name="email"
                         type="email"
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        placeholder="Email"
-                        className="bg-gray-50 border-gray-200 rounded-lg"
+                        placeholder="Email *"
                       />
-                    </div>
-                    <div>
                       <Input
                         name="phone"
                         type="tel"
                         value={formData.phone}
                         onChange={handleChange}
                         required
-                        placeholder="+91.22 phone"
-                        className="bg-gray-50 border-gray-200 rounded-lg"
+                        placeholder="Phone *"
                       />
-                    </div>
-                    <div>
                       <Textarea
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
                         placeholder="Your Message"
                         rows={4}
-                        className="bg-gray-50 border-gray-200 rounded-lg resize-none"
+                        className="resize-none"
+                      />
+
+                      <Button type="submit" size="lg" className="w-full rounded-full">
+                        Send Message
+                      </Button>
+                    </form>
+                  </CardContent>
+                </Card>
+
+                {/* Right: mascot panel */}
+                <div className="hidden lg:block">
+                  <div className="rounded-2xl overflow-hidden shadow-medium bg-card/10 border border-primary-foreground/10">
+                    <div className="h-[520px] relative flex items-end justify-end">
+                      <img
+                        src={horseBodyMascot}
+                        alt="Stallion mascot panel"
+                        className="h-full w-auto object-contain pr-10 pb-4 opacity-95"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-secondary hover:bg-secondary/90 text-primary font-semibold rounded-full py-6"
-                    >
-                      Send Message
-                    </Button>
-                    <p className="text-center text-sm text-green-600 flex items-center justify-center gap-2">
-                      <span className="inline-block w-4 h-4 bg-green-600 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                      Thank you for contacting us!
-                    </p>
-                  </form>
-                </CardContent>
-              </Card>
-
-              {/* Right Column - Mascot Panel */}
-              <div className="hidden lg:flex items-center justify-center h-full">
-                <div 
-                  className="w-full h-[500px] rounded-2xl bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: `url(${mascotBanner})` }}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Contact Information & Map Section */}
-        <section 
-          ref={contactInfoAnimation.ref}
-          className={`py-12 md:py-16 transition-all duration-700 delay-300 ${
-            contactInfoAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-          }`}
-        >
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-              {/* Left Column - Contact Information */}
-              <div className="space-y-6">
-                <h2 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
-                  <MapPin className="h-8 w-8 text-secondary" />
-                  Contact Information
-                </h2>
-                
-                <div className="space-y-4">
-                  <a 
-                    href="tel:+917875811148" 
-                    className="flex items-center gap-4 text-white/90 hover:text-secondary transition-colors"
-                  >
-                    <Phone className="h-6 w-6 text-secondary" />
-                    <span className="text-lg">+91 22 1234 5678</span>
-                  </a>
-                  <a 
-                    href="mailto:info@stallion.co.in" 
-                    className="flex items-center gap-4 text-white/90 hover:text-secondary transition-colors"
-                  >
-                    <Mail className="h-6 w-6 text-secondary" />
-                    <span className="text-lg">info@stallion.co.in</span>
-                  </a>
+                  </div>
                 </div>
               </div>
+            </div>
+          </section>
 
-              {/* Right Column - Map */}
-              <div className="w-full">
-                <Card className="rounded-2xl overflow-hidden shadow-xl border-0">
-                  <CardContent className="p-0">
-                    <div className="relative">
-                      <a 
-                        href="https://maps.google.com/?q=The+Yellow+House+Socorro+Porvorim+Goa" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="absolute top-4 left-4 z-10 bg-white/90 px-3 py-1 rounded text-sm text-primary hover:bg-white transition-colors"
+          {/* CONTACT INFO + MAP */}
+          <section className="pb-12 sm:pb-16">
+            <div className="container mx-auto px-4 sm:px-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-start">
+                <Card className="rounded-2xl border-0 shadow-medium bg-card/95 text-foreground">
+                  <CardContent className="p-5 sm:p-6">
+                    <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+                      <MapPin className="h-5 w-5 text-secondary" />
+                      Contact Information
+                    </h2>
+
+                    <div className="mt-5 space-y-3">
+                      <a
+                        className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
+                        href="tel:+917875811148"
                       >
-                        View larger map
+                        <Phone className="h-5 w-5 text-secondary" />
+                        <span>+91 7875811148</span>
                       </a>
-                      <div className="aspect-video w-full">
-                        <iframe
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3844.3607829345937!2d73.82964!3d15.540620!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDMyJzI2LjIiTiA3M8KwNDknNDYuNyJF!5e0!3m2!1sen!2sin!4v1234567890"
-                          width="100%"
-                          height="100%"
-                          style={{ border: 0 }}
-                          allowFullScreen
-                          loading="lazy"
-                          referrerPolicy="no-referrer-when-downgrade"
-                          title="Stallion IT Solutions Location"
-                          className="w-full h-full"
-                        />
+                      <a
+                        className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
+                        href="mailto:info@stallion.co.in"
+                      >
+                        <Mail className="h-5 w-5 text-secondary" />
+                        <span>info@stallion.co.in</span>
+                      </a>
+                      <div className="text-sm text-muted-foreground">
+                        The Yellow House, Socorro, Porvorim, Goa 403521
                       </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="rounded-2xl overflow-hidden shadow-medium border-0 bg-card/95">
+                  <CardContent className="p-0">
+                    <div className="aspect-video w-full">
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3844.3607829345937!2d73.82964!3d15.540620!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDMyJzI2LjIiTiA3M8KwNDknNDYuNyJF!5e0!3m2!1sen!2sin!4v1234567890"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Stallion IT Solutions Location"
+                        className="w-full h-full"
+                      />
                     </div>
                   </CardContent>
                 </Card>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </main>
 
       <Footer />
