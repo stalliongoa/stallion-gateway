@@ -127,10 +127,10 @@ const Contact = () => {
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section with Mascot */}
+        {/* Hero Section */}
         <section 
           ref={heroAnimation.ref}
-          className={`relative min-h-[580px] md:min-h-[640px] lg:min-h-[680px] overflow-hidden transition-all duration-700 ${
+          className={`relative overflow-hidden transition-all duration-700 ${
             heroAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
           style={{
@@ -139,40 +139,40 @@ const Contact = () => {
         >
           {/* Decorative particles */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-16 left-8 w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse opacity-80" />
-            <div className="absolute top-32 right-16 w-1 h-1 bg-amber-300 rounded-full animate-pulse opacity-60" style={{ animationDelay: '0.5s' }} />
-            <div className="absolute bottom-48 left-1/4 w-1 h-1 bg-amber-500 rounded-full animate-pulse opacity-70" style={{ animationDelay: '1s' }} />
-            <div className="absolute top-1/3 left-[45%] w-0.5 h-0.5 bg-white/60 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
-            <div className="absolute top-24 left-1/3 w-1 h-1 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }} />
-            <div className="absolute bottom-32 right-1/3 w-1.5 h-1.5 bg-amber-400/60 rounded-full animate-pulse" style={{ animationDelay: '1.2s' }} />
+            <div className="absolute top-20 left-[10%] w-1 h-1 bg-amber-400 rounded-full animate-pulse opacity-60" />
+            <div className="absolute top-40 right-[20%] w-1.5 h-1.5 bg-amber-300 rounded-full animate-pulse opacity-50" style={{ animationDelay: '0.5s' }} />
+            <div className="absolute bottom-32 left-[30%] w-1 h-1 bg-white/50 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-[60%] right-[40%] w-0.5 h-0.5 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
+            <div className="absolute top-32 left-[50%] w-1 h-1 bg-amber-400/40 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }} />
+            <div className="absolute bottom-48 right-[15%] w-1 h-1 bg-amber-400/50 rounded-full animate-pulse" style={{ animationDelay: '1.2s' }} />
           </div>
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-14 relative z-10">
-            <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20 relative z-10">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
               {/* Left side - Content */}
-              <div className="lg:col-span-6 xl:col-span-5 space-y-5 md:space-y-6">
+              <div className="space-y-6 md:space-y-8 max-w-xl">
                 {/* Hero Text */}
-                <div className="space-y-3">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-bold text-white leading-tight tracking-tight">
+                <div className="space-y-4">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-bold text-white leading-[1.15] tracking-tight">
                     Get in Touch with{" "}
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400">
                       Stallion IT Solutions
                     </span>{" "}
                     & Services
                   </h1>
-                  <p className="text-white/70 text-sm md:text-base max-w-md">
+                  <p className="text-white/70 text-base md:text-lg">
                     We're here to answer your IT, CCTV, Support, and AMC queries.
                   </p>
                 </div>
 
                 {/* Reach Out Form Card */}
-                <div className="bg-white/[0.97] backdrop-blur-md rounded-xl p-5 md:p-6 shadow-2xl shadow-black/20 max-w-md">
-                  <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-1">Reach Out to Us</h2>
-                  <p className="text-gray-500 text-xs md:text-sm mb-4 leading-relaxed">
+                <div className="bg-white/[0.98] backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-2xl shadow-black/30">
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Reach Out to Us</h2>
+                  <p className="text-gray-500 text-sm md:text-base mb-6 leading-relaxed">
                     We're here for your IT support, CCTV queries, AMC plans, and more. Let's take your technology further.
                   </p>
                   
-                  <form onSubmit={handleSubmit} className="space-y-3">
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     <Input
                       id="hero-name"
                       name="name"
@@ -180,7 +180,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       placeholder="Name"
-                      className="bg-gray-50/80 border-gray-200 rounded-md h-10 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                      className="bg-gray-50 border-gray-200 rounded-lg h-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
                     />
                     <Input
                       id="hero-email"
@@ -190,7 +190,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       placeholder="Email"
-                      className="bg-gray-50/80 border-gray-200 rounded-md h-10 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                      className="bg-gray-50 border-gray-200 rounded-lg h-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
                     />
                     <Input
                       id="hero-phone"
@@ -200,7 +200,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       placeholder="Phone"
-                      className="bg-gray-50/80 border-gray-200 rounded-md h-10 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                      className="bg-gray-50 border-gray-200 rounded-lg h-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
                     />
                     <Textarea
                       id="hero-message"
@@ -208,12 +208,12 @@ const Contact = () => {
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Message"
-                      rows={2}
-                      className="bg-gray-50/80 border-gray-200 rounded-md text-sm text-gray-900 placeholder:text-gray-400 resize-none focus:border-amber-400 focus:ring-amber-400/20"
+                      rows={3}
+                      className="bg-gray-50 border-gray-200 rounded-lg text-base text-gray-900 placeholder:text-gray-400 resize-none focus:border-amber-400 focus:ring-amber-400/20"
                     />
                     <Button 
                       type="submit" 
-                      className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-semibold rounded-full h-10 text-sm shadow-lg shadow-amber-500/20 transition-all duration-300 hover:shadow-amber-500/30 hover:scale-[1.02]"
+                      className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-bold rounded-full h-12 text-base shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-amber-500/40 hover:scale-[1.02]"
                     >
                       Send Message
                     </Button>
@@ -221,28 +221,26 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Right side - Mascot */}
-              <div className="hidden lg:flex lg:col-span-6 xl:col-span-7 justify-center lg:justify-end items-start pt-4">
-                <div className="relative">
-                  <img 
-                    src={horseBodyMascot} 
-                    alt="Stallion Mascot" 
-                    className="h-[420px] xl:h-[520px] 2xl:h-[580px] object-contain drop-shadow-2xl"
-                    style={{
-                      filter: 'drop-shadow(0 0 60px rgba(251, 191, 36, 0.25)) drop-shadow(0 20px 40px rgba(0,0,0,0.3))'
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Mobile Mascot */}
-              <div className="lg:hidden flex justify-center -mt-4">
+              {/* Right side - Large Mascot */}
+              <div className="hidden lg:flex justify-center lg:justify-end items-center min-h-[600px]">
                 <img 
                   src={horseBodyMascot} 
                   alt="Stallion Mascot" 
-                  className="h-[200px] sm:h-[240px] object-contain opacity-90"
+                  className="h-[500px] xl:h-[580px] 2xl:h-[640px] object-contain drop-shadow-2xl"
                   style={{
-                    filter: 'drop-shadow(0 0 30px rgba(251, 191, 36, 0.2))'
+                    filter: 'drop-shadow(0 0 80px rgba(251, 191, 36, 0.3)) drop-shadow(0 25px 50px rgba(0,0,0,0.4))'
+                  }}
+                />
+              </div>
+
+              {/* Mobile Mascot */}
+              <div className="lg:hidden flex justify-center pt-4">
+                <img 
+                  src={horseBodyMascot} 
+                  alt="Stallion Mascot" 
+                  className="h-[220px] sm:h-[280px] object-contain"
+                  style={{
+                    filter: 'drop-shadow(0 0 40px rgba(251, 191, 36, 0.25))'
                   }}
                 />
               </div>
@@ -250,18 +248,18 @@ const Contact = () => {
           </div>
         </section>
 
-        {/* Quick Actions */}
-        <section className="bg-[#0d1a2d] py-5 border-y border-white/5">
+        {/* Quick Actions CTA Row */}
+        <section className="bg-[#0d1a2d] py-6 md:py-8 border-y border-white/5">
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6">
               {quickActions.map((action, index) => (
                 <Link
                   key={index}
                   to={action.link}
-                  className="group flex items-center gap-2.5 bg-white/[0.07] backdrop-blur-sm border border-white/10 hover:border-amber-400/40 text-white px-5 py-2.5 rounded-full transition-all duration-300 hover:bg-white/[0.12] hover:shadow-lg hover:shadow-amber-500/10"
+                  className="group flex items-center gap-3 bg-white/[0.95] text-gray-900 px-6 py-3 rounded-full transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/20 hover:scale-105 border border-gray-100"
                 >
-                  <span className="text-amber-400 group-hover:scale-110 transition-transform">{action.icon}</span>
-                  <span className="font-medium text-sm">{action.label}</span>
+                  <span className="text-amber-500 group-hover:text-amber-600 transition-colors">{action.icon}</span>
+                  <span className="font-semibold text-sm md:text-base">{action.label}</span>
                 </Link>
               ))}
             </div>
@@ -271,7 +269,7 @@ const Contact = () => {
         {/* Contact Form Section */}
         <section 
           ref={formSectionAnimation.ref}
-          className={`relative py-14 md:py-20 overflow-hidden transition-all duration-700 delay-200 ${
+          className={`relative py-16 md:py-24 overflow-hidden transition-all duration-700 delay-200 ${
             formSectionAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
           style={{
@@ -280,25 +278,25 @@ const Contact = () => {
         >
           {/* Decorative elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-20 left-8 w-1 h-1 bg-white/50 rounded-full animate-pulse" />
-            <div className="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-amber-400/40 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
-            <div className="absolute bottom-24 left-1/4 w-1 h-1 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }} />
+            <div className="absolute top-24 left-[15%] w-1 h-1 bg-white/40 rounded-full animate-pulse" />
+            <div className="absolute top-[40%] right-[20%] w-1.5 h-1.5 bg-amber-400/40 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
+            <div className="absolute bottom-32 left-[25%] w-1 h-1 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '0.8s' }} />
           </div>
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-20 items-center max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 xl:gap-24 items-center max-w-7xl mx-auto">
               {/* Form Card */}
-              <div className="bg-white/[0.97] backdrop-blur-md rounded-xl p-6 md:p-8 shadow-2xl shadow-black/20">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-5">Contact Form</h2>
+              <div className="bg-white/[0.98] backdrop-blur-md rounded-2xl p-6 md:p-8 lg:p-10 shadow-2xl shadow-black/30">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">Contact Form</h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-3.5">
+                <form onSubmit={handleSubmit} className="space-y-5">
                   <Input
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
                     required
                     placeholder="Name"
-                    className="bg-gray-50/80 border-gray-200 rounded-md h-11 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                    className="bg-gray-50 border-gray-200 rounded-lg h-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
                   />
                   <Input
                     name="email"
@@ -307,7 +305,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="Email"
-                    className="bg-gray-50/80 border-gray-200 rounded-md h-11 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                    className="bg-gray-50 border-gray-200 rounded-lg h-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
                   />
                   <Input
                     name="phone"
@@ -316,27 +314,27 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="+91.22 Rebosso"
-                    className="bg-gray-50/80 border-gray-200 rounded-md h-11 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
+                    className="bg-gray-50 border-gray-200 rounded-lg h-12 text-base text-gray-900 placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20"
                   />
                   <Textarea
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Your Message"
-                    rows={4}
-                    className="bg-gray-50/80 border-gray-200 rounded-md text-sm text-gray-900 placeholder:text-gray-400 resize-none focus:border-amber-400 focus:ring-amber-400/20"
+                    rows={5}
+                    className="bg-gray-50 border-gray-200 rounded-lg text-base text-gray-900 placeholder:text-gray-400 resize-none focus:border-amber-400 focus:ring-amber-400/20"
                   />
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-semibold rounded-full h-11 text-sm shadow-lg shadow-amber-500/20 transition-all duration-300 hover:shadow-amber-500/30 hover:scale-[1.02]"
+                    className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-bold rounded-full h-12 text-base shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-amber-500/40 hover:scale-[1.02]"
                   >
                     Send Message
                   </Button>
                   
                   {isSubmitted && (
-                    <div className="flex items-center gap-2 text-emerald-600 justify-center pt-1">
-                      <CheckCircle className="h-4 w-4" />
-                      <span className="font-medium text-sm">Thank you for contacting us!</span>
+                    <div className="flex items-center gap-2 text-emerald-600 justify-center pt-2">
+                      <CheckCircle className="h-5 w-5" />
+                      <span className="font-medium text-base">Thank you for contacting us!</span>
                     </div>
                   )}
                 </form>
@@ -348,31 +346,43 @@ const Contact = () => {
                   <img 
                     src={horseBodyMascot} 
                     alt="Stallion Mascot" 
-                    className="h-[360px] xl:h-[420px] object-contain"
+                    className="h-[400px] xl:h-[480px] object-contain"
                     style={{
-                      filter: 'drop-shadow(0 0 40px rgba(251, 191, 36, 0.2))'
+                      filter: 'drop-shadow(0 0 60px rgba(251, 191, 36, 0.25))'
                     }}
                   />
                   {/* Floating icons */}
                   <div 
-                    className="absolute top-16 -left-6 bg-amber-400/15 backdrop-blur-sm p-3 rounded-full shadow-lg shadow-amber-500/10"
+                    className="absolute top-[15%] -left-4 bg-white/10 backdrop-blur-md p-4 rounded-full shadow-xl border border-white/20"
                     style={{ animation: 'bounce 3s ease-in-out infinite' }}
                   >
-                    <Phone className="h-5 w-5 text-amber-400" />
+                    <Phone className="h-6 w-6 text-amber-400" />
                   </div>
                   <div 
-                    className="absolute top-1/2 -right-2 bg-amber-400/15 backdrop-blur-sm p-3 rounded-full shadow-lg shadow-amber-500/10"
+                    className="absolute top-[50%] -right-4 bg-white/10 backdrop-blur-md p-4 rounded-full shadow-xl border border-white/20"
                     style={{ animation: 'bounce 3s ease-in-out infinite', animationDelay: '0.5s' }}
                   >
-                    <Mail className="h-5 w-5 text-amber-400" />
+                    <Mail className="h-6 w-6 text-amber-400" />
                   </div>
                   <div 
-                    className="absolute bottom-24 -left-2 bg-amber-400/15 backdrop-blur-sm p-3 rounded-full shadow-lg shadow-amber-500/10"
+                    className="absolute bottom-[20%] left-[10%] bg-white/10 backdrop-blur-md p-4 rounded-full shadow-xl border border-white/20"
                     style={{ animation: 'bounce 3s ease-in-out infinite', animationDelay: '1s' }}
                   >
-                    <MapPin className="h-5 w-5 text-amber-400" />
+                    <MapPin className="h-6 w-6 text-amber-400" />
                   </div>
                 </div>
+              </div>
+
+              {/* Mobile Mascot */}
+              <div className="lg:hidden flex justify-center">
+                <img 
+                  src={horseBodyMascot} 
+                  alt="Stallion Mascot" 
+                  className="h-[200px] sm:h-[240px] object-contain"
+                  style={{
+                    filter: 'drop-shadow(0 0 30px rgba(251, 191, 36, 0.2))'
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -381,7 +391,7 @@ const Contact = () => {
         {/* Contact Information & Map Section */}
         <section 
           ref={contactInfoAnimation.ref}
-          className={`relative py-14 md:py-20 overflow-hidden transition-all duration-700 delay-300 ${
+          className={`relative py-16 md:py-24 overflow-hidden transition-all duration-700 delay-300 ${
             contactInfoAnimation.isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
           style={{
@@ -390,51 +400,51 @@ const Contact = () => {
         >
           {/* Decorative particles */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-16 right-12 w-1 h-1 bg-amber-400/50 rounded-full animate-pulse" />
-            <div className="absolute bottom-20 left-16 w-1.5 h-1.5 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
+            <div className="absolute top-20 right-[15%] w-1 h-1 bg-amber-400/50 rounded-full animate-pulse" />
+            <div className="absolute bottom-24 left-[20%] w-1.5 h-1.5 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
           </div>
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-start max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 xl:gap-24 items-start max-w-7xl mx-auto">
               {/* Contact Information */}
-              <div className="space-y-6">
-                <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-3">
-                  <div className="bg-amber-400/20 p-2 rounded-full">
-                    <MapPin className="h-5 w-5 text-amber-400" />
+              <div className="space-y-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-4">
+                  <div className="bg-amber-400/20 p-3 rounded-full">
+                    <MapPin className="h-6 w-6 text-amber-400" />
                   </div>
                   Contact Information
                 </h2>
                 
-                <div className="space-y-4 pl-1">
+                <div className="space-y-5 pl-2">
                   <a 
                     href="tel:+917875811148" 
-                    className="flex items-center gap-4 text-white/90 hover:text-amber-400 transition-colors group"
+                    className="flex items-center gap-5 text-white/90 hover:text-amber-400 transition-colors group"
                   >
-                    <div className="bg-white/5 group-hover:bg-amber-400/20 p-2.5 rounded-full transition-colors border border-white/10">
-                      <Phone className="h-4 w-4 text-amber-400" />
+                    <div className="bg-white/5 group-hover:bg-amber-400/20 p-3 rounded-full transition-colors border border-white/10">
+                      <Phone className="h-5 w-5 text-amber-400" />
                     </div>
-                    <span className="text-base">+91 78758 11148</span>
+                    <span className="text-lg">+91 22 1234 5678</span>
                   </a>
                   
                   <a 
                     href="mailto:info@stallion.co.in" 
-                    className="flex items-center gap-4 text-white/90 hover:text-amber-400 transition-colors group"
+                    className="flex items-center gap-5 text-white/90 hover:text-amber-400 transition-colors group"
                   >
-                    <div className="bg-white/5 group-hover:bg-amber-400/20 p-2.5 rounded-full transition-colors border border-white/10">
-                      <Mail className="h-4 w-4 text-amber-400" />
+                    <div className="bg-white/5 group-hover:bg-amber-400/20 p-3 rounded-full transition-colors border border-white/10">
+                      <Mail className="h-5 w-5 text-amber-400" />
                     </div>
-                    <span className="text-base">info@stallion.co.in</span>
+                    <span className="text-lg">info@stallion.co.in</span>
                   </a>
                 </div>
 
-                {/* Mobile Mascot */}
-                <div className="lg:hidden flex justify-center py-6">
+                {/* Mobile Mascot for this section */}
+                <div className="lg:hidden flex justify-center py-8">
                   <img 
                     src={horseBodyMascot} 
                     alt="Stallion Mascot" 
-                    className="h-[180px] object-contain"
+                    className="h-[180px] sm:h-[200px] object-contain"
                     style={{
-                      filter: 'drop-shadow(0 0 20px rgba(251, 191, 36, 0.15))'
+                      filter: 'drop-shadow(0 0 25px rgba(251, 191, 36, 0.2))'
                     }}
                   />
                 </div>
@@ -442,14 +452,14 @@ const Contact = () => {
 
               {/* Map */}
               <div>
-                <div className="bg-white rounded-xl overflow-hidden shadow-2xl shadow-black/30">
-                  <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                    <span className="text-xs text-gray-500">View larger map</span>
+                <div className="bg-white rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
+                  <div className="px-5 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+                    <span className="text-sm text-gray-500">View larger map</span>
                     <a 
                       href="https://maps.google.com/?q=Stallion+IT+Solutions+Socorro+Porvorim+Goa"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-amber-500 hover:text-amber-600 text-xs font-medium transition-colors"
+                      className="text-amber-500 hover:text-amber-600 text-sm font-medium transition-colors"
                     >
                       Open in Maps →
                     </a>
@@ -467,9 +477,9 @@ const Contact = () => {
                       className="w-full h-full"
                     />
                   </div>
-                  <div className="p-4 bg-white border-t border-gray-100">
-                    <p className="font-semibold text-gray-900 text-sm">Stallion IT Solutions</p>
-                    <p className="text-xs text-gray-500 mt-0.5">The Yellow House, Socorro, Porvorim, Goa 403521</p>
+                  <div className="p-5 bg-white border-t border-gray-100">
+                    <p className="font-semibold text-gray-900">Stallion IT Solutions</p>
+                    <p className="text-sm text-gray-500 mt-1">The Yellow House, Socorro, Porvorim, Goa 403521</p>
                   </div>
                 </div>
               </div>
