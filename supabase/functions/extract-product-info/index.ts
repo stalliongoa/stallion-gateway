@@ -30,19 +30,50 @@ serve(async (req) => {
 
     console.log('Fetching product page:', url);
 
-    // Fetch the product page content
+    // Check for known problematic sites
+    const urlLower = url.toLowerCase();
+    const blockedSites = ['flipkart.com', 'amazon.in', 'amazon.com', 'myntra.com', 'ajio.com'];
+    const isBlockedSite = blockedSites.some(site => urlLower.includes(site));
+    
+    if (isBlockedSite) {
+      console.warn('Attempting to fetch from protected site:', url);
+    }
+
+    // Fetch the product page content with enhanced headers
     const pageResponse = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Sec-Ch-Ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': '"Windows"',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
+        'Upgrade-Insecure-Requests': '1',
       },
     });
 
     if (!pageResponse.ok) {
       console.error('Failed to fetch page:', pageResponse.status);
+      
+      // Provide helpful error messages for common blocking scenarios
+      let errorMessage = 'Failed to fetch product page';
+      if (pageResponse.status === 529 || pageResponse.status === 503) {
+        errorMessage = 'This site has bot protection. Try using the official brand website (e.g., cpplus.com, hikvision.com) instead of marketplaces like Flipkart/Amazon.';
+      } else if (pageResponse.status === 403) {
+        errorMessage = 'Access denied by the website. Try using the manufacturer\'s official product page.';
+      } else if (pageResponse.status === 404) {
+        errorMessage = 'Product page not found. Please check the URL.';
+      }
+      
       return new Response(
-        JSON.stringify({ success: false, error: 'Failed to fetch product page' }),
+        JSON.stringify({ success: false, error: errorMessage }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
