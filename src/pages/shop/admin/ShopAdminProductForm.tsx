@@ -37,6 +37,7 @@ import LANToHDMIConverterFields, { validateLANToHDMIConverterSpecs } from '@/com
 import LANToUSBConverterFields, { validateLANToUSBConverterSpecs } from '@/components/admin/LANToUSBConverterFields';
 import SMPSFields, { validateSMPSSpecs } from '@/components/admin/SMPSFields';
 import WiFiCameraFields, { WiFiCameraSpecs, defaultWiFiCameraSpecs, validateWiFiCameraSpecs } from '@/components/admin/WiFiCameraFields';
+import MonitorFields, { MonitorSpecs, defaultMonitorSpecs, validateMonitorSpecs } from '@/components/admin/MonitorFields';
 
 const PRODUCT_TYPES = [
   { value: 'general', label: 'General Product' },
@@ -58,6 +59,7 @@ const PRODUCT_TYPES = [
   { value: 'hdmi_splitter', label: 'HDMI Splitter' },
   { value: 'lan_to_hdmi', label: 'LAN to HDMI Converter' },
   { value: 'lan_to_usb', label: 'LAN to USB Converter' },
+  { value: 'monitor', label: 'Monitor' },
   { value: 'accessories', label: 'Accessories' },
 ];
 
@@ -142,6 +144,7 @@ export default function ShopAdminProductForm() {
     allow_in_quotation: true,
   });
   const [wifiCameraSpecs, setWifiCameraSpecs] = useState<WiFiCameraSpecs>(defaultWiFiCameraSpecs);
+  const [monitorSpecs, setMonitorSpecs] = useState<MonitorSpecs>(defaultMonitorSpecs);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   
   // AI URL extraction
@@ -1113,8 +1116,18 @@ export default function ShopAdminProductForm() {
       }
     }
     
+    // Validate Monitor-specific fields
+    if (productType === 'monitor') {
+      const validation = validateMonitorSpecs(monitorSpecs);
+      if (validation) {
+        setValidationErrors([validation]);
+        toast({ title: 'Validation Error', description: validation, variant: 'destructive' });
+        return;
+      }
+    }
+    
     // Validate common required fields
-    if (productType === 'cctv_camera' || productType === 'wifi_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector' || productType === 'rj45_connector' || productType === 'dc_pin' || productType === 'video_balun' || productType === 'hdmi_cable' || productType === 'hdmi_splitter' || productType === 'lan_to_hdmi' || productType === 'lan_to_usb' || productType === 'smps') {
+    if (productType === 'cctv_camera' || productType === 'wifi_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector' || productType === 'rj45_connector' || productType === 'dc_pin' || productType === 'video_balun' || productType === 'hdmi_cable' || productType === 'hdmi_splitter' || productType === 'lan_to_hdmi' || productType === 'lan_to_usb' || productType === 'smps' || productType === 'monitor') {
       const commonErrors: string[] = [];
       if (!formData.brand_id) commonErrors.push('Brand is required');
       if (!formData.vendor_id) commonErrors.push('Vendor is required');
@@ -1244,6 +1257,12 @@ export default function ShopAdminProductForm() {
         ...specifications,
         ...wifiCameraSpecs,
         product_type: 'wifi_camera',
+      };
+    } else if (productType === 'monitor') {
+      specifications = {
+        ...specifications,
+        ...monitorSpecs,
+        product_type: 'monitor',
       };
     }
 
@@ -2015,6 +2034,19 @@ export default function ShopAdminProductForm() {
                     <SMPSFields 
                       specifications={smpsSpecs} 
                       onSpecificationChange={(key, value) => setSmpsSpecs(prev => ({ ...prev, [key]: value }))}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* Monitor Specific Fields */}
+              {productType === 'monitor' && (
+                <div className="space-y-6">
+                  <div className="border-t pt-6">
+                    <h2 className="text-xl font-bold text-orange-600 mb-4">Monitor Specifications</h2>
+                    <MonitorFields 
+                      specifications={monitorSpecs} 
+                      onSpecificationChange={(key, value) => setMonitorSpecs(prev => ({ ...prev, [key]: value }))}
                     />
                   </div>
                 </div>
