@@ -42,19 +42,19 @@ export function KitProductSelector({
         .eq('is_active', true)
         .is('deleted_at', null);
       
-      // Apply category filter based on product type
-      const categoryMap: Record<ProductType, string[]> = {
-        camera: ['cctv-cameras', 'analog-cameras'],
+      // Map product type to specification product_type values in the database
+      const productTypeMap: Record<ProductType, string[]> = {
+        camera: ['cctv_camera', 'analog_camera', 'ip_camera'],
         dvr: ['dvr'],
         nvr: ['nvr'],
-        smps: ['smps', 'power-supply'],
-        hard_drive: ['hard-drive', 'hard-disk', 'hdd'],
-        cable: ['cables', 'cctv-cable'],
-        monitor: ['monitors', 'display'],
+        smps: ['smps'],
+        hard_drive: ['hdd', 'hard_drive'],
+        cable: ['cable', 'cables'],
+        monitor: ['monitor'],
         ups: ['ups'],
-        rack: ['racks', 'enclosure'],
-        accessory: ['accessories', 'bnc-connectors', 'dc-pins'],
-        wifi_camera: ['wifi-cameras', 'wifi-camera'],
+        rack: ['rack'],
+        accessory: ['accessories', 'bnc_connector', 'dc_pin', 'rj45_connector', 'video_balun'],
+        wifi_camera: ['wifi_camera'],
       };
       
       // Apply brand filter if provided
@@ -62,7 +62,7 @@ export function KitProductSelector({
         query = query.eq('brand_id', filters.brand_id);
       }
       
-      // Apply specifications filter
+      // Apply additional specifications filter
       if (filters.specifications) {
         Object.entries(filters.specifications).forEach(([key, value]) => {
           if (value) {
@@ -75,12 +75,15 @@ export function KitProductSelector({
       
       if (error) throw error;
       
-      // Filter by category slug client-side
-      const categorySlugs = categoryMap[productType] || [];
+      // Filter by product_type in specifications
+      const validProductTypes = productTypeMap[productType] || [];
       return data.filter(product => {
-        if (categorySlugs.length === 0) return true;
-        return product.category && categorySlugs.some(slug => 
-          product.category.slug?.toLowerCase().includes(slug.toLowerCase())
+        if (validProductTypes.length === 0) return true;
+        const specs = product.specifications as Record<string, any> | null;
+        const specProductType = specs?.product_type;
+        if (!specProductType) return false;
+        return validProductTypes.some(pt => 
+          String(specProductType).toLowerCase() === pt.toLowerCase()
         );
       });
     },
