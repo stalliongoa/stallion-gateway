@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Camera,
   IndianRupee,
+  Copy,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -103,6 +104,38 @@ export default function ShopAdminCCTVKits() {
       camera_resolution: kit.camera_resolution as any,
       brand_id: kit.brand_id,
       status: kit.status as any,
+      items: kit.items?.map(item => ({
+        product_type: item.product_type as any,
+        product_id: item.product_id,
+        product_name: item.product_name,
+        quantity: item.quantity,
+        unit_type: item.unit_type as any,
+        purchase_price: item.purchase_price,
+        selling_price: item.selling_price,
+        is_free_item: item.is_free_item,
+      })) || [],
+      has_free_wifi_camera: kit.has_free_wifi_camera,
+      free_wifi_camera_product_id: kit.free_wifi_camera_product_id,
+      selling_price: kit.selling_price,
+      image_url: kit.image_url,
+      short_highlights: kit.short_highlights || [],
+      long_description: kit.long_description || '',
+    });
+    setCurrentStep(1);
+    setCompletedSteps([]);
+    setView('wizard');
+  };
+  
+  const handleDuplicate = (kit: CCTVKit) => {
+    // Create a copy with a new name and no editing ID (creates new kit)
+    setEditingKitId(null);
+    setWizardData({
+      name: `${kit.name} (Copy)`,
+      kit_type: kit.kit_type as any,
+      channel_capacity: kit.channel_capacity as any,
+      camera_resolution: kit.camera_resolution as any,
+      brand_id: kit.brand_id,
+      status: 'inactive' as any, // Start as inactive for review
       items: kit.items?.map(item => ({
         product_type: item.product_type as any,
         product_id: item.product_id,
@@ -487,7 +520,7 @@ export default function ShopAdminCCTVKits() {
                         <MoreVertical className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" className="bg-background">
                       <DropdownMenuItem onClick={() => navigate(`/cctv/cctv-kits/${kit.slug}`)}>
                         <Eye className="h-4 w-4 mr-2" />
                         View Public Page
@@ -495,6 +528,10 @@ export default function ShopAdminCCTVKits() {
                       <DropdownMenuItem onClick={() => handleEdit(kit)}>
                         <Edit className="h-4 w-4 mr-2" />
                         Edit Kit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDuplicate(kit)}>
+                        <Copy className="h-4 w-4 mr-2" />
+                        Duplicate Kit
                       </DropdownMenuItem>
                       <DropdownMenuItem 
                         onClick={() => {
