@@ -91,6 +91,28 @@ export function StepProductSelection({
       onChange({ items: newItems });
     }
   };
+
+  // Handler for updating quantity from the kit items list
+  const handleUpdateItemQuantity = (productId: string | null, productType: string, quantity: number) => {
+    const newItems = data.items.map((item, index) => {
+      if (item.product_id === productId && item.product_type === productType) {
+        return { ...item, quantity };
+      }
+      return item;
+    });
+    onChange({ items: newItems });
+  };
+
+  // Handler for updating price from the kit items list
+  const handleUpdateItemPrice = (productId: string | null, productType: string, price: number) => {
+    const newItems = data.items.map((item, index) => {
+      if (item.product_id === productId && item.product_type === productType) {
+        return { ...item, purchase_price: price };
+      }
+      return item;
+    });
+    onChange({ items: newItems });
+  };
   
   // Apply brand filter for camera and DVR
   const appliedFilters = { ...filters };
@@ -114,13 +136,39 @@ export function StepProductSelection({
         </CardHeader>
       </Card>
 
-      {/* Row 2: Selected Items for this category */}
+      {/* Two Column Layout: Products + Kit Items */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Left: Available Products */}
+        <KitProductSelector
+          productType={productType}
+          filters={appliedFilters}
+          selectedItems={data.items}
+          onAddProduct={handleAddProduct}
+          allowMultiple={allowMultiple}
+          title="Available Products"
+          unitType={unitType}
+          defaultQuantity={getDefaultQuantity()}
+        />
+        
+        {/* Right: Kit Items List (Editable) */}
+        <KitItemsList 
+          items={data.items} 
+          onRemoveItem={removeItem}
+          onUpdateQuantity={handleUpdateItemQuantity}
+          onUpdatePrice={handleUpdateItemPrice}
+          showRemove={true}
+          editable={true}
+          compact={false}
+        />
+      </div>
+
+      {/* Row 2: Selected Items for this category (quick view) */}
       {selectedItems.length > 0 && (
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Package className="h-4 w-4" />
-              Added to Kit ({selectedItems.length})
+              {title} Added ({selectedItems.length})
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
@@ -197,27 +245,6 @@ export function StepProductSelection({
             </div>
           </CardContent>
         </Card>
-      )}
-      
-      {/* Row 3: Available Products with Add to Kit button */}
-      <KitProductSelector
-        productType={productType}
-        filters={appliedFilters}
-        selectedItems={data.items}
-        onAddProduct={handleAddProduct}
-        allowMultiple={allowMultiple}
-        title="Available Products"
-        unitType={unitType}
-        defaultQuantity={getDefaultQuantity()}
-      />
-      
-      {/* Row 4: Full Kit Items List */}
-      {data.items.length > 0 && (
-        <KitItemsList 
-          items={data.items} 
-          onRemoveItem={removeItem}
-          showRemove={true}
-        />
       )}
     </div>
   );
