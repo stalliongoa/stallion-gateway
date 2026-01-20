@@ -3,9 +3,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Minus, Plus, X, Package, Info } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Minus, Plus, X, Package, Info, Pencil } from 'lucide-react';
 import { KitProductSelector } from '../KitProductSelector';
+import { KitItemsList } from '../KitItemsList';
 import type { KitWizardData, ProductType, KitItemSelection, ChannelCapacity } from '@/types/cctv-kit';
 import { CHANNEL_DEFAULTS } from '@/types/cctv-kit';
 
@@ -33,7 +33,7 @@ export function StepProductSelection({
   unitType = 'pieces',
   defaultQuantity,
   filters = {},
-  allowMultiple = false,
+  allowMultiple = true,
   suggestion,
 }: StepProductSelectionProps) {
   const selectedItems = data.items.filter(item => item.product_type === productType);
@@ -54,36 +54,20 @@ export function StepProductSelection({
     }
   };
   
-  const handleSelectProduct = (product: any) => {
-    const existingIndex = data.items.findIndex(
-      item => item.product_type === productType && item.product_id === product.id
-    );
+  const handleAddProduct = (product: any, quantity: number) => {
+    const newItem: KitItemSelection = {
+      product_type: productType,
+      product_id: product.id,
+      product_name: product.name,
+      quantity: quantity,
+      unit_type: unitType,
+      purchase_price: product.purchase_price || 0,
+      selling_price: product.selling_price || 0,
+      is_free_item: false,
+    };
     
-    if (existingIndex >= 0) {
-      // Remove if already selected
-      const newItems = [...data.items];
-      newItems.splice(existingIndex, 1);
-      onChange({ items: newItems });
-    } else {
-      const newItem: KitItemSelection = {
-        product_type: productType,
-        product_id: product.id,
-        product_name: product.name,
-        quantity: getDefaultQuantity(),
-        unit_type: unitType,
-        purchase_price: product.purchase_price || 0,
-        selling_price: product.selling_price || 0,
-        is_free_item: false,
-      };
-      
-      if (allowMultiple) {
-        onChange({ items: [...data.items, newItem] });
-      } else {
-        // Replace existing item of same type
-        const filteredItems = data.items.filter(item => item.product_type !== productType);
-        onChange({ items: [...filteredItems, newItem] });
-      }
-    }
+    // Always add as a new item (allow duplicates with different quantities)
+    onChange({ items: [...data.items, newItem] });
   };
   
   const updateItemQuantity = (productId: string | null, delta: number) => {
@@ -106,11 +90,16 @@ export function StepProductSelection({
     onChange({ items: newItems });
   };
   
-  const removeItem = (productId: string | null) => {
-    const newItems = data.items.filter(
-      item => !(item.product_type === productType && item.product_id === productId)
+  const removeItem = (productId: string | null, productType?: string) => {
+    // Find and remove first matching item
+    const indexToRemove = data.items.findIndex(
+      item => item.product_id === productId && (!productType || item.product_type === productType)
     );
-    onChange({ items: newItems });
+    if (indexToRemove >= 0) {
+      const newItems = [...data.items];
+      newItems.splice(indexToRemove, 1);
+      onChange({ items: newItems });
+    }
   };
   
   // Apply brand filter for camera and DVR
@@ -135,30 +124,29 @@ export function StepProductSelection({
         </CardHeader>
       </Card>
 
-      {/* Row 2: Selected Items with Quantity Controls */}
+      {/* Row 2: Selected Items for this category */}
       {selectedItems.length > 0 && (
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Package className="h-4 w-4" />
-              Selected ({selectedItems.length})
+              Added to Kit ({selectedItems.length})
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
             <div className="divide-y">
-              {selectedItems.map((item) => (
+              {selectedItems.map((item, index) => (
                 <div
-                  key={item.product_id}
+                  key={`${item.product_id}-${index}`}
                   className="py-3 first:pt-0 last:pb-0"
                 >
                   <div className="flex flex-wrap items-center gap-2 mb-2">
                     <span className="font-medium text-sm flex-1 min-w-[150px]">{item.product_name}</span>
-                    <Badge variant="outline" className="text-xs">{item.product_type}</Badge>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6"
-                      onClick={() => removeItem(item.product_id)}
+                      className="h-6 w-6 text-destructive hover:text-destructive"
+                      onClick={() => removeItem(item.product_id, item.product_type)}
                     >
                       <X className="h-3 w-3" />
                     </Button>
@@ -221,15 +209,26 @@ export function StepProductSelection({
         </Card>
       )}
       
-      {/* Row 3: Available Products */}
+      {/* Row 3: Available Products with Add to Kit button */}
       <KitProductSelector
         productType={productType}
         filters={appliedFilters}
         selectedItems={data.items}
-        onSelectProduct={handleSelectProduct}
+        onAddProduct={handleAddProduct}
         allowMultiple={allowMultiple}
-        title={selectedItems.length === 0 ? "Select a Product" : "Add More Products"}
+        title="Available Products"
+        unitType={unitType}
+        defaultQuantity={getDefaultQuantity()}
       />
+      
+      {/* Row 4: Full Kit Items List */}
+      {data.items.length > 0 && (
+        <KitItemsList 
+          items={data.items} 
+          onRemoveItem={removeItem}
+          showRemove={true}
+        />
+      )}
     </div>
   );
 }
