@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -37,6 +38,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useCCTVKits, useDeleteKit } from '@/hooks/use-cctv-kits';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 import { StepBasicDetails } from '@/components/cctv-kit/wizard-steps/StepBasicDetails';
 import { StepProductSelection } from '@/components/cctv-kit/wizard-steps/StepProductSelection';
 import { StepOptionalOffer } from '@/components/cctv-kit/wizard-steps/StepOptionalOffer';
@@ -69,6 +71,19 @@ export default function ShopAdminCCTVKits() {
   const deleteKit = useDeleteKit();
   const createKit = useCreateKit();
   const updateKit = useUpdateKit();
+  
+  // Fetch brands for AI generation
+  const { data: brands } = useQuery({
+    queryKey: ['shop-brands-for-kit'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('shop_brands')
+        .select('id, name')
+        .eq('is_active', true);
+      if (error) throw error;
+      return data;
+    },
+  });
   
   const [view, setView] = useState<'list' | 'wizard'>('list');
   const [editingKitId, setEditingKitId] = useState<string | null>(null);
@@ -307,7 +322,8 @@ export default function ShopAdminCCTVKits() {
       case 12:
         return <StepPricing data={wizardData} onChange={handleWizardDataChange} />;
       case 13:
-        return <StepMediaContent data={wizardData} onChange={handleWizardDataChange} />;
+        const selectedBrand = brands?.find(b => b.id === wizardData.brand_id);
+        return <StepMediaContent data={wizardData} onChange={handleWizardDataChange} brandName={selectedBrand?.name} />;
       case 14:
         return <StepReview data={wizardData} />;
       default:

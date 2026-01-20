@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.extract-purchase-info]
 verify_jwt = false
+
+[functions.generate-kit-content]
+verify_jwt = false

@@ -29,7 +29,7 @@ export function KitProductSelector({
   allowMultiple = false,
   title,
   unitType = 'pieces',
-  defaultQuantity = 1,
+  defaultQuantity = 0,
 }: KitProductSelectorProps) {
   const [search, setSearch] = useState('');
   const [quantities, setQuantities] = useState<Record<string, number>>({});
@@ -108,7 +108,7 @@ export function KitProductSelector({
   const updateQuantity = (productId: string, delta: number) => {
     setQuantities(prev => ({
       ...prev,
-      [productId]: Math.max(1, (prev[productId] ?? defaultQuantity) + delta),
+      [productId]: Math.max(0, (prev[productId] ?? defaultQuantity) + delta),
     }));
   };
   
@@ -220,8 +220,8 @@ export function KitProductSelector({
                           type="number"
                           value={qty}
                           onChange={(e) => {
-                            const value = parseInt(e.target.value) || 1;
-                            setQuantities(prev => ({ ...prev, [product.id]: Math.max(1, value) }));
+                            const value = parseInt(e.target.value) || 0;
+                            setQuantities(prev => ({ ...prev, [product.id]: Math.max(0, value) }));
                           }}
                           className="h-7 w-14 text-center text-xs px-1"
                         />

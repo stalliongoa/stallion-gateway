@@ -38,20 +38,10 @@ export function StepProductSelection({
 }: StepProductSelectionProps) {
   const selectedItems = data.items.filter(item => item.product_type === productType);
   
-  // Get default quantity based on channel capacity
+  // Get default quantity - always 0 unless explicitly specified
   const getDefaultQuantity = () => {
     if (defaultQuantity !== undefined) return defaultQuantity;
-    
-    const channelDefaults = CHANNEL_DEFAULTS[data.channel_capacity as ChannelCapacity];
-    
-    switch (productType) {
-      case 'camera':
-        return channelDefaults?.cameras || data.channel_capacity;
-      case 'cable':
-        return channelDefaults?.cableMeters || 90;
-      default:
-        return 1;
-    }
+    return 0;
   };
   
   const handleAddProduct = (product: any, quantity: number) => {
