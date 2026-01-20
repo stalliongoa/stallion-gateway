@@ -31,11 +31,9 @@ import { toast } from '@/hooks/use-toast';
 interface Product {
   id: string;
   name: string;
-  sku: string | null;
   slug: string;
-  mrp: number | null;
+  purchase_price: number | null;
   selling_price: number | null;
-  stock_quantity: number | null;
   is_active: boolean | null;
   is_featured: boolean | null;
   images: string[] | null;
@@ -59,7 +57,7 @@ export default function ShopAdminProducts() {
     const { data, error } = await supabase
       .from('shop_products')
       .select(`
-        id, name, sku, slug, mrp, selling_price, stock_quantity, is_active, is_featured, images,
+        id, name, slug, purchase_price, selling_price, is_active, is_featured, images,
         category:shop_categories(name),
         brand:shop_brands(name)
       `)
@@ -124,8 +122,7 @@ export default function ShopAdminProducts() {
   };
 
   const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.sku?.toLowerCase().includes(searchQuery.toLowerCase())
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleSelectAll = (checked: boolean) => {
@@ -217,11 +214,11 @@ export default function ShopAdminProducts() {
         </div>
 
         {/* Products Table */}
-        <div className="bg-white rounded-lg border overflow-x-auto">
-          <Table className="min-w-[900px]">
+        <div className="bg-white rounded-lg border">
+          <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-12">
+                <TableHead className="w-8 px-2">
                   <Checkbox
                     checked={isAllSelected}
                     onCheckedChange={handleSelectAll}
@@ -229,103 +226,96 @@ export default function ShopAdminProducts() {
                     className={isSomeSelected && !isAllSelected ? "opacity-50" : ""}
                   />
                 </TableHead>
-                <TableHead>Product</TableHead>
-                <TableHead>SKU</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Brand</TableHead>
-                <TableHead className="text-right">MRP</TableHead>
-                <TableHead className="text-right">Price</TableHead>
-                <TableHead className="text-right">Stock</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-xs px-2">Product</TableHead>
+                <TableHead className="text-xs px-2 hidden md:table-cell">Category</TableHead>
+                <TableHead className="text-xs px-2 hidden lg:table-cell">Brand</TableHead>
+                <TableHead className="text-xs px-2 text-right">Purchase</TableHead>
+                <TableHead className="text-xs px-2 text-right">Selling</TableHead>
+                <TableHead className="text-xs px-2 text-center">Status</TableHead>
+                <TableHead className="text-xs px-2 text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={10} className="text-center py-8">
+                  <TableCell colSpan={8} className="text-center py-8 text-xs">
                     Loading products...
                   </TableCell>
                 </TableRow>
               ) : filteredProducts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={10} className="text-center py-8">
+                  <TableCell colSpan={8} className="text-center py-8 text-xs">
                     No products found
                   </TableCell>
                 </TableRow>
               ) : (
                 filteredProducts.map((product) => (
                   <TableRow key={product.id} className={selectedProducts.has(product.id) ? "bg-muted/50" : ""}>
-                    <TableCell>
+                    <TableCell className="px-2">
                       <Checkbox
                         checked={selectedProducts.has(product.id)}
                         onCheckedChange={(checked) => handleSelectProduct(product.id, checked as boolean)}
                         aria-label={`Select ${product.name}`}
                       />
                     </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
+                    <TableCell className="px-2">
+                      <div className="flex items-center gap-2">
                         {product.images?.[0] ? (
                           <img
                             src={product.images[0]}
                             alt={product.name}
-                            className="h-10 w-10 rounded object-cover"
+                            className="h-8 w-8 rounded object-cover flex-shrink-0"
                           />
                         ) : (
-                          <div className="h-10 w-10 rounded bg-muted flex items-center justify-center text-xs">
+                          <div className="h-8 w-8 rounded bg-muted flex items-center justify-center text-[10px] flex-shrink-0">
                             N/A
                           </div>
                         )}
-                        <div>
-                          <p className="font-medium text-sm line-clamp-1">{product.name}</p>
+                        <div className="min-w-0">
+                          <p className="font-medium text-xs line-clamp-1">{product.name}</p>
                           {product.is_featured && (
-                            <Badge variant="secondary" className="text-xs">Featured</Badge>
+                            <Badge variant="secondary" className="text-[10px] px-1 py-0">Featured</Badge>
                           )}
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-sm">{product.sku || '-'}</TableCell>
-                    <TableCell className="text-sm">{product.category?.name || '-'}</TableCell>
-                    <TableCell className="text-sm">{product.brand?.name || '-'}</TableCell>
-                    <TableCell className="text-right text-sm">
-                      {product.mrp ? `₹${product.mrp.toLocaleString('en-IN')}` : '-'}
+                    <TableCell className="text-xs px-2 hidden md:table-cell">{product.category?.name || '-'}</TableCell>
+                    <TableCell className="text-xs px-2 hidden lg:table-cell">{product.brand?.name || '-'}</TableCell>
+                    <TableCell className="text-xs px-2 text-right">
+                      {product.purchase_price ? `₹${product.purchase_price.toLocaleString('en-IN')}` : '-'}
                     </TableCell>
-                    <TableCell className="text-right text-sm font-medium">
+                    <TableCell className="text-xs px-2 text-right font-medium">
                       {product.selling_price ? `₹${product.selling_price.toLocaleString('en-IN')}` : '-'}
                     </TableCell>
-                    <TableCell className="text-right">
-                      <Badge variant={product.stock_quantity && product.stock_quantity > 5 ? 'default' : 'destructive'}>
-                        {product.stock_quantity ?? 0}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={product.is_active ? 'default' : 'secondary'}>
+                    <TableCell className="px-2 text-center">
+                      <Badge variant={product.is_active ? 'default' : 'secondary'} className="text-[10px] px-1">
                         {product.is_active ? 'Active' : 'Inactive'}
                       </Badge>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex items-center justify-end gap-2">
+                    <TableCell className="px-2">
+                      <div className="flex items-center justify-end gap-1">
                         <Button
                           variant="ghost"
                           size="icon"
+                          className="h-7 w-7"
                           onClick={() => toggleProductStatus(product.id, product.is_active ?? false)}
                           title={product.is_active ? 'Deactivate' : 'Activate'}
                         >
                           {product.is_active ? (
-                            <EyeOff className="h-4 w-4" />
+                            <EyeOff className="h-3.5 w-3.5" />
                           ) : (
-                            <Eye className="h-4 w-4" />
+                            <Eye className="h-3.5 w-3.5" />
                           )}
                         </Button>
                         <Link to={`/shop/admin/products/${product.id}`}>
-                          <Button variant="ghost" size="icon">
-                            <Edit className="h-4 w-4" />
+                          <Button variant="ghost" size="icon" className="h-7 w-7">
+                            <Edit className="h-3.5 w-3.5" />
                           </Button>
                         </Link>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-destructive">
-                              <Trash2 className="h-4 w-4" />
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive">
+                              <Trash2 className="h-3.5 w-3.5" />
                             </Button>
                           </AlertDialogTrigger>
                           <AlertDialogContent>

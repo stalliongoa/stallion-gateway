@@ -1463,7 +1463,6 @@ export default function ShopAdminProductForm() {
                       setWifiCameraSpecs(defaultWiFiCameraSpecs);
                     }
                   }}
-                  disabled={isEdit && (productType === 'cctv_camera' || productType === 'wifi_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector')}
                 >
                   <SelectTrigger className="bg-background mt-1">
                     <SelectValue placeholder="Select product type" />
@@ -1476,9 +1475,9 @@ export default function ShopAdminProductForm() {
                     ))}
                   </SelectContent>
                 </Select>
-                {isEdit && (productType === 'cctv_camera' || productType === 'dvr' || productType === 'nvr' || productType === 'hdd' || productType === 'ups' || productType === 'cables' || productType === 'rack' || productType === 'poe_switch' || productType === 'bnc_connector') && (
+                {isEdit && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    Product type cannot be changed after creation
+                    Changing product type will update the specifications form
                   </p>
                 )}
               </div>
