@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
-import heroBanner from "@/assets/hero-banner-8k.jpg";
+import heroBanner from "@/assets/hero-banner-hd.jpg";
 import mascotBanner from "@/assets/mascot-banner.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { 

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Navigation from "@/components/Navigation";
@@ -23,10 +24,13 @@ import {
   Users,
   Building2,
   Home,
-  Store
+  Store,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import stallionCctvHero from "@/assets/stallion-cctv-hero-8k.jpg";
+import stallionCctvHero2 from "@/assets/hero-banner-8k.jpg";
 import ipCCTVImage from "@/assets/ip-cctv.jpg";
 import analogCamerasImage from "@/assets/analog-cameras.webp";
 import wifiCamerasImage from "@/assets/wifi-cameras.jpg";
@@ -48,11 +52,28 @@ import pvJayaprakashImage from "@/assets/pv-jayaprakash.jpg";
 import cctvAmcBg from "@/assets/cctv-amc-bg.jpeg";
 
 const StallionCCTV = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
   const heroAnimation = useScrollAnimation();
   const productsAnimation = useScrollAnimation();
   const setupsAnimation = useScrollAnimation();
   const testimonialsAnimation = useScrollAnimation();
   const clientsAnimation = useScrollAnimation();
+
+  const heroSlides = [
+    { image: stallionCctvHero, alt: "Stallion CCTV Solutions - Advanced Surveillance" },
+    { image: stallionCctvHero2, alt: "Stallion IT Solutions - Professional Security Systems" }
+  ];
+
+  // Auto-slide effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroSlides.length]);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
 
   const products = [
     {
@@ -228,18 +249,56 @@ const StallionCCTV = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Hero Section */}
+      {/* Hero Section with Slider */}
       <section className="relative overflow-hidden" ref={heroAnimation.ref}>
         <div className="relative w-full">
-          <img 
-            src={stallionCctvHero} 
-            alt="Stallion CCTV Solutions - Advanced Surveillance" 
-            className="w-full h-auto object-cover min-h-[400px] xs:min-h-[450px] sm:min-h-[500px] md:min-h-[600px] lg:min-h-[700px]"
-            fetchPriority="high"
-            decoding="async"
-          />
+          {/* Slides */}
+          {heroSlides.map((slide, index) => (
+            <img 
+              key={index}
+              src={slide.image} 
+              alt={slide.alt}
+              className={`w-full h-auto object-cover min-h-[400px] xs:min-h-[450px] sm:min-h-[500px] md:min-h-[600px] lg:min-h-[700px] transition-opacity duration-700 ${
+                index === currentSlide ? 'opacity-100' : 'opacity-0 absolute top-0 left-0'
+              }`}
+              fetchPriority={index === 0 ? "high" : "low"}
+              decoding="async"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          ))}
+          
+          {/* Slider Navigation Arrows */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 sm:p-3 rounded-full transition-all duration-300"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 sm:p-3 rounded-full transition-all duration-300"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+          </button>
+          
+          {/* Slide Indicators */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            {heroSlides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
+                  index === currentSlide ? 'bg-stallion-gold scale-125' : 'bg-white/60 hover:bg-white/80'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+          
           {/* CTA Buttons Overlay */}
-          <div className={`absolute bottom-8 xs:bottom-10 sm:bottom-14 md:bottom-20 left-4 xs:left-6 sm:left-10 md:left-16 lg:left-24 flex flex-col xs:flex-row gap-3 xs:gap-4 transition-all duration-1000 ${heroAnimation.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className={`absolute bottom-12 xs:bottom-14 sm:bottom-20 md:bottom-24 left-4 xs:left-6 sm:left-10 md:left-16 lg:left-24 flex flex-col xs:flex-row gap-3 xs:gap-4 transition-all duration-1000 ${heroAnimation.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <Button 
               size="lg" 
               className="bg-stallion-gold hover:bg-stallion-gold/90 text-primary font-bold text-sm xs:text-base sm:text-lg px-4 xs:px-6 sm:px-8 py-3 xs:py-4 sm:py-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
