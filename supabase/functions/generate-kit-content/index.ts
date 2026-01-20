@@ -18,22 +18,26 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
+    console.log("Generating content for type:", type, "kit:", kitData?.name);
+
     let systemPrompt = "";
     let userPrompt = "";
 
     if (type === "description") {
       systemPrompt = `You are a professional CCTV and security equipment copywriter. Write compelling, technical, and marketing-friendly product descriptions for CCTV kits. Keep descriptions concise but informative, highlighting key benefits and features.`;
       
+      const itemsList = kitData.items?.map((item: any) => `- ${item.quantity}x ${item.product_name}`).join('\n') || 'Standard CCTV components';
+      
       userPrompt = `Generate a professional product description for this CCTV kit:
       
-Kit Name: ${kitData.name}
-Kit Type: ${kitData.kit_type} (${kitData.kit_type === 'analog' ? 'Analog/HD' : kitData.kit_type === 'ip' ? 'IP/Network' : 'WiFi/Wireless'})
-Channel Capacity: ${kitData.channel_capacity} Channels
-Camera Resolution: ${kitData.camera_resolution}
+Kit Name: ${kitData.name || 'CCTV Kit'}
+Kit Type: ${kitData.kit_type || 'analog'} (${kitData.kit_type === 'analog' ? 'Analog/HD' : kitData.kit_type === 'ip' ? 'IP/Network' : 'WiFi/Wireless'})
+Channel Capacity: ${kitData.channel_capacity || 4} Channels
+Camera Resolution: ${kitData.camera_resolution || '2MP'}
 Brand: ${kitData.brandName || 'Generic'}
 
 Included Items:
-${kitData.items?.map((item: any) => `- ${item.quantity}x ${item.product_name}`).join('\n') || 'Not specified'}
+${itemsList}
 
 Write a 2-3 paragraph description that:
 1. Highlights the key features and benefits
@@ -47,10 +51,10 @@ Keep the tone professional yet accessible. Do not use markdown formatting.`;
       
       userPrompt = `Create a detailed image generation prompt for a professional product photo of this CCTV kit:
 
-Kit Name: ${kitData.name}
-Kit Type: ${kitData.kit_type}
-Channel Capacity: ${kitData.channel_capacity} Channels
-Camera Resolution: ${kitData.camera_resolution}
+Kit Name: ${kitData.name || 'CCTV Kit'}
+Kit Type: ${kitData.kit_type || 'analog'}
+Channel Capacity: ${kitData.channel_capacity || 4} Channels
+Camera Resolution: ${kitData.camera_resolution || '2MP'}
 Brand: ${kitData.brandName || 'Generic'}
 
 The prompt should describe:
@@ -65,6 +69,8 @@ Return ONLY the image generation prompt, nothing else. Keep it under 200 words.`
       throw new Error("Invalid type. Use 'description' or 'image'");
     }
 
+    console.log("Calling AI gateway for text generation...");
+    
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -72,7 +78,7 @@ Return ONLY the image generation prompt, nothing else. Keep it under 200 words.`
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
@@ -81,6 +87,9 @@ Return ONLY the image generation prompt, nothing else. Keep it under 200 words.`
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error("AI gateway error:", response.status, errorText);
+      
       if (response.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
           status: 429,
@@ -93,20 +102,36 @@ Return ONLY the image generation prompt, nothing else. Keep it under 200 words.`
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      throw new Error(`AI gateway error: ${response.status}`);
+      throw new Error(`AI gateway error: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
+    console.log("AI response structure:", JSON.stringify(data, null, 2).substring(0, 500));
+    
+    // Try multiple paths to get content
+    let content = data.choices?.[0]?.message?.content;
+    
+    // Fallback: check if content is in a different location
+    if (!content && data.choices?.[0]?.text) {
+      content = data.choices[0].text;
+    }
+    
+    // Fallback: check for direct message
+    if (!content && data.message?.content) {
+      content = data.message.content;
+    }
 
     if (!content) {
-      throw new Error("No content generated");
+      console.error("Full AI response:", JSON.stringify(data));
+      throw new Error("No content in AI response. Response structure may have changed.");
     }
+
+    console.log("Generated content length:", content.length);
 
     // If type is image, generate the actual image
     if (type === "image") {
+      console.log("Generating image with prompt:", content.substring(0, 100));
+      
       const imageResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -129,10 +154,13 @@ Return ONLY the image generation prompt, nothing else. Keep it under 200 words.`
       }
 
       const imageData = await imageResponse.json();
+      console.log("Image response structure:", JSON.stringify(imageData, null, 2).substring(0, 500));
+      
       const imageUrl = imageData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
 
       if (!imageUrl) {
-        throw new Error("No image generated");
+        console.error("Full image response:", JSON.stringify(imageData));
+        throw new Error("No image URL in response");
       }
 
       return new Response(JSON.stringify({ content: imageUrl, prompt: content }), {
