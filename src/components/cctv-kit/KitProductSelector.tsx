@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Search, Plus, Check, Package } from 'lucide-react';
+import { Search, Plus, Minus, Package, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ProductType, KitItemSelection } from '@/types/cctv-kit';
 
@@ -14,20 +14,25 @@ interface KitProductSelectorProps {
   productType: ProductType;
   filters?: Record<string, any>;
   selectedItems: KitItemSelection[];
-  onSelectProduct: (product: any) => void;
+  onAddProduct: (product: any, quantity: number) => void;
   allowMultiple?: boolean;
   title: string;
+  unitType?: 'pieces' | 'meters';
+  defaultQuantity?: number;
 }
 
 export function KitProductSelector({
   productType,
   filters = {},
   selectedItems,
-  onSelectProduct,
+  onAddProduct,
   allowMultiple = false,
   title,
+  unitType = 'pieces',
+  defaultQuantity = 1,
 }: KitProductSelectorProps) {
   const [search, setSearch] = useState('');
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
   
   const { data: products, isLoading } = useQuery({
     queryKey: ['kit-products', productType, filters],
@@ -98,6 +103,26 @@ export function KitProductSelector({
     .filter(item => item.product_type === productType)
     .map(item => item.product_id);
   
+  const getQuantity = (productId: string) => quantities[productId] ?? defaultQuantity;
+  
+  const updateQuantity = (productId: string, delta: number) => {
+    setQuantities(prev => ({
+      ...prev,
+      [productId]: Math.max(1, (prev[productId] ?? defaultQuantity) + delta),
+    }));
+  };
+  
+  const handleAddToKit = (product: any) => {
+    const qty = getQuantity(product.id);
+    onAddProduct(product, qty);
+    // Reset quantity after adding
+    setQuantities(prev => {
+      const newState = { ...prev };
+      delete newState[product.id];
+      return newState;
+    });
+  };
+  
   return (
     <Card className="h-full">
       <CardHeader className="pb-3">
@@ -116,7 +141,7 @@ export function KitProductSelector({
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <ScrollArea className="h-[400px] px-4 pb-4">
+        <ScrollArea className="h-[350px] px-4 pb-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-32">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
@@ -130,18 +155,18 @@ export function KitProductSelector({
           ) : (
             <div className="space-y-2">
               {filteredProducts.map((product) => {
-                const isSelected = selectedProductIds.includes(product.id);
+                const isAlreadyAdded = selectedProductIds.includes(product.id);
+                const qty = getQuantity(product.id);
                 
                 return (
                   <div
                     key={product.id}
                     className={cn(
-                      "p-3 rounded-lg border cursor-pointer transition-all",
-                      isSelected 
-                        ? "border-primary bg-primary/5" 
-                        : "border-border hover:border-primary/50 hover:bg-muted/50"
+                      "p-3 rounded-lg border transition-all",
+                      isAlreadyAdded 
+                        ? "border-green-500 bg-green-50 dark:bg-green-950/20" 
+                        : "border-border hover:border-primary/50"
                     )}
-                    onClick={() => onSelectProduct(product)}
                   >
                     <div className="flex items-start gap-3">
                       {product.images?.[0] ? (
@@ -156,14 +181,9 @@ export function KitProductSelector({
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2">
-                          <p className="text-sm font-medium truncate">
-                            {product.name}
-                          </p>
-                          {isSelected && (
-                            <Check className="h-4 w-4 text-primary flex-shrink-0" />
-                          )}
-                        </div>
+                        <p className="text-sm font-medium line-clamp-2">
+                          {product.name}
+                        </p>
                         {product.sku && (
                           <p className="text-xs text-muted-foreground">
                             SKU: {product.sku}
@@ -181,6 +201,54 @@ export function KitProductSelector({
                         </div>
                       </div>
                     </div>
+                    
+                    {/* Quantity and Add Button Row */}
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t">
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs text-muted-foreground mr-1">
+                          Qty{unitType === 'meters' ? ' (m)' : ''}:
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-7 w-7"
+                          onClick={() => updateQuantity(product.id, -1)}
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <Input
+                          type="number"
+                          value={qty}
+                          onChange={(e) => {
+                            const value = parseInt(e.target.value) || 1;
+                            setQuantities(prev => ({ ...prev, [product.id]: Math.max(1, value) }));
+                          }}
+                          className="h-7 w-14 text-center text-xs px-1"
+                        />
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-7 w-7"
+                          onClick={() => updateQuantity(product.id, 1)}
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <Button
+                        size="sm"
+                        className="h-7 text-xs gap-1"
+                        onClick={() => handleAddToKit(product)}
+                      >
+                        <ShoppingCart className="h-3 w-3" />
+                        Add to Kit
+                      </Button>
+                    </div>
+                    
+                    {isAlreadyAdded && (
+                      <Badge variant="secondary" className="mt-2 text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                        Already in kit
+                      </Badge>
+                    )}
                   </div>
                 );
               })}
