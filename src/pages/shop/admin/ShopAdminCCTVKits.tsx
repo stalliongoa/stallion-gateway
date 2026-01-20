@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { 
   Plus, 
@@ -37,8 +36,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useCCTVKits, useDeleteKit } from '@/hooks/use-cctv-kits';
 import { cn } from '@/lib/utils';
-import { KitWizardProgress } from '@/components/cctv-kit/KitWizardProgress';
-import { KitPricingSummary } from '@/components/cctv-kit/KitPricingSummary';
 import { StepBasicDetails } from '@/components/cctv-kit/wizard-steps/StepBasicDetails';
 import { StepProductSelection } from '@/components/cctv-kit/wizard-steps/StepProductSelection';
 import { StepOptionalOffer } from '@/components/cctv-kit/wizard-steps/StepOptionalOffer';
@@ -288,101 +285,134 @@ export default function ShopAdminCCTVKits() {
   // Wizard View
   if (view === 'wizard') {
     return (
-      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
+      <div className="p-4 md:p-6 space-y-4">
+        {/* Row 1: Header with navigation */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b">
+          <div className="flex items-center gap-3">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setView('list')}
-              className="mb-2"
             >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Back to Kits
+              <ChevronLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-xl md:text-2xl font-bold">
-              {editingKitId ? 'Edit CCTV Kit' : 'Create New CCTV Kit'}
+            <h1 className="text-lg font-bold">
+              {editingKitId ? 'Edit Kit' : 'New Kit'}
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => setView('list')}>
+            <Button variant="outline" size="sm" onClick={() => setView('list')}>
               Cancel
             </Button>
-            {currentStep === KIT_WIZARD_STEPS.length && (
-              <Button 
-                onClick={handleSave} 
-                disabled={!canSave || createKit.isPending || updateKit.isPending}
-              >
-                {createKit.isPending || updateKit.isPending ? 'Saving...' : 'Save Kit'}
-              </Button>
-            )}
+            <Button 
+              size="sm"
+              onClick={handleSave} 
+              disabled={!canSave || createKit.isPending || updateKit.isPending}
+            >
+              {createKit.isPending || updateKit.isPending ? 'Saving...' : 'Save Kit'}
+            </Button>
           </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left: Progress */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-4">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Wizard Steps</CardTitle>
-              </CardHeader>
-              <CardContent className="p-0 pb-4">
-                <KitWizardProgress
-                  currentStep={currentStep}
-                  completedSteps={completedSteps}
-                  onStepClick={setCurrentStep}
-                />
-              </CardContent>
-            </Card>
-          </div>
-          
-          {/* Center: Form */}
-          <div className="lg:col-span-2">
-            <ScrollArea className="h-[calc(100vh-200px)]">
-              {renderWizardStep()}
-            </ScrollArea>
-            
-            {/* Navigation */}
-            <div className="flex justify-between mt-4 pt-4 border-t">
-              <Button
-                variant="outline"
-                onClick={handlePrev}
-                disabled={currentStep === 1}
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                Previous
-              </Button>
-              {currentStep < KIT_WIZARD_STEPS.length ? (
-                <Button onClick={handleNext}>
-                  Next
-                  <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
-              ) : (
-                <Button 
-                  onClick={handleSave} 
-                  disabled={!canSave || createKit.isPending || updateKit.isPending}
+        {/* Row 2: Wizard Steps Progress - Horizontal Scrollable */}
+        <div className="overflow-x-auto pb-2">
+          <div className="flex gap-1 min-w-max">
+            {KIT_WIZARD_STEPS.map((step) => {
+              const isCompleted = completedSteps.includes(step.id);
+              const isCurrent = currentStep === step.id;
+              
+              return (
+                <button
+                  key={step.id}
+                  onClick={() => onStepClick(step.id)}
+                  className={cn(
+                    "flex items-center gap-1.5 px-2 py-1.5 rounded-md text-xs whitespace-nowrap transition-colors",
+                    isCurrent && "bg-primary text-primary-foreground",
+                    !isCurrent && isCompleted && "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300",
+                    !isCurrent && !isCompleted && "bg-muted text-muted-foreground hover:bg-muted/80"
+                  )}
                 >
-                  {createKit.isPending || updateKit.isPending ? 'Saving...' : 'Save Kit'}
-                </Button>
-              )}
-            </div>
+                  <span className={cn(
+                    "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium",
+                    isCurrent && "bg-primary-foreground text-primary",
+                    !isCurrent && isCompleted && "bg-green-500 text-white",
+                    !isCurrent && !isCompleted && "bg-background"
+                  )}>
+                    {step.id}
+                  </span>
+                  <span className="hidden sm:inline">{step.title}</span>
+                </button>
+              );
+            })}
           </div>
-          
-          {/* Right: Pricing Summary */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-4">
-              <KitPricingSummary
-                items={wizardData.items}
-                sellingPrice={wizardData.selling_price}
-                hasFreeWifiCamera={wizardData.has_free_wifi_camera}
-              />
+        </div>
+        
+        {/* Row 3: Pricing Summary - Compact */}
+        <Card className="bg-muted/50">
+          <CardContent className="py-3">
+            <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
+              <div className="flex items-center gap-4">
+                <span>Items: <strong>{wizardData.items.length}</strong></span>
+                <span>Cost: <strong>₹{wizardData.items.reduce((sum, item) => sum + (item.purchase_price * item.quantity), 0).toLocaleString()}</strong></span>
+                <span>Selling: <strong className="text-primary">₹{wizardData.selling_price.toLocaleString()}</strong></span>
+              </div>
+              <div className="flex items-center gap-2">
+                {(() => {
+                  const totalCost = wizardData.items.reduce((sum, item) => sum + (item.purchase_price * item.quantity), 0);
+                  const profit = wizardData.selling_price - totalCost;
+                  const margin = totalCost > 0 ? ((profit / totalCost) * 100).toFixed(1) : 0;
+                  return (
+                    <Badge variant={profit >= 0 ? "default" : "destructive"}>
+                      Profit: ₹{profit.toLocaleString()} ({margin}%)
+                    </Badge>
+                  );
+                })()}
+              </div>
             </div>
+          </CardContent>
+        </Card>
+        
+        {/* Row 4: Main Content - Full Width */}
+        <div>
+          {renderWizardStep()}
+        </div>
+        
+        {/* Row 5: Navigation Footer */}
+        <div className="flex justify-between pt-3 border-t">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePrev}
+            disabled={currentStep === 1}
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Previous
+          </Button>
+          <div className="text-sm text-muted-foreground">
+            Step {currentStep} of {KIT_WIZARD_STEPS.length}
           </div>
+          {currentStep < KIT_WIZARD_STEPS.length ? (
+            <Button size="sm" onClick={handleNext}>
+              Next
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          ) : (
+            <Button 
+              size="sm"
+              onClick={handleSave} 
+              disabled={!canSave || createKit.isPending || updateKit.isPending}
+            >
+              Save Kit
+            </Button>
+          )}
         </div>
       </div>
     );
   }
+
+  const onStepClick = (step: number) => {
+    setCurrentStep(step);
+  };
   
   // List View
   return (
