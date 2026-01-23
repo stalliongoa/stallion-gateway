@@ -20,48 +20,6 @@ import StallionCCTV from "./pages/StallionCCTV";
 import CCTVAmc from "./pages/CCTVAmc";
 import Careers from "./pages/Careers";
 
-// Quotation Builder pages
-import CCTVQuotationBuilder from "./pages/CCTVQuotationBuilder";
-import QuotationList from "./pages/QuotationList";
-import QuotationDetail from "./pages/QuotationDetail";
-import EngineerDashboard from "./pages/EngineerDashboard";
-
-// CCTV Kit pages
-import CCTVKits from "./pages/cctv/CCTVKits";
-import CCTVKitDetail from "./pages/cctv/CCTVKitDetail";
-
-// Shop pages
-import ShopHome from "./pages/shop/ShopHome";
-import ProductList from "./pages/shop/ProductList";
-import ProductDetail from "./pages/shop/ProductDetail";
-import ShopAuth from "./pages/shop/ShopAuth";
-import ShopCart from "./pages/shop/ShopCart";
-import ShopCheckout from "./pages/shop/ShopCheckout";
-import ShopOrderSuccess from "./pages/shop/ShopOrderSuccess";
-import ShopOrders from "./pages/shop/ShopOrders";
-import ShopAccount from "./pages/shop/ShopAccount";
-
-// Shop Admin pages
-import { ShopAdminLayout } from "./pages/shop/admin/ShopAdminLayout";
-import ShopAdminDashboard from "./pages/shop/admin/ShopAdminDashboard";
-import ShopAdminProducts from "./pages/shop/admin/ShopAdminProducts";
-import ShopAdminProductForm from "./pages/shop/admin/ShopAdminProductForm";
-import ShopAdminOrders from "./pages/shop/admin/ShopAdminOrders";
-import ShopAdminCategories from "./pages/shop/admin/ShopAdminCategories";
-import ShopAdminBrands from "./pages/shop/admin/ShopAdminBrands";
-import ShopAdminVendors from "./pages/shop/admin/ShopAdminVendors";
-import ShopAdminCustomers from "./pages/shop/admin/ShopAdminCustomers";
-import ShopAdminReports from "./pages/shop/admin/ShopAdminReports";
-import ShopAdminSettings from "./pages/shop/admin/ShopAdminSettings";
-import ShopAdminManagement from "./pages/shop/admin/ShopAdminManagement";
-import ShopAdminInvoices from "./pages/shop/admin/ShopAdminInvoices";
-import ShopAdminInventory from "./pages/shop/admin/ShopAdminInventory";
-import ShopAdminStockMovements from "./pages/shop/admin/ShopAdminStockMovements";
-import ShopAdminLowStockAlerts from "./pages/shop/admin/ShopAdminLowStockAlerts";
-import ShopAdminPurchases from "./pages/shop/admin/ShopAdminPurchases";
-import ShopAdminInventoryReports from "./pages/shop/admin/ShopAdminInventoryReports";
-import ShopAdminCCTVKits from "./pages/shop/admin/ShopAdminCCTVKits";
-
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -86,50 +44,6 @@ const App = () => (
           <Route path="/careers" element={<Careers />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
-          
-          {/* CCTV Quotation Builder Routes */}
-          <Route path="/engineer-dashboard" element={<EngineerDashboard />} />
-          <Route path="/quotation-builder" element={<CCTVQuotationBuilder />} />
-          <Route path="/quotation-list" element={<QuotationList />} />
-          <Route path="/quotation/:id" element={<QuotationDetail />} />
-          
-          {/* CCTV Kit Routes (Customer-facing) */}
-          <Route path="/cctv/cctv-kits" element={<CCTVKits />} />
-          <Route path="/cctv/cctv-kits/:slug" element={<CCTVKitDetail />} />
-          
-          {/* Shop Routes */}
-          <Route path="/shop" element={<ShopHome />} />
-          <Route path="/shop/products" element={<ProductList />} />
-          <Route path="/shop/category/:categorySlug" element={<ProductList />} />
-          <Route path="/shop/product/:productSlug" element={<ProductDetail />} />
-          <Route path="/shop/auth" element={<ShopAuth />} />
-          <Route path="/shop/cart" element={<ShopCart />} />
-          <Route path="/shop/checkout" element={<ShopCheckout />} />
-          <Route path="/shop/order-success" element={<ShopOrderSuccess />} />
-          <Route path="/shop/orders" element={<ShopOrders />} />
-          <Route path="/shop/orders/:orderId" element={<ShopOrders />} />
-          <Route path="/shop/account" element={<ShopAccount />} />
-          
-          {/* Shop Admin Routes */}
-          <Route path="/shop/admin" element={<ShopAdminLayout><ShopAdminDashboard /></ShopAdminLayout>} />
-          <Route path="/shop/admin/products" element={<ShopAdminLayout><ShopAdminProducts /></ShopAdminLayout>} />
-          <Route path="/shop/admin/products/new" element={<ShopAdminLayout><ShopAdminProductForm /></ShopAdminLayout>} />
-          <Route path="/shop/admin/products/:id" element={<ShopAdminLayout><ShopAdminProductForm /></ShopAdminLayout>} />
-          <Route path="/shop/admin/orders" element={<ShopAdminLayout><ShopAdminOrders /></ShopAdminLayout>} />
-          <Route path="/shop/admin/categories" element={<ShopAdminLayout><ShopAdminCategories /></ShopAdminLayout>} />
-          <Route path="/shop/admin/brands" element={<ShopAdminLayout><ShopAdminBrands /></ShopAdminLayout>} />
-          <Route path="/shop/admin/vendors" element={<ShopAdminLayout><ShopAdminVendors /></ShopAdminLayout>} />
-          <Route path="/shop/admin/customers" element={<ShopAdminLayout><ShopAdminCustomers /></ShopAdminLayout>} />
-          <Route path="/shop/admin/reports" element={<ShopAdminLayout><ShopAdminReports /></ShopAdminLayout>} />
-          <Route path="/shop/admin/invoices" element={<ShopAdminLayout><ShopAdminInvoices /></ShopAdminLayout>} />
-          <Route path="/shop/admin/inventory" element={<ShopAdminLayout><ShopAdminInventory /></ShopAdminLayout>} />
-          <Route path="/shop/admin/inventory/movements" element={<ShopAdminLayout><ShopAdminStockMovements /></ShopAdminLayout>} />
-          <Route path="/shop/admin/inventory/alerts" element={<ShopAdminLayout><ShopAdminLowStockAlerts /></ShopAdminLayout>} />
-          <Route path="/shop/admin/purchases" element={<ShopAdminLayout><ShopAdminPurchases /></ShopAdminLayout>} />
-          <Route path="/shop/admin/inventory/reports" element={<ShopAdminLayout><ShopAdminInventoryReports /></ShopAdminLayout>} />
-          <Route path="/shop/admin/cctv-kit" element={<ShopAdminLayout><ShopAdminCCTVKits /></ShopAdminLayout>} />
-          <Route path="/shop/admin/management" element={<ShopAdminLayout><ShopAdminManagement /></ShopAdminLayout>} />
-          <Route path="/shop/admin/settings" element={<ShopAdminLayout><ShopAdminSettings /></ShopAdminLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
