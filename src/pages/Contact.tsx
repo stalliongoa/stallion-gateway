@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import mascotBanner from "@/assets/mascot-banner.jpg";
+import stallionMascot from "@/assets/stallion-mascot-hero.png";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -67,7 +67,7 @@ const Contact = () => {
           {/* Mascot Background Image */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${mascotBanner})` }}
+            style={{ backgroundImage: `url(${stallionMascot})` }}
           />
           
           {/* Navy Blue Overlay with Gradient Fade */}
