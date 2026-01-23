@@ -1,38 +1,73 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle2, Target, Users, Award } from "lucide-react";
+import { 
+  CheckCircle2, 
+  Shield, 
+  TrendingUp, 
+  Users, 
+  Settings, 
+  HeadphonesIcon,
+  Building2,
+  Clock,
+  ArrowUpRight,
+  Zap
+} from "lucide-react";
 import founderImage from "@/assets/founder-image.jpg";
+import stallionMascot from "@/assets/stallion-mascot-hero.png";
 
 const About = () => {
-  const values = [
+  const approachItems = [
     {
-      icon: <Target className="h-8 w-8 text-secondary" />,
-      title: "Our Mission",
-      description: "To empower businesses through strategic, cutting-edge IT solutions that drive growth, efficiency, and resilience in an ever-evolving digital landscape."
+      icon: <HeadphonesIcon className="h-8 w-8" />,
+      title: "Proactive Support",
+      description: "We don't wait for issues—we prevent them. Our monitoring and maintenance approach keeps your systems running smoothly."
     },
     {
-      icon: <CheckCircle2 className="h-8 w-8 text-secondary" />,
-      title: "Quality Focus",
-      description: "We emphasize understanding client objectives and use technology to streamline operations, improve reporting and support business planning."
+      icon: <TrendingUp className="h-8 w-8" />,
+      title: "Scalable Solutions",
+      description: "Technology that grows with your business. We design infrastructure that adapts to your evolving needs."
     },
     {
-      icon: <Users className="h-8 w-8 text-secondary" />,
-      title: "Client-Centric",
-      description: "Building lasting partnerships with our clients, understanding their unique needs, and evolving alongside them as a strategic ally."
+      icon: <Shield className="h-8 w-8" />,
+      title: "Business Continuity",
+      description: "Minimal downtime, maximum uptime. Our backup systems and disaster recovery plans protect your operations."
     },
     {
-      icon: <Award className="h-8 w-8 text-secondary" />,
-      title: "Excellence",
-      description: "Delivering exceptional service with a team of experts who are passionate about technological innovation and client satisfaction."
+      icon: <Settings className="h-8 w-8" />,
+      title: "Vendor-Neutral Consulting",
+      description: "We recommend the best solutions for your needs—not the ones that pay us the highest commission."
+    }
+  ];
+
+  const whyStallionPoints = [
+    {
+      icon: <Building2 className="h-6 w-6" />,
+      title: "Company-Level Support",
+      description: "You work with a team, not a single resource. Multiple experts ensure consistent service quality."
+    },
+    {
+      icon: <Users className="h-6 w-6" />,
+      title: "Backup Engineers & Escalation",
+      description: "Dedicated backup personnel and clear escalation paths ensure issues are resolved quickly."
+    },
+    {
+      icon: <Settings className="h-6 w-6" />,
+      title: "Structured IT Processes",
+      description: "Documented procedures, regular maintenance schedules, and systematic troubleshooting protocols."
+    },
+    {
+      icon: <Clock className="h-6 w-6" />,
+      title: "Long-Term Service Mindset",
+      description: "We build partnerships, not transactions. Our oldest clients have been with us since 2012."
     }
   ];
 
   const milestones = [
-    { number: "10+", label: "Years in IT Industry" },
-    { number: "100+", label: "IT AMC Clients" },
+    { number: "15+", label: "Years in IT Industry" },
+    { number: "500+", label: "IT AMC Clients" },
     { number: "1000+", label: "CCTV Setups" },
-    { number: "50+", label: "Hotel Networks Designed" }
+    { number: "50+", label: "Hotel Networks" }
   ];
 
   return (
@@ -40,102 +75,195 @@ const About = () => {
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="hero-gradient text-primary-foreground py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">About Stallion IT Solutions</h1>
-              <p className="text-lg md:text-xl text-primary-foreground/90">
-                Your trusted IT partner since 2012, delivering excellence in hospitality technology solutions
+        {/* Hero Section with Mascot Background */}
+        <section className="relative min-h-[70vh] md:min-h-[80vh] overflow-hidden">
+          {/* Mascot Background - Positioned Right */}
+          <div 
+            className="absolute inset-0 bg-cover bg-right-top md:bg-right bg-no-repeat"
+            style={{ backgroundImage: `url(${stallionMascot})` }}
+          />
+          
+          {/* Navy Blue Gradient Overlay - 65% opacity, stronger on left for text */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/75 to-[#0a1628]/50" />
+          
+          {/* Bottom Fade */}
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" />
+          
+          {/* Content */}
+          <div className="relative z-10 container mx-auto px-4 py-20 md:py-32 flex items-center min-h-[70vh] md:min-h-[80vh]">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                Driven by <span className="text-[#c9a55c]">Strength</span>.<br />
+                Powered by <span className="text-[#c9a55c]">Technology</span>.
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 mb-8 max-w-xl">
+                Delivering reliable IT solutions across Goa since <span className="text-[#c9a55c] font-semibold">2012</span>.
               </p>
+              
+              {/* Stats Row */}
+              <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
+                {milestones.map((item, index) => (
+                  <div key={index} className="text-center">
+                    <p className="text-3xl md:text-4xl font-bold text-[#c9a55c]">{item.number}</p>
+                    <p className="text-white/80 text-sm">{item.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Company Story */}
-        <section className="py-16">
+        {/* Who We Are Section */}
+        <section className="py-16 md:py-24 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <Card className="shadow-medium">
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold mb-6 text-primary">Our Story</h2>
-                  <div className="space-y-4 text-foreground/80">
-                    <p>
-                      Since our inception in 2012, STALLION has been at the forefront of providing exceptional IT consultation services tailored to the unique needs of our clients in the hotel and industrial sectors. We specialize in offering comprehensive solutions for CCTV and network support, helping businesses enhance security, streamline operations, and stay technologically resilient.
-                    </p>
-                    <p>
-                      At STALLION, our commitment to excellence is the driving force behind everything we do. We understand the critical role that technology plays in the modern business landscape, especially in industries like hospitality and manufacturing. With a customer-centric approach, we strive to exceed expectations and deliver solutions that empower our clients to thrive in a rapidly evolving digital world.
-                    </p>
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-[#0a1628] mb-4">
+                  Who We <span className="text-[#c9a55c]">Are</span>
+                </h2>
+                <div className="w-20 h-1 bg-gradient-to-r from-[#c9a55c] to-[#e8c547] mx-auto rounded-full" />
+              </div>
+              
+              <div className="space-y-6 text-[#0a1628]/80 text-lg leading-relaxed">
+                <p>
+                  <span className="font-semibold text-[#0a1628]">Stallion IT Solutions & Services</span> is a Goa-based technology partner trusted by hotels, industries, and enterprises since 2012. We specialize in comprehensive IT infrastructure management, CCTV security solutions, and network design that keeps businesses running efficiently and securely.
+                </p>
+                <p>
+                  Our strength lies in our <span className="text-[#c9a55c] font-semibold">reliability</span>—we don't just fix problems, we prevent them. With a team of seasoned professionals and a commitment to long-term partnerships, we've become the IT backbone for some of Goa's most prominent establishments.
+                </p>
+                <p>
+                  Whether you're a boutique hotel needing seamless guest WiFi or a manufacturing unit requiring 24/7 surveillance, Stallion delivers <span className="text-[#c9a55c] font-semibold">enterprise-grade solutions</span> with a personal touch.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Navy Divider */}
+        <div className="h-1 bg-gradient-to-r from-[#0a1628] via-[#c9a55c] to-[#0a1628]" />
+
+        {/* Our Approach Section */}
+        <section className="py-16 md:py-24 bg-[#f8f9fa]">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#0a1628] mb-4">
+                Our <span className="text-[#c9a55c]">Approach</span>
+              </h2>
+              <p className="text-[#0a1628]/70 max-w-2xl mx-auto">
+                We believe in building IT infrastructure that works for your business—not against it.
+              </p>
+              <div className="w-20 h-1 bg-gradient-to-r from-[#c9a55c] to-[#e8c547] mx-auto rounded-full mt-4" />
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {approachItems.map((item, index) => (
+                <Card 
+                  key={index} 
+                  className="bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover:-translate-y-1"
+                >
+                  <CardContent className="p-6 text-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-[#0a1628] to-[#162d4a] rounded-2xl flex items-center justify-center mx-auto mb-5 text-[#c9a55c] group-hover:scale-110 transition-transform">
+                      {item.icon}
+                    </div>
+                    <h3 className="text-lg font-bold text-[#0a1628] mb-3">{item.title}</h3>
+                    <p className="text-[#0a1628]/70 text-sm leading-relaxed">{item.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Navy Divider */}
+        <div className="h-1 bg-gradient-to-r from-[#0a1628] via-[#c9a55c] to-[#0a1628]" />
+
+        {/* Why Stallion Section - With Subtle Mascot Watermark */}
+        <section className="relative py-16 md:py-24 bg-white overflow-hidden">
+          {/* Subtle Mascot Watermark */}
+          <div 
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[800px] opacity-[0.04] bg-contain bg-center bg-no-repeat pointer-events-none"
+            style={{ backgroundImage: `url(${stallionMascot})` }}
+          />
+          
+          <div className="relative z-10 container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-[#0a1628] mb-4">
+                  Why <span className="text-[#c9a55c]">Stallion</span>?
+                </h2>
+                <p className="text-[#0a1628]/70 max-w-2xl mx-auto">
+                  What sets us apart from individual IT consultants and other service providers.
+                </p>
+                <div className="w-20 h-1 bg-gradient-to-r from-[#c9a55c] to-[#e8c547] mx-auto rounded-full mt-4" />
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                {whyStallionPoints.map((point, index) => (
+                  <div 
+                    key={index}
+                    className="flex gap-4 p-6 bg-[#f8f9fa] rounded-2xl border border-[#0a1628]/10 hover:border-[#c9a55c]/40 transition-all duration-300 group"
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#c9a55c] to-[#e8c547] rounded-xl flex items-center justify-center text-[#0a1628] flex-shrink-0 group-hover:scale-110 transition-transform">
+                      {point.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-[#0a1628] mb-2 flex items-center gap-2">
+                        {point.title}
+                        <ArrowUpRight className="w-4 h-4 text-[#c9a55c] opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </h3>
+                      <p className="text-[#0a1628]/70 text-sm leading-relaxed">{point.description}</p>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
+                ))}
+              </div>
 
-        {/* Milestones */}
-        <section className="py-16 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12 text-primary">Our Milestones</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {milestones.map((milestone, index) => (
-                <Card key={index} className="text-center shadow-subtle hover:shadow-gold transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="text-4xl font-bold text-secondary mb-2">{milestone.number}</div>
-                    <div className="text-sm text-foreground/70">{milestone.label}</div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Values */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12 text-primary">Our Values</h2>
-            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-              {values.map((value, index) => (
-                <Card key={index} className="shadow-subtle hover:shadow-medium transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="mb-4">{value.icon}</div>
-                    <h3 className="text-xl font-semibold mb-3 text-primary">{value.title}</h3>
-                    <p className="text-foreground/70">{value.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
+              {/* Key Differentiator Callout */}
+              <div className="mt-12 p-8 bg-gradient-to-r from-[#0a1628] to-[#162d4a] rounded-2xl text-center">
+                <Zap className="w-10 h-10 text-[#c9a55c] mx-auto mb-4" />
+                <p className="text-white text-lg md:text-xl font-medium max-w-2xl mx-auto">
+                  "With Stallion, you're not hiring an IT person—you're <span className="text-[#c9a55c]">partnering with an IT company</span>."
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Founder Message */}
-        <section className="py-16 bg-muted/30">
+        <section className="py-16 md:py-24 bg-[#f8f9fa]">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <Card className="shadow-medium">
-                <CardContent className="p-8">
-                  <h2 className="text-3xl font-bold mb-6 text-primary">Founder's Message</h2>
-                  <div className="flex flex-col md:flex-row gap-8">
-                    <div className="md:w-1/3 flex-shrink-0">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-[#0a1628] mb-4">
+                  Founder's <span className="text-[#c9a55c]">Message</span>
+                </h2>
+                <div className="w-20 h-1 bg-gradient-to-r from-[#c9a55c] to-[#e8c547] mx-auto rounded-full" />
+              </div>
+              
+              <Card className="bg-white border-none shadow-xl overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="flex flex-col md:flex-row">
+                    <div className="md:w-2/5 flex-shrink-0">
                       <img 
                         src={founderImage} 
                         alt="Rajvaibhav Parulekar - Founder" 
-                        className="w-full rounded-lg shadow-medium object-cover aspect-square"
+                        className="w-full h-64 md:h-full object-cover"
                       />
                     </div>
-                    <div className="md:w-2/3 space-y-4 text-foreground/80">
-                      <p className="italic">
-                        "As the proud founder of Stallion, I am thrilled to reflect on a remarkable journey that began in 2012, a journey marked by a decade of unwavering commitment to excellence in the realm of IT consultation."
-                      </p>
-                      <p>
-                        Over the past ten years, we have evolved into a beacon of technological innovation, providing invaluable services to major hotels and industries across the vibrant landscape of Goa. Our mission has always been clear – to empower businesses with cutting-edge IT solutions that not only meet but exceed expectations.
-                      </p>
-                      <p>
-                        We take pride in the expertise we bring to the table, derived from years of hands-on experience and a commitment to staying at the forefront of technological advancements. Looking ahead, we are excited about the future possibilities as we continue to evolve, adapt, and lead the way in shaping the digital landscape.
-                      </p>
-                      <div className="mt-6 pt-6 border-t border-border">
-                        <p className="font-semibold text-primary">Rajvaibhav Parulekar</p>
-                        <p className="text-sm text-foreground/70">Founder, Stallion IT Solutions & Services</p>
+                    <div className="md:w-3/5 p-8 md:p-10">
+                      <div className="space-y-4 text-[#0a1628]/80">
+                        <p className="italic text-lg border-l-4 border-[#c9a55c] pl-4">
+                          "As the proud founder of Stallion, I am thrilled to reflect on a remarkable journey that began in 2012—a journey marked by unwavering commitment to excellence in IT consultation."
+                        </p>
+                        <p>
+                          Over the past decade, we have evolved into a beacon of technological innovation, providing invaluable services to major hotels and industries across Goa. Our mission has always been clear—to empower businesses with cutting-edge IT solutions.
+                        </p>
+                        <p>
+                          We take pride in staying at the forefront of technological advancements. Looking ahead, we are excited about the future as we continue to evolve, adapt, and lead the way in shaping the digital landscape.
+                        </p>
+                      </div>
+                      <div className="mt-8 pt-6 border-t border-[#0a1628]/10">
+                        <p className="font-bold text-[#0a1628] text-lg">Rajvaibhav Parulekar</p>
+                        <p className="text-[#c9a55c] font-medium">Founder, Stallion IT Solutions & Services</p>
                       </div>
                     </div>
                   </div>
@@ -145,41 +273,47 @@ const About = () => {
           </div>
         </section>
 
-        {/* Team */}
-        <section className="py-16">
+        {/* Team Leads */}
+        <section className="py-16 md:py-24 bg-white">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12 text-primary">Meet Our Team Leads</h2>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#0a1628] mb-4">
+                Meet Our <span className="text-[#c9a55c]">Team Leads</span>
+              </h2>
+              <div className="w-20 h-1 bg-gradient-to-r from-[#c9a55c] to-[#e8c547] mx-auto rounded-full" />
+            </div>
+            
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              <Card className="shadow-subtle hover:shadow-medium transition-shadow">
-                <CardContent className="p-6 text-center">
-                  <div className="w-24 h-24 bg-secondary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Users className="h-12 w-12 text-secondary" />
+              <Card className="bg-[#f8f9fa] border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
+                <CardContent className="p-8 text-center">
+                  <div className="w-24 h-24 bg-gradient-to-br from-[#0a1628] to-[#162d4a] rounded-full mx-auto mb-5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Users className="h-12 w-12 text-[#c9a55c]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-primary">Tukaram Kunkalikar</h3>
-                  <p className="text-sm text-secondary font-medium mb-2">Project Head - Team Lead</p>
-                  <p className="text-sm text-foreground/70">20+ years experience in IT field</p>
+                  <h3 className="text-xl font-bold text-[#0a1628] mb-2">Tukaram Kunkalikar</h3>
+                  <p className="text-[#c9a55c] font-semibold text-sm mb-2">Project Head - Team Lead</p>
+                  <p className="text-[#0a1628]/70 text-sm">20+ years experience in IT field</p>
                 </CardContent>
               </Card>
 
-              <Card className="shadow-subtle hover:shadow-medium transition-shadow">
-                <CardContent className="p-6 text-center">
-                  <div className="w-24 h-24 bg-secondary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Users className="h-12 w-12 text-secondary" />
+              <Card className="bg-[#f8f9fa] border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
+                <CardContent className="p-8 text-center">
+                  <div className="w-24 h-24 bg-gradient-to-br from-[#0a1628] to-[#162d4a] rounded-full mx-auto mb-5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Users className="h-12 w-12 text-[#c9a55c]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-primary">Rohit Toraskar</h3>
-                  <p className="text-sm text-secondary font-medium mb-2">Sr. Regional IT Manager</p>
-                  <p className="text-sm text-foreground/70">North Goa - 15 years experience</p>
+                  <h3 className="text-xl font-bold text-[#0a1628] mb-2">Rohit Toraskar</h3>
+                  <p className="text-[#c9a55c] font-semibold text-sm mb-2">Sr. Regional IT Manager</p>
+                  <p className="text-[#0a1628]/70 text-sm">North Goa - 15 years experience</p>
                 </CardContent>
               </Card>
 
-              <Card className="shadow-subtle hover:shadow-medium transition-shadow">
-                <CardContent className="p-6 text-center">
-                  <div className="w-24 h-24 bg-secondary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Users className="h-12 w-12 text-secondary" />
+              <Card className="bg-[#f8f9fa] border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
+                <CardContent className="p-8 text-center">
+                  <div className="w-24 h-24 bg-gradient-to-br from-[#0a1628] to-[#162d4a] rounded-full mx-auto mb-5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Users className="h-12 w-12 text-[#c9a55c]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-primary">Hafeel Mohammad</h3>
-                  <p className="text-sm text-secondary font-medium mb-2">Sr. Regional IT Manager</p>
-                  <p className="text-sm text-foreground/70">South Goa - 10 years experience</p>
+                  <h3 className="text-xl font-bold text-[#0a1628] mb-2">Hafeel Mohammad</h3>
+                  <p className="text-[#c9a55c] font-semibold text-sm mb-2">Sr. Regional IT Manager</p>
+                  <p className="text-[#0a1628]/70 text-sm">South Goa - 10 years experience</p>
                 </CardContent>
               </Card>
             </div>
