@@ -67,7 +67,7 @@ const Contact = () => {
           {/* Mascot Background Image */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${mascotBanner})` }}
+            style={{ backgroundImage: `url(${stallionMascot})` }}
           />
           
           {/* Navy Blue Overlay with Gradient Fade */}
