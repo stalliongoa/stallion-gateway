@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import ProjectsManager from "@/components/admin/ProjectsManager";
 import TeamManager from "@/components/admin/TeamManager";
@@ -12,7 +11,6 @@ import ClientsManager from "@/components/admin/ClientsManager";
 import BlogManager from "@/components/admin/BlogManager";
 import SettingsManager from "@/components/admin/SettingsManager";
 import PageContentManager from "@/components/admin/PageContentManager";
-import EngineerRoleManager from "@/components/admin/EngineerRoleManager";
 import JobsManager from "@/components/admin/JobsManager";
 
 export default function Admin() {
@@ -123,7 +121,6 @@ export default function Admin() {
             <TabsTrigger value="clients">Clients</TabsTrigger>
             <TabsTrigger value="jobs">Jobs</TabsTrigger>
             <TabsTrigger value="blog">Blog Posts</TabsTrigger>
-            <TabsTrigger value="engineers">Engineers</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
 
@@ -149,10 +146,6 @@ export default function Admin() {
 
           <TabsContent value="blog">
             <BlogManager />
-          </TabsContent>
-
-          <TabsContent value="engineers">
-            <EngineerRoleManager />
           </TabsContent>
 
           <TabsContent value="settings">
