@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight } from "lucide-react";
+import blogHeroBanner from "@/assets/blog-hero-banner.jpg";
 import { supabase } from "@/integrations/supabase/client";
 
 interface BlogPost {
@@ -47,17 +48,25 @@ const Blog = () => {
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="hero-gradient text-primary-foreground py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge className="mb-6 bg-secondary text-secondary-foreground">
+        {/* Hero Section with Banner */}
+        <section className="relative bg-[#0a1628] overflow-hidden">
+          {/* Banner Background - Full Image No Cuts */}
+          <div 
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
+            style={{ backgroundImage: `url(${blogHeroBanner})` }}
+          />
+          
+          {/* Text Overlay on Right */}
+          <div className="absolute inset-0 flex items-center justify-end">
+            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/90 via-[#0a1628]/40 to-transparent" />
+            <div className="relative z-10 text-right pr-4 md:pr-8 lg:pr-16 max-w-xs md:max-w-sm lg:max-w-md">
+              <Badge className="mb-2 bg-[#c9a55c] text-[#0a1628] text-xs">
                 Blog & Resources
               </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                IT Insights & Best Practices
+              <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-white mb-2">
+                <span className="text-[#c9a55c]">IT Insights</span> & Best Practices
               </h1>
-              <p className="text-lg md:text-xl text-primary-foreground/90">
+              <p className="text-xs md:text-sm lg:text-base text-white/90">
                 Expert advice, industry trends, and practical guides for your IT infrastructure
               </p>
             </div>
