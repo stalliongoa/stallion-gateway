@@ -14,7 +14,7 @@ import {
   Zap
 } from "lucide-react";
 import founderImage from "@/assets/founder-image.jpg";
-import aboutHeroBanner from "@/assets/about-us-hero-banner.jpg";
+import aboutHeroBanner from "@/assets/hero-banner-hd.jpg";
 import stallionMascot from "@/assets/stallion-mascot-hero.png";
 
 const About = () => {
