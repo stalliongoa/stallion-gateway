@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Calendar, CheckCircle2 } from "lucide-react";
+import ourProjectsHeroBanner from "@/assets/our-projects-hero-banner.jpg";
 
 const Projects = () => {
   const projects = [
@@ -78,12 +79,22 @@ const Projects = () => {
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="hero-gradient text-primary-foreground py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Projects</h1>
-              <p className="text-lg md:text-xl text-primary-foreground/90">
+        {/* Hero Section with Banner */}
+        <section className="relative bg-[#0a1628] overflow-hidden">
+          {/* Banner Background - Full Image No Cuts */}
+          <div 
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
+            style={{ backgroundImage: `url(${ourProjectsHeroBanner})` }}
+          />
+          
+          {/* Text Overlay on Right */}
+          <div className="absolute inset-0 flex items-center justify-end">
+            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/90 via-[#0a1628]/40 to-transparent" />
+            <div className="relative z-10 text-right pr-6 md:pr-12 lg:pr-20 max-w-md md:max-w-lg">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">
+                <span className="text-[#c9a55c]">Our Projects</span>
+              </h1>
+              <p className="text-sm md:text-base lg:text-lg text-white/90">
                 Delivering excellence in IT infrastructure across Goa's hospitality sector
               </p>
             </div>
