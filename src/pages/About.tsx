@@ -75,37 +75,32 @@ const About = () => {
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section with Mascot Background */}
-        <section className="relative min-h-[70vh] md:min-h-[80vh] overflow-hidden">
-          {/* Mascot Background - Positioned Right */}
+        {/* Hero Section with Banner */}
+        <section className="relative bg-[#0a1628] overflow-hidden">
+          {/* Banner Background - Full Image No Cuts */}
           <div 
-            className="absolute inset-0 bg-cover bg-right-top md:bg-right bg-no-repeat"
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
             style={{ backgroundImage: `url(${stallionMascot})` }}
           />
           
-          {/* Navy Blue Gradient Overlay - 65% opacity, stronger on left for text */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/75 to-[#0a1628]/50" />
-          
-          {/* Bottom Fade */}
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" />
-          
-          {/* Content */}
-          <div className="relative z-10 container mx-auto px-4 py-20 md:py-32 flex items-center min-h-[70vh] md:min-h-[80vh]">
-            <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          {/* Text Overlay on Right */}
+          <div className="absolute inset-0 flex items-center justify-end">
+            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/95 via-[#0a1628]/50 to-transparent" />
+            <div className="relative z-10 text-right pr-3 md:pr-6 lg:pr-10 max-w-[160px] md:max-w-[240px] lg:max-w-sm">
+              <h1 className="text-sm md:text-lg lg:text-2xl font-bold text-white mb-1 md:mb-2 leading-tight">
                 Driven by <span className="text-[#c9a55c]">Strength</span>.<br />
                 Powered by <span className="text-[#c9a55c]">Technology</span>.
               </h1>
-              <p className="text-lg md:text-xl text-white/90 mb-8 max-w-xl">
+              <p className="text-[10px] md:text-xs lg:text-sm text-white/90 leading-snug mb-2 md:mb-4">
                 Delivering reliable IT solutions across Goa since <span className="text-[#c9a55c] font-semibold">2012</span>.
               </p>
               
               {/* Stats Row */}
-              <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
+              <div className="flex flex-wrap justify-end gap-2 md:gap-4">
                 {milestones.map((item, index) => (
-                  <div key={index} className="text-center">
-                    <p className="text-3xl md:text-4xl font-bold text-[#c9a55c]">{item.number}</p>
-                    <p className="text-white/80 text-sm">{item.label}</p>
+                  <div key={index} className="text-right">
+                    <p className="text-sm md:text-lg lg:text-xl font-bold text-[#c9a55c]">{item.number}</p>
+                    <p className="text-white/80 text-[8px] md:text-[10px] lg:text-xs">{item.label}</p>
                   </div>
                 ))}
               </div>
