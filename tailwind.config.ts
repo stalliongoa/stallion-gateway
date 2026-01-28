@@ -7,9 +7,21 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: {
+        DEFAULT: "1rem",
+        sm: "2rem",
+        lg: "4rem",
+        xl: "5rem",
+        "2xl": "6rem",
+        "3xl": "8rem",
+        "4xl": "10rem",
+        "5xl": "12rem",
+      },
       screens: {
         "2xl": "1400px",
+        "3xl": "1800px",
+        "4xl": "2400px",
+        "5xl": "3600px",
       },
     },
     screens: {
@@ -19,6 +31,9 @@ export default {
       'lg': '1024px',
       'xl': '1280px',
       '2xl': '1536px',
+      '3xl': '1920px',  // Full HD TVs (21-32 inch)
+      '4xl': '2560px',  // QHD/Large monitors (42-50 inch)
+      '5xl': '3840px',  // 4K TVs (55-75 inch)
     },
     extend: {
       colors: {
