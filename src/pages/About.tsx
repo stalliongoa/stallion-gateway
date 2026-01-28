@@ -78,16 +78,16 @@ const About = () => {
       <main className="flex-1">
         {/* Hero Section with Banner */}
         <section className="relative bg-[#0a1628] overflow-hidden">
-          {/* Banner Background - Full Image No Cuts */}
+          {/* Banner Background - Full Width Stretched */}
           <div 
-            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${aboutHeroBanner})` }}
           />
           
-          {/* Text Overlay on Right */}
-          <div className="absolute inset-0 flex items-center justify-end">
-            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/95 via-[#0a1628]/50 to-transparent" />
-            <div className="relative z-10 text-right pr-3 md:pr-6 lg:pr-10 max-w-[160px] md:max-w-[240px] lg:max-w-sm">
+          {/* Text Overlay on Left */}
+          <div className="absolute inset-0 flex items-center justify-start">
+            <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/60 to-transparent" />
+            <div className="relative z-10 text-left pl-3 md:pl-6 lg:pl-10 max-w-[160px] md:max-w-[240px] lg:max-w-sm">
               <h1 className="text-sm md:text-lg lg:text-2xl font-bold text-white mb-1 md:mb-2 leading-tight">
                 Driven by <span className="text-[#c9a55c]">Strength</span>.<br />
                 Powered by <span className="text-[#c9a55c]">Technology</span>.
@@ -97,9 +97,9 @@ const About = () => {
               </p>
               
               {/* Stats Row */}
-              <div className="flex flex-wrap justify-end gap-2 md:gap-4">
+              <div className="flex flex-wrap justify-start gap-2 md:gap-4">
                 {milestones.map((item, index) => (
-                  <div key={index} className="text-right">
+                  <div key={index} className="text-left">
                     <p className="text-sm md:text-lg lg:text-xl font-bold text-[#c9a55c]">{item.number}</p>
                     <p className="text-white/80 text-[8px] md:text-[10px] lg:text-xs">{item.label}</p>
                   </div>
