@@ -272,53 +272,6 @@ const About = () => {
             </div>
           </div>
         </section>
-
-        {/* Team Leads */}
-        <section className="py-16 md:py-24 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#0a1628] mb-4">
-                Meet Our <span className="text-[#c9a55c]">Team Leads</span>
-              </h2>
-              <div className="w-20 h-1 bg-gradient-to-r from-[#c9a55c] to-[#e8c547] mx-auto rounded-full" />
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              <Card className="bg-[#f8f9fa] border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-                <CardContent className="p-8 text-center">
-                  <div className="w-24 h-24 bg-gradient-to-br from-[#0a1628] to-[#162d4a] rounded-full mx-auto mb-5 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Users className="h-12 w-12 text-[#c9a55c]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#0a1628] mb-2">Tukaram Kunkalikar</h3>
-                  <p className="text-[#c9a55c] font-semibold text-sm mb-2">Project Head - Team Lead</p>
-                  <p className="text-[#0a1628]/70 text-sm">20+ years experience in IT field</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-[#f8f9fa] border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-                <CardContent className="p-8 text-center">
-                  <div className="w-24 h-24 bg-gradient-to-br from-[#0a1628] to-[#162d4a] rounded-full mx-auto mb-5 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Users className="h-12 w-12 text-[#c9a55c]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#0a1628] mb-2">Rohit Toraskar</h3>
-                  <p className="text-[#c9a55c] font-semibold text-sm mb-2">Sr. Regional IT Manager</p>
-                  <p className="text-[#0a1628]/70 text-sm">North Goa - 15 years experience</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-[#f8f9fa] border-none shadow-lg hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-                <CardContent className="p-8 text-center">
-                  <div className="w-24 h-24 bg-gradient-to-br from-[#0a1628] to-[#162d4a] rounded-full mx-auto mb-5 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Users className="h-12 w-12 text-[#c9a55c]" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#0a1628] mb-2">Hafeel Mohammad</h3>
-                  <p className="text-[#c9a55c] font-semibold text-sm mb-2">Sr. Regional IT Manager</p>
-                  <p className="text-[#0a1628]/70 text-sm">South Goa - 10 years experience</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
       </main>
 
       <Footer />

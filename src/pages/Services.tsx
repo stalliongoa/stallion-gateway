@@ -14,6 +14,7 @@ import {
   Server,
   Home
 } from "lucide-react";
+import servicesHeroBanner from "@/assets/services-hero-banner.jpg";
 
 const Services = () => {
   const services = [
@@ -78,12 +79,24 @@ const Services = () => {
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="hero-gradient text-primary-foreground py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Services</h1>
-              <p className="text-lg md:text-xl text-primary-foreground/90">
+        {/* Hero Section with Banner */}
+        <section className="relative min-h-[50vh] md:min-h-[60vh] overflow-hidden">
+          {/* Banner Background */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${servicesHeroBanner})` }}
+          />
+          
+          {/* Gradient Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/70 via-[#0a1628]/50 to-transparent" />
+          
+          {/* Content */}
+          <div className="relative z-10 container mx-auto px-4 flex items-center min-h-[50vh] md:min-h-[60vh]">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                Our <span className="text-[#c9a55c]">Services</span>
+              </h1>
+              <p className="text-lg md:text-xl text-white/90 max-w-xl">
                 Comprehensive IT solutions tailored for hotels, resorts, and businesses
               </p>
             </div>
