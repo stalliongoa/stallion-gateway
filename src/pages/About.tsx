@@ -80,28 +80,28 @@ const About = () => {
         <section className="relative bg-[#0a1628] overflow-hidden">
           {/* Banner Background - Full Width Stretched */}
           <div 
-            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-cover bg-center bg-no-repeat"
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] 3xl:aspect-[24/9] 4xl:aspect-[28/9] bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${aboutHeroBanner})` }}
           />
           
           {/* Text Overlay on Left */}
           <div className="absolute inset-0 flex items-center justify-start">
             <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/60 to-transparent" />
-            <div className="relative z-10 text-left pl-3 md:pl-6 lg:pl-10 max-w-[160px] md:max-w-[240px] lg:max-w-sm">
-              <h1 className="text-sm md:text-lg lg:text-2xl font-bold text-white mb-1 md:mb-2 leading-tight">
+            <div className="relative z-10 text-left pl-3 md:pl-6 lg:pl-10 xl:pl-16 2xl:pl-20 3xl:pl-28 4xl:pl-36 max-w-[160px] md:max-w-[240px] lg:max-w-sm xl:max-w-md 2xl:max-w-lg 3xl:max-w-xl 4xl:max-w-2xl">
+              <h1 className="text-sm md:text-lg lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-white mb-1 md:mb-2 lg:mb-3 2xl:mb-4 3xl:mb-6 leading-tight">
                 Driven by <span className="text-[#c9a55c]">Strength</span>.<br />
                 Powered by <span className="text-[#c9a55c]">Technology</span>.
               </h1>
-              <p className="text-[10px] md:text-xs lg:text-sm text-white/90 leading-snug mb-2 md:mb-4">
+              <p className="text-[10px] md:text-xs lg:text-sm xl:text-base 2xl:text-lg 3xl:text-xl 4xl:text-2xl text-white/90 leading-snug mb-2 md:mb-4 lg:mb-6 2xl:mb-8">
                 Delivering reliable IT solutions across Goa since <span className="text-[#c9a55c] font-semibold">2012</span>.
               </p>
               
               {/* Stats Row */}
-              <div className="flex flex-wrap justify-start gap-2 md:gap-4">
+              <div className="flex flex-wrap justify-start gap-2 md:gap-4 lg:gap-6 2xl:gap-8 3xl:gap-10">
                 {milestones.map((item, index) => (
                   <div key={index} className="text-left">
-                    <p className="text-sm md:text-lg lg:text-xl font-bold text-[#c9a55c]">{item.number}</p>
-                    <p className="text-white/80 text-[8px] md:text-[10px] lg:text-xs">{item.label}</p>
+                    <p className="text-sm md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl font-bold text-[#c9a55c]">{item.number}</p>
+                    <p className="text-white/80 text-[8px] md:text-[10px] lg:text-xs xl:text-sm 2xl:text-base 3xl:text-lg 4xl:text-xl">{item.label}</p>
                   </div>
                 ))}
               </div>
@@ -110,17 +110,17 @@ const About = () => {
         </section>
 
         {/* Who We Are Section */}
-        <section className="py-16 md:py-24 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-[#0a1628] mb-4">
+        <section className="py-16 md:py-24 lg:py-28 2xl:py-36 3xl:py-44 bg-white">
+          <div className="container mx-auto px-4 3xl:max-w-[1800px] 4xl:max-w-[2400px]">
+            <div className="max-w-4xl 2xl:max-w-5xl 3xl:max-w-6xl mx-auto">
+              <div className="text-center mb-12 lg:mb-16 2xl:mb-20">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl 3xl:text-7xl font-bold text-[#0a1628] mb-4 lg:mb-6">
                   Who We <span className="text-[#c9a55c]">Are</span>
                 </h2>
-                <div className="w-20 h-1 bg-gradient-to-r from-[#c9a55c] to-[#e8c547] mx-auto rounded-full" />
+                <div className="w-20 h-1 2xl:w-28 2xl:h-1.5 3xl:w-36 bg-gradient-to-r from-[#c9a55c] to-[#e8c547] mx-auto rounded-full" />
               </div>
               
-              <div className="space-y-6 text-[#0a1628]/80 text-lg leading-relaxed">
+              <div className="space-y-6 lg:space-y-8 2xl:space-y-10 text-[#0a1628]/80 text-lg lg:text-xl 2xl:text-2xl 3xl:text-3xl leading-relaxed">
                 <p>
                   <span className="font-semibold text-[#0a1628]">Stallion IT Solutions & Services</span> is a Goa-based technology partner trusted by hotels, industries, and enterprises since 2012. We specialize in comprehensive IT infrastructure management, CCTV security solutions, and network design that keeps businesses running efficiently and securely.
                 </p>
