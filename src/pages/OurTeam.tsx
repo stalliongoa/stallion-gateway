@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import ourTeamHeroBanner from "@/assets/our-team-hero-banner.jpg";
 
 import { supabase } from "@/integrations/supabase/client";
 
@@ -34,17 +35,22 @@ const OurTeam = () => {
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="hero-gradient text-primary-foreground py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge className="mb-6 bg-secondary text-secondary-foreground">
-                Our Team
-              </Badge>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Meet the Experts Behind Your IT Success
+        {/* Hero Section with Banner */}
+        <section className="relative bg-[#0a1628] overflow-hidden">
+          {/* Banner Background - Full Image No Cuts */}
+          <div 
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
+            style={{ backgroundImage: `url(${ourTeamHeroBanner})` }}
+          />
+          
+          {/* Text Overlay on Right */}
+          <div className="absolute inset-0 flex items-center justify-end">
+            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/90 via-[#0a1628]/40 to-transparent" />
+            <div className="relative z-10 text-right pr-6 md:pr-12 lg:pr-20 max-w-md md:max-w-lg">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">
+                Meet the Experts Behind Your <span className="text-[#c9a55c]">IT Success</span>
               </h1>
-              <p className="text-lg md:text-xl text-primary-foreground/90">
+              <p className="text-sm md:text-base lg:text-lg text-white/90">
                 Our experienced team of IT professionals brings over a decade of hospitality industry expertise to every project
               </p>
             </div>
