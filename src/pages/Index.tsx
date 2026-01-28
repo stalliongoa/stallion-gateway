@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import stallionLogo from "@/assets/stallion-gold-logo.png";
-import heroBanner from "@/assets/hero-banner-hd.jpg";
+import heroBanner from "@/assets/about-us-hero-banner.jpg";
 import mascotBanner from "@/assets/mascot-banner.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -101,8 +101,8 @@ const Index = () => {
               decoding="async"
             />
             
-            {/* CTA Buttons - Positioned over the image */}
-            <div className="absolute bottom-[4%] xs:bottom-[6%] sm:bottom-[8%] left-[3%] xs:left-[4%] sm:left-[5%] md:left-[6%] flex flex-col xs:flex-row gap-0.5 xs:gap-1 sm:gap-2">
+            {/* CTA Buttons - Positioned over the image on the right */}
+            <div className="absolute bottom-[4%] xs:bottom-[6%] sm:bottom-[8%] right-[3%] xs:right-[4%] sm:right-[5%] md:right-[6%] flex flex-col xs:flex-row gap-0.5 xs:gap-1 sm:gap-2">
               <Button 
                 size="sm" 
                 className="bg-stallion-gold hover:bg-stallion-gold/90 text-stallion-navy font-semibold text-[7px] xs:text-[9px] sm:text-xs md:text-sm px-1 xs:px-1.5 sm:px-3 md:px-4 py-0.5 xs:py-1 sm:py-2 h-auto rounded-sm xs:rounded-md shadow-lg whitespace-nowrap" 
