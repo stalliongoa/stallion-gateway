@@ -89,12 +89,12 @@ const Projects = () => {
           
           {/* Text Overlay on Right */}
           <div className="absolute inset-0 flex items-center justify-end">
-            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/90 via-[#0a1628]/40 to-transparent" />
-            <div className="relative z-10 text-right pr-6 md:pr-12 lg:pr-20 max-w-md md:max-w-lg">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">
+            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/95 via-[#0a1628]/50 to-transparent" />
+            <div className="relative z-10 text-right pr-3 md:pr-6 lg:pr-10 max-w-[140px] md:max-w-[200px] lg:max-w-xs">
+              <h1 className="text-base md:text-lg lg:text-2xl font-bold text-white mb-1 md:mb-2">
                 <span className="text-[#c9a55c]">Our Projects</span>
               </h1>
-              <p className="text-sm md:text-base lg:text-lg text-white/90">
+              <p className="text-[10px] md:text-xs lg:text-sm text-white/90 leading-snug">
                 Delivering excellence in IT infrastructure across Goa's hospitality sector
               </p>
             </div>
