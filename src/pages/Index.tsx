@@ -101,6 +101,19 @@ const Index = () => {
               decoding="async"
             />
             
+            {/* Text Overlay on Right */}
+            <div className="absolute inset-0 flex items-center justify-end">
+              <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/80 via-[#0a1628]/40 to-transparent" />
+              <div className="relative z-10 text-right pr-3 xs:pr-4 sm:pr-6 md:pr-10 max-w-[140px] xs:max-w-[180px] sm:max-w-[240px] md:max-w-xs lg:max-w-sm">
+                <h1 className="text-[10px] xs:text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-white mb-1 md:mb-2 leading-tight">
+                  Empowering Your Business with <span className="text-[#c9a55c]">Cutting-Edge IT Solutions</span>
+                </h1>
+                <p className="text-[8px] xs:text-[9px] sm:text-xs md:text-sm text-[#c9a55c] font-medium leading-snug">
+                  Innovative • Reliable • Secure
+                </p>
+              </div>
+            </div>
+            
             {/* CTA Buttons - Positioned over the image on the right */}
             <div className="absolute bottom-[4%] xs:bottom-[6%] sm:bottom-[8%] right-[3%] xs:right-[4%] sm:right-[5%] md:right-[6%] flex flex-col xs:flex-row gap-0.5 xs:gap-1 sm:gap-2">
               <Button 
