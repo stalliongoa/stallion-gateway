@@ -14,7 +14,7 @@ import {
   Server,
   Home
 } from "lucide-react";
-import servicesHeroBanner from "@/assets/services-hero-banner.jpg";
+import servicesHeroBanner from "@/assets/services-hero-banner-clean.jpg";
 
 const Services = () => {
   const services = [
@@ -80,23 +80,21 @@ const Services = () => {
       
       <main className="flex-1">
         {/* Hero Section with Banner */}
-        <section className="relative min-h-[50vh] md:min-h-[60vh] overflow-hidden">
-          {/* Banner Background */}
+        <section className="relative bg-[#0a1628] overflow-hidden">
+          {/* Banner Background - Full Image No Cuts */}
           <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
             style={{ backgroundImage: `url(${servicesHeroBanner})` }}
           />
           
-          {/* Gradient Overlay for Text Readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/70 via-[#0a1628]/50 to-transparent" />
-          
-          {/* Content */}
-          <div className="relative z-10 container mx-auto px-4 flex items-center min-h-[50vh] md:min-h-[60vh]">
-            <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          {/* Text Overlay on Right */}
+          <div className="absolute inset-0 flex items-center justify-end">
+            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/90 via-[#0a1628]/40 to-transparent" />
+            <div className="relative z-10 text-right pr-6 md:pr-12 lg:pr-20 max-w-md md:max-w-lg">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">
                 Our <span className="text-[#c9a55c]">Services</span>
               </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-xl">
+              <p className="text-sm md:text-base lg:text-lg text-white/90">
                 Comprehensive IT solutions tailored for hotels, resorts, and businesses
               </p>
             </div>
