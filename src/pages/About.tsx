@@ -80,7 +80,7 @@ const About = () => {
         <section className="relative bg-[#0a1628] overflow-hidden">
           {/* Banner Background - Full Image No Cuts */}
           <div 
-            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-center bg-no-repeat"
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
             style={{ backgroundImage: `url(${aboutHeroBanner})` }}
           />
           
