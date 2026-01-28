@@ -103,12 +103,14 @@ const Index = () => {
             
             {/* Text Overlay on Right */}
             <div className="absolute inset-0 flex items-center justify-end">
-              <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/80 via-[#0a1628]/40 to-transparent" />
-              <div className="relative z-10 text-right pr-2 xs:pr-3 sm:pr-4 md:pr-6 lg:pr-8 max-w-[100px] xs:max-w-[120px] sm:max-w-[160px] md:max-w-[200px] lg:max-w-[240px]">
-                <h1 className="text-[9px] xs:text-[10px] sm:text-xs md:text-sm lg:text-base font-bold text-white mb-1 md:mb-2 leading-tight">
-                  Empowering<br />Your Business with<br /><span className="text-[#c9a55c]">Cutting-Edge IT Solutions</span>
+              <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-[#0a1628]/90 via-[#0a1628]/60 to-transparent" />
+              <div className="relative z-10 text-right pr-4 sm:pr-8 md:pr-12 lg:pr-16">
+                <h1 className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 sm:mb-2 leading-tight">
+                  Empowering<br />
+                  Your Business with<br />
+                  <span className="text-[#c9a55c]">Cutting-Edge IT Solutions</span>
                 </h1>
-                <p className="text-[8px] xs:text-[9px] sm:text-xs md:text-sm text-[#c9a55c] font-medium leading-snug">
+                <p className="text-[9px] xs:text-[10px] sm:text-xs md:text-sm lg:text-base text-[#c9a55c] font-medium">
                   Innovative • Reliable • Secure
                 </p>
               </div>
