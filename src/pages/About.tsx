@@ -14,6 +14,7 @@ import {
   Zap
 } from "lucide-react";
 import founderImage from "@/assets/founder-image.jpg";
+import aboutHeroBanner from "@/assets/about-us-hero-banner.jpg";
 import stallionMascot from "@/assets/stallion-mascot-hero.png";
 
 const About = () => {
@@ -79,8 +80,8 @@ const About = () => {
         <section className="relative bg-[#0a1628] overflow-hidden">
           {/* Banner Background - Full Image No Cuts */}
           <div 
-            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
-            style={{ backgroundImage: `url(${stallionMascot})` }}
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${aboutHeroBanner})` }}
           />
           
           {/* Text Overlay on Right */}
