@@ -87,14 +87,14 @@ const Projects = () => {
             style={{ backgroundImage: `url(${ourProjectsHeroBanner})` }}
           />
           
-          {/* Text Overlay on Left */}
-          <div className="absolute inset-0 flex items-center justify-start">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/50 to-transparent" />
-            <div className="relative z-10 text-left pl-4 md:pl-8 lg:pl-12 xl:pl-16 3xl:pl-20 4xl:pl-28 5xl:pl-36 max-w-[200px] md:max-w-xs lg:max-w-sm xl:max-w-md 3xl:max-w-lg 4xl:max-w-xl 5xl:max-w-2xl">
-              <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-white mb-2 md:mb-3 lg:mb-4">
+          {/* Text Overlay on Right */}
+          <div className="absolute inset-0 flex items-center justify-end">
+            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/90 via-[#0a1628]/40 to-transparent" />
+            <div className="relative z-10 text-right pr-4 md:pr-8 lg:pr-12 xl:pr-16 3xl:pr-20 4xl:pr-28 5xl:pr-36 max-w-[160px] md:max-w-[200px] lg:max-w-xs xl:max-w-sm 3xl:max-w-md 4xl:max-w-lg 5xl:max-w-xl">
+              <h1 className="text-base md:text-lg lg:text-xl xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl font-bold text-white mb-1 md:mb-2 lg:mb-3">
                 <span className="text-[#c9a55c]">Our Projects</span>
               </h1>
-              <p className="text-xs md:text-sm lg:text-base xl:text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl text-white/90 leading-snug">
+              <p className="text-[10px] md:text-xs lg:text-sm xl:text-base 3xl:text-lg 4xl:text-xl 5xl:text-2xl text-white/90 leading-snug">
                 Delivering excellence in IT infrastructure across Goa's hospitality sector
               </p>
             </div>
