@@ -92,6 +92,9 @@ const Footer = () => {
           <p className="text-xs xs:text-sm lg:text-base 2xl:text-lg 3xl:text-xl text-white/70">
             © {new Date().getFullYear()} Stallion IT Solutions & Services. All rights reserved.
           </p>
+          <p className="text-[10px] xs:text-xs lg:text-sm 2xl:text-base 3xl:text-lg text-white/50 mt-2">
+            Developed by Stallion IT Solutions & Services, 2025
+          </p>
         </div>
       </div>
     </footer>
