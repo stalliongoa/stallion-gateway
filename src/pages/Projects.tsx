@@ -83,18 +83,18 @@ const Projects = () => {
         <section className="relative bg-[#0a1628] overflow-hidden">
           {/* Banner Background - Full Image No Cuts */}
           <div 
-            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] lg:aspect-[24/9] xl:aspect-[28/9] 3xl:aspect-[32/9] 4xl:aspect-[36/9] 5xl:aspect-[40/9] bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${ourProjectsHeroBanner})` }}
           />
           
-          {/* Text Overlay on Right */}
-          <div className="absolute inset-0 flex items-center justify-end">
-            <div className="absolute inset-0 bg-gradient-to-l from-[#0a1628]/95 via-[#0a1628]/50 to-transparent" />
-            <div className="relative z-10 text-right pr-3 md:pr-6 lg:pr-10 max-w-[140px] md:max-w-[200px] lg:max-w-xs">
-              <h1 className="text-base md:text-lg lg:text-2xl font-bold text-white mb-1 md:mb-2">
+          {/* Text Overlay on Left */}
+          <div className="absolute inset-0 flex items-center justify-start">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/50 to-transparent" />
+            <div className="relative z-10 text-left pl-4 md:pl-8 lg:pl-12 xl:pl-16 3xl:pl-20 4xl:pl-28 5xl:pl-36 max-w-[200px] md:max-w-xs lg:max-w-sm xl:max-w-md 3xl:max-w-lg 4xl:max-w-xl 5xl:max-w-2xl">
+              <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-white mb-2 md:mb-3 lg:mb-4">
                 <span className="text-[#c9a55c]">Our Projects</span>
               </h1>
-              <p className="text-[10px] md:text-xs lg:text-sm text-white/90 leading-snug">
+              <p className="text-xs md:text-sm lg:text-base xl:text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl text-white/90 leading-snug">
                 Delivering excellence in IT infrastructure across Goa's hospitality sector
               </p>
             </div>
