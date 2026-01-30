@@ -83,7 +83,7 @@ const Projects = () => {
         <section className="relative bg-[#0a1628] overflow-hidden">
           {/* Banner Background - Full Width Stretched */}
           <div 
-            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] lg:aspect-[24/9] xl:aspect-[28/9] 3xl:aspect-[32/9] 4xl:aspect-[36/9] 5xl:aspect-[40/9] bg-cover bg-center bg-no-repeat"
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] lg:aspect-[24/9] xl:aspect-[28/9] 3xl:aspect-[32/9] 4xl:aspect-[36/9] 5xl:aspect-[40/9] bg-cover bg-top bg-no-repeat"
             style={{ backgroundImage: `url(${ourProjectsHeroBanner})` }}
           />
           
