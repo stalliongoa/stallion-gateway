@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Briefcase, MapPin, Clock, Users, ArrowRight, CheckCircle2 } from "lucide-react";
+import careersHeroBanner from "@/assets/careers-hero-banner.jpg";
 
 interface JobOpening {
   id: string;
@@ -136,24 +137,31 @@ const Careers = () => {
       <Navigation />
       
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="hero-gradient text-primary-foreground py-16 md:py-24">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="max-w-3xl">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Join Our Team
+        {/* Hero Section with Banner */}
+        <section className="relative bg-[#0a1628] overflow-hidden">
+          {/* Banner Background - Full Image No Cuts */}
+          <div 
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] lg:aspect-[24/9] xl:aspect-[28/9] 3xl:aspect-[32/9] 4xl:aspect-[36/9] 5xl:aspect-[40/9] bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${careersHeroBanner})` }}
+          />
+          
+          {/* Text Overlay on Left */}
+          <div className="absolute inset-0 flex items-center justify-start">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/50 to-transparent" />
+            <div className="relative z-10 text-left pl-4 md:pl-8 lg:pl-12 xl:pl-16 3xl:pl-20 4xl:pl-28 5xl:pl-36 max-w-[200px] md:max-w-xs lg:max-w-sm xl:max-w-md 3xl:max-w-lg 4xl:max-w-xl 5xl:max-w-2xl">
+              <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold text-white mb-2 md:mb-3 lg:mb-4">
+                <span className="text-[#c9a55c]">Join Our Team</span>
               </h1>
-              <p className="text-xl text-primary-foreground/90 mb-8">
-                Build your career with Goa's leading IT solutions provider. 
-                We're always looking for talented individuals to join our growing team.
+              <p className="text-xs md:text-sm lg:text-base xl:text-lg 3xl:text-xl 4xl:text-2xl 5xl:text-3xl text-white/90 leading-snug mb-4 md:mb-6">
+                Build your career with Goa's leading IT solutions provider
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Badge variant="secondary" className="text-sm py-2 px-4">
-                  <Users className="h-4 w-4 mr-2" />
+              <div className="flex flex-wrap gap-2 md:gap-4">
+                <Badge variant="secondary" className="text-xs md:text-sm py-1.5 md:py-2 px-3 md:px-4">
+                  <Users className="h-3 w-3 md:h-4 md:w-4 mr-1.5 md:mr-2" />
                   {jobs.length} Open Positions
                 </Badge>
-                <Badge variant="outline" className="text-sm py-2 px-4 border-primary-foreground/30 text-primary-foreground">
-                  <MapPin className="h-4 w-4 mr-2" />
+                <Badge variant="outline" className="text-xs md:text-sm py-1.5 md:py-2 px-3 md:px-4 border-primary-foreground/30 text-white">
+                  <MapPin className="h-3 w-3 md:h-4 md:w-4 mr-1.5 md:mr-2" />
                   Goa, India
                 </Badge>
               </div>
