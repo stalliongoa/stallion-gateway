@@ -81,9 +81,9 @@ const Services = () => {
       <main className="flex-1">
         {/* Hero Section with Banner */}
         <section className="relative bg-[#0a1628] overflow-hidden">
-          {/* Banner Background - Full Image No Cuts */}
+          {/* Banner Background - Full Width Stretched */}
           <div 
-            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-contain bg-left bg-no-repeat"
+            className="w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${servicesHeroBanner})` }}
           />
           
